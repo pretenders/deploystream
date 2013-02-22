@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block title %}Feature {{ feature_id }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+{% endblock %}
+
+{% block content %}
+  <h1>{{ feature_id }}</h1>
+{% endblock %}
