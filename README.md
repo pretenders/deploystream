@@ -18,11 +18,11 @@ There are three different types of provider that can be written for
 deploystream. Each have different expectations of what functions they need to
 provide and what values they return.
 
-1. Management Provider - see providers/template_management.py
+1. Management Provider - see providers/examples/template_management.py
 
-2. Source Code Control Provider - see providers/template_source_code_control.py
+2. Source Code Control Provider - see providers/examples/template_source_code_control.py
 
-3. CI Provider - see providers/template_ci.py
+3. CI Provider - see providers/examples/template_ci.py
 
 
 Configuration

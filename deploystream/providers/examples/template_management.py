@@ -20,16 +20,3 @@ def get_feature_info(feature_id, **kwargs):
         ``None`` otherwise
     """
     pass
-
-
-def default_config():
-    """
-    Optional function. Return the default configuration for the plugin.
-
-    The return value from this function will be passed in to calls of
-    ``get_feature_info`` by default. These can be overwritten by configuration.
-
-    :returns:
-        A dictionary containing only string keys and values.
-    """
-    pass
