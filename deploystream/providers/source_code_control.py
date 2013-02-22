@@ -19,3 +19,6 @@ class SourceCodeControlPlugin(ProviderPluginReader):
             ],
         'default_config': [],
     }
+
+    def additional_function_that_is_deploystream_internal():
+        pass
