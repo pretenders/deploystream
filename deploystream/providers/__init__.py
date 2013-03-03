@@ -1,6 +1,6 @@
 from importlib import import_module
 
-from zope.interface import classImplements, verify
+from zope import interface as zinterface
 
 from interfaces import (
     ISourceCodeControlPlugin, IBuildInfoPlugin, IPlanningPlugin)
@@ -43,9 +43,9 @@ def init_plugins():
 
 
 def _check_implements(cls, interface):
-    classImplements(cls, interface)
+    zinterface.classImplements(cls, interface)
     try:
-        verify.verifyClass(interface, cls)
+        zinterface.verify.verifyClass(interface, cls)
         return True
     except Exception, e:
         print e

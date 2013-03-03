@@ -11,6 +11,7 @@ def get_feature_info(feature_id):
     # First get any feature info from any management providers
     for plugin in PLANNING_PLUGINS:
         feature.planning_info = PlanningInfo(
+                                plugin=plugin,
                                 **plugin.get_feature_info(feature_id))
 
     # Then get any branch info from any source control providers

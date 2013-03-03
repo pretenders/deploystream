@@ -42,8 +42,9 @@ class PlanningInfo(object):
 
 class BuildInfo(object):
 
-    def __init__(self, timestamp, result, commit, url):
+    def __init__(self, timestamp, result, commit, url, plugin):
         self.timestamp = timestamp
         self.result = result
         self.commit = commit
         self.url = url
+        self.plugin = plugin
