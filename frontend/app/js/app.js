@@ -1,4 +1,4 @@
-// global angular, FeatureList
+// global angular, FeatureListCtrl
 'use strict';
 
 
@@ -6,10 +6,10 @@
 angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives'])
 .config(['$routeProvider', function ($routeProvider) {
     $routeProvider.when('/features', {
-        templateUrl: 'partials/partial1.html',
-        controller: FeatureList
+        templateUrl: 'partials/features.html',
+        controller: FeatureListCtrl
     });
     $routeProvider.otherwise({
-        redirectTo: '/view1'
+        redirectTo: '/features'
     });
 }]);
