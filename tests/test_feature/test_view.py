@@ -23,7 +23,7 @@ class PlanningPlugin(object):
         }
 
 
-class CIPlugin(object):
+class BuildInfoPlugin(object):
     def get_build_information(self, repo, branch, commit, **kwargs):
         return {
             "timestamp": datetime.now(),
@@ -44,7 +44,8 @@ class TestEndToEndWithDummyPlugins(object):
             [PlanningPlugin()])
     @patch("deploystream.apps.feature.lib.SOURCE_CODE_PLUGINS",
             [SourceCodePlugin()])
-    @patch("deploystream.apps.feature.lib.CI_PLUGINS", [CIPlugin()])
+    @patch("deploystream.apps.feature.lib.BUILD_INFO_PLUGINS",
+            [BuildInfoPlugin()])
     def test_feature_view_shows_details(self):
         response = self.client.get('/feature/FT101')
         assert "Amazing feature that will blow your mind" in response.data

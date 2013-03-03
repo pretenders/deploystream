@@ -1,3 +1,3 @@
-from ci import ICIPlugin
+from build_info import IBuildInfoPlugin
 from planning import IPlanningPlugin
 from source_code_control import ISourceCodeControlPlugin

@@ -1,7 +1,7 @@
 from nose.tools import assert_true, assert_false
 
 from deploystream.providers import (
-    is_source_control_plugin, is_ci_plugin, is_planning_plugin)
+    is_source_control_plugin, is_build_info_plugin, is_planning_plugin)
 
 
 class TestSourceCodeControlPluginInterface(object):
@@ -25,18 +25,18 @@ class TestSourceCodeControlPluginInterface(object):
         assert_false(is_source_control_plugin(MyPlugin))
 
 
-class TestCIPluginInterface(object):
+class TestBuildInfoPluginInterface(object):
 
-    def test_implements_ci_plugin(self):
+    def test_implements_build_info_plugin(self):
         class MyPlugin(object):
             def get_build_information(self, repo, branch, commit, **kwargs):
                 pass
-        assert_true(is_ci_plugin(MyPlugin))
+        assert_true(is_build_info_plugin(MyPlugin))
 
-    def test_does_not_implement_ci_plugin(self):
+    def test_does_not_implement_build_info_plugin(self):
         class MyPlugin(object):
             pass
-        assert_false(is_ci_plugin(MyPlugin))
+        assert_false(is_build_info_plugin(MyPlugin))
 
 
 class TestPlanningPluginInterface(object):

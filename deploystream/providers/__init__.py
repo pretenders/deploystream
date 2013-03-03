@@ -2,11 +2,12 @@ from importlib import import_module
 
 from zope.interface import classImplements, verify
 
-from interfaces import ISourceCodeControlPlugin, ICIPlugin, IPlanningPlugin
+from interfaces import (
+    ISourceCodeControlPlugin, IBuildInfoPlugin, IPlanningPlugin)
 
 PLANNING_PLUGINS = []
 SOURCE_CODE_PLUGINS = []
-CI_PLUGINS = []
+BUILD_INFO_PLUGINS = []
 
 
 def get_plugin_class(path):
@@ -26,7 +27,7 @@ def init_plugin_set(plugin_set, plugin_check, plugin_holder):
 
 
 def init_plugins():
-    global PLANNING_PLUGINS, SOURCE_CODE_PLUGINS, CI_PLUGINS
+    global PLANNING_PLUGINS, SOURCE_CODE_PLUGINS, BUILD_INFO_PLUGINS
     from deploystream import app
     init_plugin_set(app.config['SOURCE_CODE_PLUGINS'],
                     is_source_control_plugin,
@@ -36,9 +37,9 @@ def init_plugins():
                     is_planning_plugin,
                     PLANNING_PLUGINS)
 
-    init_plugin_set(app.config['CI_PLUGINS'],
-                    is_ci_plugin,
-                    CI_PLUGINS)
+    init_plugin_set(app.config['BUILD_INFO_PLUGINS'],
+                    is_build_info_plugin,
+                    BUILD_INFO_PLUGINS)
 
 
 def _check_implements(cls, interface):
@@ -61,6 +62,6 @@ def is_planning_plugin(plugin):
     return _check_implements(plugin, IPlanningPlugin)
 
 
-def is_ci_plugin(plugin):
-    "Check the plugin class given implements ICIPlugin."
-    return _check_implements(plugin, ICIPlugin)
+def is_build_info_plugin(plugin):
+    "Check the plugin class given implements IBuildInfoPlugin."
+    return _check_implements(plugin, IBuildInfoPlugin)
