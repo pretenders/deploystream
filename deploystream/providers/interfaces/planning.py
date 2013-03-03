@@ -1,18 +1,12 @@
-from zope.interface import Interface
+from zope import interface
 
 
-class IPlanningPlugin(Interface):
+class IPlanningPlugin(interface.Interface):
 
-    def get_feature_info(feature_id, **kwargs):
+    def get_feature_info(feature_id):
         """
         :param feature_id:
             The identifier of a feature to be looked up.
-
-        :param **kwargs:
-            Additional configuration for the plugin. If this plugin was written
-            by you then this will only be information you have added in the
-            configuration of it. See :ref:`<configure_provider>` for more
-            information about configuring plugins.
 
         :returns:
             If found, a dictionary containing keys for at least:

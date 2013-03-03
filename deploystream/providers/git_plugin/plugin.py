@@ -3,24 +3,34 @@ import git
 
 class GitPlugin(object):
 
-    def get_repo_branches_involved(self, feature_id, **kwargs):
+    def __init__(self, **configuration):
         pass
 
-    def get_branches_involved(self, repo_name, feature_id, **kwargs):
+    def get_repo_branches_involved(self, feature_id):
+        """
+        Get all the repo branches involved.
+
+        For each repository in each repo location defined in configuration,
+        call ``get_branches_involved`` and return a list of tuples.
+
+        :returns:
+            A list of iterables containing at position:
+
+                0: repo name
+                1: branch name
+                2: latest commit
+        """
+        pass
+
+    def get_branches_involved(self, repo_location, feature_id):
         """
         Get the set of brances involved in the given repo and feature.
 
-        :param repo_name:
-            The name of the repository to search for branches.
+        :param repo_location:
+            The location of the repository to search for branches.
 
         :param feature_id:
             The id of the feature to look for in branches.
-
-        :param kwargs:
-            Expected to contain keys for:
-
-                - CODE_DIR: The directory in which repo ``repo_name`` can be
-                  found.
 
         :returns:
             A list of iterables containing at position:
@@ -28,10 +38,8 @@ class GitPlugin(object):
                 0: branch name
                 1: latest commit
         """
-        code_dir = kwargs['CODE_DIR']
-        repo = git.Repo("{CODE_DIR}/{REPO_NAME}/.git".format(
-                                                    CODE_DIR=code_dir,
-                                                    REPO_NAME=repo_name,))
+        repo = git.Repo("{repo_location}/.git".format(
+                                                repo_location=repo_location))
         remote = git.remote.Remote(repo, 'origin')
         affected = []
         for remote_ref in remote.refs:

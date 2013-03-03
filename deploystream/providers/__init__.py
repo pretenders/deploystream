@@ -1,13 +1,21 @@
 from importlib import import_module
 
-from zope import interface as zinterface
+# from zope import interface as zinterface
 
 from interfaces import (
-    ISourceCodeControlPlugin, IBuildInfoPlugin, IPlanningPlugin)
+    ISourceCodeControlPlugin, IBuildInfoPlugin, IPlanningPlugin,
+    check_class_implements_interface)
 
 PLANNING_PLUGINS = []
 SOURCE_CODE_PLUGINS = []
 BUILD_INFO_PLUGINS = []
+
+PLUGIN_INTERFACES = (
+    ('SOURCE_CODE_PLUGINS', ISourceCodeControlPlugin, SOURCE_CODE_PLUGINS),
+    ('BUILD_INFO_PLUGINS', IBuildInfoPlugin, BUILD_INFO_PLUGINS),
+    ('PLANNING_PLUGINS', IPlanningPlugin, PLANNING_PLUGINS),
+)
+# A list of tuples of ('setting conf name', plugin interface class, holder_ref)
 
 
 def get_plugin_class(path):
@@ -18,50 +26,18 @@ def get_plugin_class(path):
     return getattr(mod, class_name)
 
 
-def init_plugin_set(plugin_set, plugin_check, plugin_holder):
+def init_plugin_set(plugin_set, plugin_interface, plugin_holder):
     "Create a set of plugins, check they are correct, add to a placeholder"
     for path in plugin_set:
         plugin_class = get_plugin_class(path)
-        if plugin_check(plugin_class):
+        if check_class_implements_interface(plugin_class, plugin_interface):
             plugin_holder.append(plugin_class())
 
 
 def init_plugins():
-    global PLANNING_PLUGINS, SOURCE_CODE_PLUGINS, BUILD_INFO_PLUGINS
+    global PLUGINS
     from deploystream import app
-    init_plugin_set(app.config['SOURCE_CODE_PLUGINS'],
-                    is_source_control_plugin,
-                    SOURCE_CODE_PLUGINS)
-
-    init_plugin_set(app.config['PLANNING_PLUGINS'],
-                    is_planning_plugin,
-                    PLANNING_PLUGINS)
-
-    init_plugin_set(app.config['BUILD_INFO_PLUGINS'],
-                    is_build_info_plugin,
-                    BUILD_INFO_PLUGINS)
-
-
-def _check_implements(cls, interface):
-    zinterface.classImplements(cls, interface)
-    try:
-        zinterface.verify.verifyClass(interface, cls)
-        return True
-    except Exception, e:
-        print e
-        return False
-
-
-def is_source_control_plugin(plugin):
-    "Check the plugin class given implements ISourceCodeControlPlugin."
-    return _check_implements(plugin, ISourceCodeControlPlugin)
-
-
-def is_planning_plugin(plugin):
-    "Check the plugin class given implements IPlanningPlugin."
-    return _check_implements(plugin, IPlanningPlugin)
-
-
-def is_build_info_plugin(plugin):
-    "Check the plugin class given implements IBuildInfoPlugin."
-    return _check_implements(plugin, IBuildInfoPlugin)
+    for config_name, plugin_class, holder in PLUGIN_INTERFACES:
+        init_plugin_set(app.config[config_name],
+                        plugin_class,
+                        holder)

@@ -1,9 +1,9 @@
-from zope.interface import Interface
+from zope import interface
 
 
-class ISourceCodeControlPlugin(Interface):
+class ISourceCodeControlPlugin(interface.Interface):
 
-    def get_repo_branches_involved(feature_id, **kwargs):
+    def get_repo_branches_involved(feature_id):
         """
         Get the set of repo, branches involved in the given feature.
 
@@ -25,7 +25,7 @@ class ISourceCodeControlPlugin(Interface):
         """
         pass
 
-    def set_merged_status(repo_name, hierarchy_tree, **kwargs):
+    def set_merged_status(repo_name, hierarchy_tree):
         """
         Set the merged status of the given tree in the repo.
 
