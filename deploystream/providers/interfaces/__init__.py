@@ -1,9 +1,15 @@
 from zope import interface as zinterface
 from zope.interface import verify
 
+# These imports are here for convenience, to be re-imported by others
 from build_info import IBuildInfoPlugin
 from planning import IPlanningPlugin
 from source_code_control import ISourceCodeControlPlugin
+
+__all__ = [
+    IBuildInfoPlugin, IPlanningPlugin, ISourceCodeControlPlugin,
+    'isimplementation'
+]
 
 
 def isimplementation(cls, interface):
@@ -17,7 +23,7 @@ def isimplementation(cls, interface):
     """
     zinterface.classImplements(cls, interface)
     try:
-        zinterface.verify.verifyClass(interface, cls)
+        verify.verifyClass(interface, cls)
         return True
     except Exception:
         #raise
