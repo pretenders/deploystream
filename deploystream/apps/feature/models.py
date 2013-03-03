@@ -1,3 +1,6 @@
+from collections import defaultdict
+
+
 class Feature(object):
     """
     The class used for encapsulating ``Feature`` data across repos & branches.
@@ -21,7 +24,7 @@ class Feature(object):
     """
     def __init__(self, id):
         self.id = id
-        self.branches = []
+        self.info = defaultdict(list)
         self.planning_info = None
         self.trees = []
 
@@ -29,9 +32,39 @@ class Feature(object):
         "Create hierarchy trees - one for each repo."
         pass
 
-    def add_branch(self, branch):
-        assert isinstance(branch, Branch)
-        self.branches.append(branch)
+    def add(self, info_item):
+        """
+        Add an item of information to a feature.
+
+        Information items of any type can be added, they will be inserted in
+        the ``self.info`` dictionary, where the key will be the type of
+        object and the values a list of objects of that type.
+
+        Example use:
+
+        >>> from deploystream.apps.feature.models import Feature, Branch
+        >>> f = Feature(122)
+        >>> f.add(Branch('a_repo', 'a_branch', 'cf7823ab', None))
+        """
+        self.info[type(info_item)].append(info_item)
+
+    def __getitem__(self, cls):
+        """
+        Access objects within this feature by type.
+
+        Example:
+
+        >>> from deploystream.apps.feature.models import Feature, Branch
+        >>> f = Feature(122)
+        >>> f[Branch]
+        []
+        >>> f.add(Branch('a_repo', 'a_branch', 'cf7823ab', None))
+        >>> f[Branch][0].repo_name
+        'a_repo'
+        >>> f[PlanningInfo]
+        []
+        """
+        return self.info[cls]
 
 
 class PlanningInfo(object):
