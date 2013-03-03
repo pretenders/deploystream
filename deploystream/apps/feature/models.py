@@ -45,15 +45,18 @@ class PlanningInfo(object):
         ``url``             - The url to the feature.
         ``feature_type``    - The type of the feature.
         ``owner``           - The owner of the feature.
+        ``description``     - Long description of the feature.
         ``plugin``          - The plugin that provided all of these values.
     """
 
-    def __init__(self, title, id, url, feature_type, owner, plugin):
+    def __init__(self, title, id, url, feature_type, owner, description,
+                 plugin):
         self.title = title
         self.id = id
         self.url = url
         self.feature_type = feature_type
         self.owner = owner
+        self.description = description
         self.plugin = plugin
 
 

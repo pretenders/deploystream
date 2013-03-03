@@ -15,6 +15,7 @@ class IPlanningPlugin(interface.Interface):
                 - url
                 - feature_type
                 - owner
+                - description
 
             ``None`` otherwise
         """
