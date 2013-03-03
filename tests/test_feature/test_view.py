@@ -18,8 +18,9 @@ class PlanningPlugin(object):
             "title": "Amazing feature that will blow your mind",
             "id": feature_id,
             "url": "http://planning_site/{0}".format(feature_id),
-            "feature_type": "interesting",
-            "owner": "Bob"
+            "feature_type": "story",
+            "owner": "Bob",
+            "description": "Too good for words..."
         }
 
 
@@ -41,11 +42,11 @@ class TestEndToEndWithDummyPlugins(object):
         self.client = deploystream.app.test_client()
 
     @patch("deploystream.apps.feature.lib.PLANNING_PLUGINS",
-            [PlanningPlugin()])
+           [PlanningPlugin()])
     @patch("deploystream.apps.feature.lib.SOURCE_CODE_PLUGINS",
-            [SourceCodePlugin()])
+           [SourceCodePlugin()])
     @patch("deploystream.apps.feature.lib.BUILD_INFO_PLUGINS",
-            [BuildInfoPlugin()])
+           [BuildInfoPlugin()])
     def test_feature_view_shows_details(self):
         response = self.client.get('/feature/FT101')
         assert "Amazing feature that will blow your mind" in response.data

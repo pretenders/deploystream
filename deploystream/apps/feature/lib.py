@@ -11,8 +11,8 @@ def get_feature_info(feature_id):
     # First get any feature info from any management providers
     for plugin in PLANNING_PLUGINS:
         feature.planning_info = PlanningInfo(
-                                plugin=plugin,
-                                **plugin.get_feature_info(feature_id))
+            plugin=plugin,
+            **plugin.get_feature_info(feature_id))
 
     # Then get any branch info from any source control providers
     for plugin in SOURCE_CODE_PLUGINS:
@@ -32,9 +32,9 @@ def get_feature_info(feature_id):
     for plugin in BUILD_INFO_PLUGINS:
         for branch in feature.branches:
             branch.build_info = BuildInfo(plugin=plugin,
-                                       **plugin.get_build_information(
-                                                    branch.repo_name,
-                                                    branch.branch_name,
-                                                    branch.latest_commit)
-                                       )
+                                          **plugin.get_build_information(
+                                              branch.repo_name,
+                                              branch.branch_name,
+                                              branch.latest_commit)
+                                          )
     return feature

@@ -20,7 +20,7 @@ class GitPlugin(object):
                 1: branch name
                 2: latest commit
         """
-        pass
+        return []  # no info available for now
 
     def get_branches_involved(self, repo_location, feature_id):
         """
@@ -38,8 +38,8 @@ class GitPlugin(object):
                 0: branch name
                 1: latest commit
         """
-        repo = git.Repo("{repo_location}/.git".format(
-                                                repo_location=repo_location))
+        repo = git.Repo("{repo_location}/.git"
+                        .format(repo_location=repo_location))
         remote = git.remote.Remote(repo, 'origin')
         affected = []
         for remote_ref in remote.refs:
