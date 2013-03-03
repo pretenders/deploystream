@@ -46,7 +46,13 @@ class Feature(object):
         >>> f = Feature(122)
         >>> f.add(Branch('a_repo', 'a_branch', 'cf7823ab', None))
         """
-        self.info[type(info_item)].append(info_item)
+        cls = type(info_item)
+        self.info[cls].append(info_item)
+
+        # Dynamically add a property for this type
+        name = cls.__name__.lower()
+        if not hasattr(Feature, name):
+            setattr(Feature, name, property(lambda self: self[cls]))
 
     def __getitem__(self, cls):
         """
@@ -128,6 +134,8 @@ class Branch(object):
         self.branch_name = branch_name
         self.latest_commit = latest_commit
         self.plugin = plugin
+
+Branch.__name__ = 'branches'
 
 
 class BuildInfo(object):
