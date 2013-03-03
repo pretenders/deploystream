@@ -1,0 +1,5 @@
+docopt               # create command-line interface from docstring
+Flask                # web framework
+GitPython            # access git repositories
+jsonpickle           # encode/decode arbitrary objects to JSON
+zope.interface       # define and enforce interfaces

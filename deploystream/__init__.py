@@ -1,4 +1,5 @@
-VERSION = '0.1'
+__version__ = '0.1'
+
 from os import environ
 from os.path import join, dirname
 from flask import Flask
@@ -17,4 +18,4 @@ from providers import init_plugins
 init_plugins()
 
 # Import any views we want to register here at the bottom of the file:
-import deploystream.apps.feature.views
+import deploystream.apps.feature.views  # NOQA

@@ -1,0 +1,3 @@
+-r test.txt
+
+flake8           # combine pep8 and pyflakes (static analysis) in a single command

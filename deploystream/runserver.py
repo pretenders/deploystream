@@ -1,4 +1,4 @@
-from deploystream import VERSION, app
+from deploystream import __version__, app
 
 USAGE = """
 deploystream {version}: runserver.py
@@ -17,11 +17,11 @@ Usage:
 Options:
     -h --help   Show this screen.
     --version   Show version.
-""".format(version=VERSION)
+""".format(version=__version__)
 
 if __name__ == '__main__':
     from docopt import docopt
-    arguments = docopt(USAGE, version=VERSION)
+    arguments = docopt(USAGE, version=__version__)
     kwargs = {}
     if arguments['<host_port>']:
         host, port = arguments['<host_port>'].split(':')

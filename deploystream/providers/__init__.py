@@ -4,7 +4,8 @@ from importlib import import_module
 
 from interfaces import (
     ISourceCodeControlPlugin, IBuildInfoPlugin, IPlanningPlugin,
-    check_class_implements_interface)
+    is_implementation
+)
 
 PLANNING_PLUGINS = []
 SOURCE_CODE_PLUGINS = []
@@ -30,12 +31,11 @@ def init_plugin_set(plugin_set, plugin_interface, plugin_holder):
     "Create a set of plugins, check they are correct, add to a placeholder"
     for path in plugin_set:
         plugin_class = get_plugin_class(path)
-        if check_class_implements_interface(plugin_class, plugin_interface):
+        if is_implementation(plugin_class, plugin_interface):
             plugin_holder.append(plugin_class())
 
 
 def init_plugins():
-    global PLUGINS
     from deploystream import app
     for config_name, plugin_class, holder in PLUGIN_INTERFACES:
         init_plugin_set(app.config[config_name],
