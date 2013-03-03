@@ -8,11 +8,11 @@ from source_code_control import ISourceCodeControlPlugin
 
 __all__ = [
     IBuildInfoPlugin, IPlanningPlugin, ISourceCodeControlPlugin,
-    'isimplementation'
+    'is_implementation'
 ]
 
 
-def isimplementation(cls, interface):
+def is_implementation(cls, interface):
     """
     Check that the given class implements the given interface.
 

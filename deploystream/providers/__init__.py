@@ -4,7 +4,7 @@ from importlib import import_module
 
 from interfaces import (
     ISourceCodeControlPlugin, IBuildInfoPlugin, IPlanningPlugin,
-    isimplementation
+    is_implementation
 )
 
 PLANNING_PLUGINS = []
@@ -31,7 +31,7 @@ def init_plugin_set(plugin_set, plugin_interface, plugin_holder):
     "Create a set of plugins, check they are correct, add to a placeholder"
     for path in plugin_set:
         plugin_class = get_plugin_class(path)
-        if isimplementation(plugin_class, plugin_interface):
+        if is_implementation(plugin_class, plugin_interface):
             plugin_holder.append(plugin_class())
 
 

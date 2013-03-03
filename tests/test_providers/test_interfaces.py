@@ -1,7 +1,7 @@
 from nose.tools import assert_true, assert_false
 
 from deploystream.providers.interfaces import (
-    isimplementation,
+    is_implementation,
     IBuildInfoPlugin, IPlanningPlugin, ISourceCodeControlPlugin,
 )
 
@@ -15,7 +15,7 @@ class TestSourceCodeControlPluginInterface(object):
             def set_merged_status(self, repo_name, hierarchy_tree):
                 pass
 
-        assert_true(isimplementation(MyPlugin, ISourceCodeControlPlugin))
+        assert_true(is_implementation(MyPlugin, ISourceCodeControlPlugin))
 
     def test_does_not_implement_source_control_plugin(self):
         class MyPlugin(object):
@@ -24,7 +24,7 @@ class TestSourceCodeControlPluginInterface(object):
             def set_merged_status(self, repo_name):
                 pass
 
-        assert_false(isimplementation(MyPlugin, ISourceCodeControlPlugin))
+        assert_false(is_implementation(MyPlugin, ISourceCodeControlPlugin))
 
 
 class TestBuildInfoPluginInterface(object):
@@ -34,13 +34,13 @@ class TestBuildInfoPluginInterface(object):
             def get_build_information(self, repo, branch, commit):
                 pass
 
-        assert_true(isimplementation(MyPlugin, IBuildInfoPlugin))
+        assert_true(is_implementation(MyPlugin, IBuildInfoPlugin))
 
     def test_does_not_implement_build_info_plugin(self):
         class MyPlugin(object):
             pass
 
-        assert_false(isimplementation(MyPlugin, IBuildInfoPlugin))
+        assert_false(is_implementation(MyPlugin, IBuildInfoPlugin))
 
 
 class TestPlanningPluginInterface(object):
@@ -50,10 +50,10 @@ class TestPlanningPluginInterface(object):
             def get_feature_info(self, feature_id):
                 pass
 
-        assert_true(isimplementation(MyPlugin, IPlanningPlugin))
+        assert_true(is_implementation(MyPlugin, IPlanningPlugin))
 
     def test_does_not_implement_planning_plugin(self):
         class MyPlugin(object):
             pass
 
-        assert_false(isimplementation(MyPlugin, IPlanningPlugin))
+        assert_false(is_implementation(MyPlugin, IPlanningPlugin))
