@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% block title %}Feature {{ feature_id }}{% endblock %}
+{% block title %}Feature {{ feature.id }}: {{feature.planning_info.title}}{% endblock %}
 
 {% block head %}
     {{ super() }}

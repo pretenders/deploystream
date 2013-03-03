@@ -1,2 +1,4 @@
+zope.interface
 Flask
 docopt
+GitPython
