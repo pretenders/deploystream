@@ -1,0 +1,4 @@
+-r runtime.txt
+
+nose                # test discovery and execution
+mock                # create mock objects and patch code for unit tests
