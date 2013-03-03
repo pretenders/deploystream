@@ -3,11 +3,10 @@
 /* Controllers */
 
 
-function MyCtrl1() {
+function FeatureListCtrl($scope) {
+    $scope.features = [
+        {id: '812', title: 'Build something good'},
+        {id: '350', title: 'Check it out'}
+    ];
 }
-//MyCtrl1.$inject = [];
-
-
-function MyCtrl2() {
-}
-//MyCtrl2.$inject = [];
+//FeatureList.$inject = [];

@@ -1,4 +1,4 @@
-// global angular, MyCtrl1, MyCtrl2
+// global angular
 'use strict';
 
 /* Services */

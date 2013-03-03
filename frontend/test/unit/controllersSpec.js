@@ -1,31 +1,20 @@
+// global describe, beforeEach, inject, it, expect
+// global FeatureListCtrl
 'use strict';
 
 /* jasmine specs for controllers go here */
 
-describe('MyCtrl1', function(){
-  var myCtrl1;
+describe('Feature list controller', function () {
+    var scope, ctrl;
 
-  beforeEach(function(){
-    myCtrl1 = new MyCtrl1();
-  });
-
-
-  it('should ....', function() {
-    //spec body
-  });
-});
+    beforeEach(inject(function ($rootScope, $controller) {
+        scope = $rootScope.$new();
+        ctrl = $controller(FeatureListCtrl, {$scope: scope});
+    }));
 
 
-describe('MyCtrl2', function(){
-  var myCtrl2;
-
-
-  beforeEach(function(){
-    myCtrl2 = new MyCtrl2();
-  });
-
-
-  it('should ....', function() {
-    //spec body
-  });
+    it('should add features to the scope', function () {
+        //spec body
+        expect(scope.features.length).toBe(2);
+    });
 });
