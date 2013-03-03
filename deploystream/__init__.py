@@ -12,5 +12,9 @@ app.config.from_pyfile(join(dirname(__file__), 'settings.py'))
 if environ.get("DEPLOYSTREAM_SETTINGS"):
     app.config.from_envvar("DEPLOYSTREAM_SETTINGS")
 
+# Initialise the plugins.
+from providers import init_plugins
+init_plugins()
+
 # Import any views we want to register here at the bottom of the file:
 import deploystream.apps.feature.views
