@@ -7,6 +7,8 @@ class Feature(object):
 
     Instances of this class contain:
 
+        ``plugin``        - the plugin where this issue came from.
+
         ``id``            - the feature identifier.
 
         ``branches``      - a list of ``Branch`` objects
@@ -19,7 +21,8 @@ class Feature(object):
                             the front end to display information about what
                             branches are merged into their parents etc.
     """
-    def __init__(self, id):
+    def __init__(self, plugin, id):
+        self.plugin = plugin
         self.id = id
         self.branches = []
         self.planning_info = None
@@ -49,8 +52,8 @@ class PlanningInfo(object):
         ``plugin``          - The plugin that provided all of these values.
     """
 
-    def __init__(self, title, id, url, feature_type, owner, description,
-                 plugin):
+    def __init__(self, plugin, id, title, feature_type='story',
+                 owner=None, description=None, url=None, **kwargs):
         self.title = title
         self.id = id
         self.url = url
@@ -58,6 +61,7 @@ class PlanningInfo(object):
         self.owner = owner
         self.description = description
         self.plugin = plugin
+        self.extras = kwargs
 
 
 class Branch(object):
