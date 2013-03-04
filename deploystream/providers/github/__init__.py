@@ -5,7 +5,7 @@ from deploystream.apps.feature.models import Feature, PlanningInfo
 from deploystream.providers.interfaces import IPlanningPlugin
 
 
-class GithubIssuesProvider(object):
+class GithubProvider(object):
     """
     An implementation of the planning plugin that gets issues from GitHub
     """

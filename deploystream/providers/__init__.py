@@ -1,7 +1,3 @@
-from importlib import import_module
-
-# from zope import interface as zinterface
-
 from interfaces import (
     ISourceCodeControlPlugin, IBuildInfoPlugin, IPlanningPlugin,
     is_implementation
@@ -21,9 +17,8 @@ PLUGIN_INTERFACES = (
 
 def get_plugin_class(path):
     "Given a path to a class import the module and return the class"
-    index_pos = path.rindex('.')
-    mod_path, class_name = path[:index_pos], path[index_pos + 1:]
-    mod = import_module(mod_path)
+    mod_path, class_name = path.rsplit('.', 1)
+    mod = __import__(mod_path, globals(), locals(), [class_name])
     return getattr(mod, class_name)
 
 

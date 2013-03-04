@@ -47,6 +47,8 @@ class TestPlanningPluginInterface(object):
 
     def test_implements_planning_plugin(self):
         class MyPlugin(object):
+            def get_features(self, **filters):
+                pass
             def get_feature_info(self, feature_id):
                 pass
 
