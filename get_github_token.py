@@ -18,5 +18,5 @@ filename = 'github_auth.py'
 print("Writing token to {0}...".format(filename))
 
 with open(filename, 'w') as fd:
-    fd.write("TOKEN = {0}\n".format(auth.token))
+    fd.write("TOKEN = '{0}'\n".format(auth.token))
     fd.write("ID = {0}\n".format(auth.id))
