@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 from deploystream import __version__, app
 
 USAGE = """
