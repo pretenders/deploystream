@@ -22,7 +22,7 @@ class Feature(object):
                             branches are merged into their parents etc.
     """
     def __init__(self, plugin, id):
-        self.plugin = plugin
+        self._plugin = plugin
         self.id = id
         self.branches = []
         self.planning_info = None
@@ -60,7 +60,7 @@ class PlanningInfo(object):
         self.feature_type = feature_type
         self.owner = owner
         self.description = description
-        self.plugin = plugin
+        self._plugin = plugin
         self.extras = kwargs
 
 
@@ -98,7 +98,7 @@ class Branch(object):
         self.repo_name = repo_name
         self.branch_name = branch_name
         self.latest_commit = latest_commit
-        self.plugin = plugin
+        self._plugin = plugin
 
 
 class BuildInfo(object):
@@ -123,4 +123,4 @@ class BuildInfo(object):
         self.result = result
         self.commit = commit
         self.url = url
-        self.plugin = plugin
+        self._plugin = plugin

@@ -11,7 +11,7 @@ class GithubProvider(object):
     """
     interface.implements(IPlanningPlugin)
 
-    def __init__(self, user, password, repositories, **kwargs):
+    def __init__(self, username, password, repositories, **kwargs):
         """
         Initialise the plugin by giving it GitHub credentials and repos.
 
@@ -19,7 +19,7 @@ class GithubProvider(object):
             A list of tuples containing (<owner>, <name>) that identify
             a repository in GitHub
         """
-        self.github = github3.login(user, password=password)
+        self.github = github3.login(username, password=password)
         self.repositories = repositories
 
     def get_features(self, **filters):
@@ -40,3 +40,6 @@ class GithubProvider(object):
                 features.append(feature)
 
         return features
+
+    def get_feature_info(self, feature_id):
+        pass

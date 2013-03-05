@@ -24,10 +24,12 @@ def get_plugin_class(path):
 
 def init_plugin_set(plugin_set, plugin_interface, plugin_holder):
     "Create a set of plugins, check they are correct, add to a placeholder"
-    for path in plugin_set:
+    for path, options in plugin_set:
         plugin_class = get_plugin_class(path)
         if is_implementation(plugin_class, plugin_interface):
-            plugin_holder.append(plugin_class())
+            plugin_holder.append(plugin_class(**options))
+        else:
+            print('Skipping erroneous plugin: {0}'.format(path))
 
 
 def init_plugins():
