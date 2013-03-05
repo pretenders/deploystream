@@ -13,7 +13,6 @@ def as_json(func):
     @wraps(func)
     def _wrapped(*args, **kwargs):
         result = func(*args, **kwargs)
-        native_result = [r.__dict__ for r in result]
 
         def nativify(data):
             """
@@ -38,7 +37,7 @@ def as_json(func):
             else:
                 return '"{0}"'.format(data)
 
-        return Response(json.dumps(nativify(native_result), indent=2),
+        return Response(json.dumps(nativify(result), indent=2),
                         mimetype='application/json')
 
     return _wrapped
