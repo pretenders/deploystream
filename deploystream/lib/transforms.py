@@ -42,6 +42,11 @@ def remap(original, keymap):
         containing `(new_name, value_mapping)`.
     """
     def _transform(k, v):
-        k = keymap.get(k, k)
-        return k, v
+        newk = keymap.get(k, k)
+        if isinstance(newk, tuple):
+            newk, valuemap = newk
+            return newk, valuemap.get(v, v)
+        else:
+            return newk, v
+
     return dict([_transform(k, v) for k, v in original.iteritems()])
