@@ -4,6 +4,7 @@ from flask import json, Response
 
 from deploystream import app
 from deploystream.apps.feature.lib import get_feature_info, get_all_features
+from deploystream.lib.transforms import nativify
 
 
 def as_json(func):
@@ -13,30 +14,6 @@ def as_json(func):
     @wraps(func)
     def _wrapped(*args, **kwargs):
         result = func(*args, **kwargs)
-
-        def nativify(data):
-            """
-            Convert stuff to native datatypes that can be JSON-encoded.
-
-            This is a bespoke implementation that works with the types
-            of objects we support.
-            """
-            if isinstance(data, basestring) or isinstance(data, int):
-                return repr(data)
-            elif isinstance(data, list) or isinstance(data, tuple):
-                return [nativify(x) for x in data]
-            elif isinstance(data, dict):
-                return {
-                    k: nativify(v)
-                    for k, v in data.items() if not k.startswith('_')
-                }
-            elif data is None:
-                return 'null'
-            elif hasattr(data, '__dict__'):
-                return nativify(data.__dict__)
-            else:
-                return '"{0}"'.format(data)
-
         return Response(json.dumps(nativify(result), indent=2),
                         mimetype='application/json')
 
