@@ -3,6 +3,13 @@ from zope import interface
 
 from deploystream.apps.feature.models import Feature, PlanningInfo
 from deploystream.providers.interfaces import IPlanningPlugin
+from deploystream.lib import transforms
+
+
+FEATURE_MAP = {
+    'body_html': 'description',
+    'assignee': 'owner',
+}
 
 
 class GithubProvider(object):
@@ -32,10 +39,8 @@ class GithubProvider(object):
             ghrepo = self.github.repository(owner, repo)
             for issue in ghrepo.iter_issues(**filters):
                 feature = Feature(self, issue.number)
-                issue_info = issue.__dict__
+                issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
                 issue_info['feature_type'] = 'defect'
-                issue_info['description'] = issue_info['body_html']
-                issue_info['owner'] = issue_info['assignee']
                 feature.planning_info = PlanningInfo(self, **issue_info)
                 features.append(feature)
 

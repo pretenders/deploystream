@@ -1,8 +1,8 @@
 def nativify(data):
     """
-    convert stuff to native datatypes that can be json-encoded.
+    Convert stuff to native datatypes that can be json-encoded.
 
-    this is a bespoke implementation that works with the types
+    This is a bespoke implementation that works with the types
     of objects we support.
     """
     if isinstance(data, unicode):

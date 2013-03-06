@@ -61,7 +61,7 @@ class PlanningInfo(object):
         self.owner = owner
         self.description = description
         self._plugin = plugin
-        self.extras = kwargs
+        self._extras = kwargs
 
 
 class Branch(object):
