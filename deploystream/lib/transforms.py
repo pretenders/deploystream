@@ -8,7 +8,7 @@ def nativify(data):
     if isinstance(data, unicode):
         return data.encode('utf-8')
     if isinstance(data, basestring) or isinstance(data, int):
-        return repr(data)
+        return data
     elif isinstance(data, list) or isinstance(data, tuple):
         return [nativify(x) for x in data]
     elif isinstance(data, dict):
