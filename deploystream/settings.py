@@ -1,17 +1,14 @@
+from local_settings import GITHUB_CONFIG, GIT_CONFIG
 
-SOURCE_CODE_PLUGINS = ['deploystream.providers.git_plugin.GitPlugin']
-PLANNING_PLUGINS = []
+
+SOURCE_CODE_PLUGINS = [
+    ('deploystream.providers.git_provider.GitProvider', GIT_CONFIG),
+]
+
+PLANNING_PLUGINS = [
+    ('deploystream.providers.github.GithubProvider', GITHUB_CONFIG),
+]
+
 BUILD_INFO_PLUGINS = []
 
 HIERARCHY_REGEXES = []
-
-
-PLUGIN_CONFIG = {
-    'GitPlugin': {
-        'code_dir': None
-    }
-}
-"""A dict of configuration information for the plugins.
-Keys are plugin class names, values are dictionaries to be passed in as kwargs
-during insantiation.
-"""

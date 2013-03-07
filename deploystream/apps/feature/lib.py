@@ -1,13 +1,28 @@
+import itertools
+
 from deploystream import app
 from deploystream.providers import (
     PLANNING_PLUGINS, SOURCE_CODE_PLUGINS, BUILD_INFO_PLUGINS
 )
 
-from models import Feature, Branch, PlanningInfo, BuildInfo
+from .models import Feature, Branch, PlanningInfo, BuildInfo
+
+
+def get_all_features():
+    features = []
+
+    for plugin in PLANNING_PLUGINS:
+        features += plugin.get_features()
+
+    # features = itertools.chain([plugin.get_features() for plugin in PLANNING_PLUGINS])
+
+    return features
 
 
 def get_feature_info(feature_id):
-    feature = Feature(feature_id)
+    # TODO: we need to provide a way to identify where the feature came from,
+    # possibly by namespacing the feature_id parameter. For now we use None
+    feature = Feature(None, feature_id)
     # First get any feature info from any management providers
     for plugin in PLANNING_PLUGINS:
         feature.planning_info = PlanningInfo(

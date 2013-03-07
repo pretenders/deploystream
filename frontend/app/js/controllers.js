@@ -1,12 +1,10 @@
+// global Feature
 'use strict';
 
 /* Controllers */
 
 
-function FeatureListCtrl($scope) {
-    $scope.features = [
-        {id: '812', title: 'Build something good'},
-        {id: '350', title: 'Check it out'}
-    ];
+function FeatureListCtrl($scope, Feature) {
+    $scope.features = Feature.query();
 }
-//FeatureList.$inject = [];
+//FeatureListCtrl.$inject = [];
