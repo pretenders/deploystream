@@ -3,13 +3,18 @@
 
 
 // Declare app level module which depends on filters, and services
-angular.module('myApp', ['myApp.filters', 'myApp.services', 'myApp.directives'])
+angular.module('deploystream', [
+        'deploystream.filters',
+        'deploystream.services',
+        'deploystream.directives'
+    ])
 .config(['$routeProvider', function ($routeProvider) {
-    $routeProvider.when('/features', {
-        templateUrl: 'partials/features.html',
-        controller: FeatureListCtrl
-    });
-    $routeProvider.otherwise({
-        redirectTo: '/features'
-    });
-}]);
+        $routeProvider.when('/features', {
+            templateUrl: 'partials/features.html',
+            controller: FeatureListCtrl
+        });
+        $routeProvider.otherwise({
+            redirectTo: '/features'
+        });
+    }]
+);
