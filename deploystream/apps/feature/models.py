@@ -7,6 +7,8 @@ class Feature(object):
 
     Instances of this class contain:
 
+        ``plugin``        - the plugin where this issue came from.
+
         ``id``            - the feature identifier.
 
         ``branches``      - a list of ``Branch`` objects
@@ -19,7 +21,8 @@ class Feature(object):
                             the front end to display information about what
                             branches are merged into their parents etc.
     """
-    def __init__(self, id):
+    def __init__(self, plugin, id):
+        self._plugin = plugin
         self.id = id
         self.branches = []
         self.planning_info = None
@@ -49,15 +52,16 @@ class PlanningInfo(object):
         ``plugin``          - The plugin that provided all of these values.
     """
 
-    def __init__(self, title, id, url, feature_type, owner, description,
-                 plugin):
+    def __init__(self, plugin, id, title, feature_type='story',
+                 owner=None, description=None, url=None, **kwargs):
         self.title = title
         self.id = id
         self.url = url
         self.feature_type = feature_type
         self.owner = owner
         self.description = description
-        self.plugin = plugin
+        self._plugin = plugin
+        self._extras = kwargs
 
 
 class Branch(object):
@@ -94,7 +98,7 @@ class Branch(object):
         self.repo_name = repo_name
         self.branch_name = branch_name
         self.latest_commit = latest_commit
-        self.plugin = plugin
+        self._plugin = plugin
 
 
 class BuildInfo(object):
@@ -119,4 +123,4 @@ class BuildInfo(object):
         self.result = result
         self.commit = commit
         self.url = url
-        self.plugin = plugin
+        self._plugin = plugin

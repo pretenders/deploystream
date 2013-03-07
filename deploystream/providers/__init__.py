@@ -1,7 +1,3 @@
-from importlib import import_module
-
-# from zope import interface as zinterface
-
 from interfaces import (
     ISourceCodeControlPlugin, IBuildInfoPlugin, IPlanningPlugin,
     is_implementation
@@ -21,18 +17,19 @@ PLUGIN_INTERFACES = (
 
 def get_plugin_class(path):
     "Given a path to a class import the module and return the class"
-    index_pos = path.rindex('.')
-    mod_path, class_name = path[:index_pos], path[index_pos + 1:]
-    mod = import_module(mod_path)
+    mod_path, class_name = path.rsplit('.', 1)
+    mod = __import__(mod_path, globals(), locals(), [class_name])
     return getattr(mod, class_name)
 
 
 def init_plugin_set(plugin_set, plugin_interface, plugin_holder):
     "Create a set of plugins, check they are correct, add to a placeholder"
-    for path in plugin_set:
+    for path, options in plugin_set:
         plugin_class = get_plugin_class(path)
         if is_implementation(plugin_class, plugin_interface):
-            plugin_holder.append(plugin_class())
+            plugin_holder.append(plugin_class(**options))
+        else:
+            print('Skipping erroneous plugin: {0}'.format(path))
 
 
 def init_plugins():
