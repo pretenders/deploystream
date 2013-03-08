@@ -1,7 +1,7 @@
 import os
 from os.path import join, exists, dirname
 
-from nose.tools import assert_equal
+from nose.tools import assert_equal, with_setup
 
 from deploystream.providers.git_provider import GitProvider
 
@@ -12,6 +12,8 @@ def ensure_dummy_clone_available():
     """
     Check that we have access to pretenderers' dummyrepo
     """
+    if not os.path.exists(DUMMY_CODE_DIR):
+        os.mkdir(DUMMY_CODE_DIR)
     folder_name = join(DUMMY_CODE_DIR, 'dummyrepo')
     if not exists(folder_name):
         os.system('git clone git+ssh://git@github.com/pretenders/dummyrepo {0}'
@@ -20,6 +22,7 @@ def ensure_dummy_clone_available():
         os.system('git --git-dir={0} fetch'.format(folder_name))
 
 
+@with_setup(ensure_dummy_clone_available)
 def test_git_plugin_finds_branches_across_repos():
     """
     Test that the GitPlugin finds branches in repos in the dir given.
