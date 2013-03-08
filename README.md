@@ -4,6 +4,15 @@ deploystream
 Track the progress of feature development across repositories gathering
 information from a multitude of sources.
 
+Getting started
+---------------
+
+You'll need to create a ``github_auth.py`` file with your TOKEN information from
+github.
+
+Do this by running ``get_github_token.py`` and follow the steps. That will
+enable access to github. Alter the configuration of GITHUB_CONFIG in
+local_settings.py to point to the repo of choice.
 
 Running the server locally
 --------------------------
@@ -35,4 +44,5 @@ Defining which providers to use
 
 Configuring a provider
 ~~~~~~~~~~~~~~~~~~~~~~
+
 

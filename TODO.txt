@@ -1,7 +1,6 @@
 Alex
 ====
 
- - Finish Git plugin - to make it look across a group of repos
  - Code that handles the creation of hierarchical branch trees
  - git plugin code to use hierarchical trees to determine merge statuses
 
@@ -11,8 +10,6 @@ Unclaimed
  - Code to handle multiple plugins - we'll need to merge data between them I suspect.
  - Code that passes per-plugin settings to the plugins.
  - There's inconsistency in the naming between providers and plugins. Which do you prefer?
- - Creation of jenkins plugin.
- - Creation of CI github plugin
  - Addition of normalised Result class for buildinfo
  - Normalised status for a feature
  - Normalised feature type
