@@ -10,6 +10,27 @@ class GitProvider(object):
     def __init__(self, code_dir='.',
                  feature_breakup_regex='',
                  branch_finder_template=''):
+        """
+        Create a GitProvider.
+
+        :param code_dir:
+            The filesystem path to the directory within which all repositories
+            live that are to be queried.
+
+        :param feature_breakup_regex:
+            A regular expression to be used to breakup feature ids into
+            understandable parts. The regex should use named groups to be
+            of use to the ``branch_finder_template``.
+
+            eg. "(?P<project>[a-zA-Z]+)-?(?P<id>[0-9]+)"
+
+        :param branch_finder_template:
+            A template regular expression with named gaps to be filled by the
+            outcome of breaking up the feature.
+
+            eg. ".*{id}.*"
+
+        """
         self.code_dir = code_dir
         self.feature_breakup_regex = feature_breakup_regex
         self.branch_finder_template = branch_finder_template
