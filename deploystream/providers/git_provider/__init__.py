@@ -1,13 +1,18 @@
 import os
 from os.path import join, exists
+import re
 
 import git
 
 
 class GitProvider(object):
 
-    def __init__(self, code_dir='.'):
+    def __init__(self, code_dir='.',
+                 feature_breakup_regex='',
+                 branch_finder_template=''):
         self.code_dir = code_dir
+        self.feature_breakup_regex = feature_breakup_regex
+        self.branch_finder_template = branch_finder_template
 
     def get_repo_branches_involved(self, feature_id):
         """
@@ -35,6 +40,14 @@ class GitProvider(object):
                     (repo_name, ) + branch for branch in branches])
         return repo_branches
 
+    def _get_feature_breakdown(self, feature_id):
+        """
+        Break up the feature_id using the regex in configuration.
+        """
+        match = re.search(self.feature_breakup_regex, feature_id)
+        if match:
+            return match.groupdict()
+
     def get_branches_involved(self, repo_location, feature_id):
         """
         Get the set of brances involved in the given repo and feature.
@@ -55,9 +68,10 @@ class GitProvider(object):
                         .format(repo_location=repo_location))
         remote = git.remote.Remote(repo, 'origin')
         affected = []
-        lower_feature = feature_id.lower()
+        feature_breakup = self._get_feature_breakdown(feature_id)
+        regex = self.branch_finder_template.format(**feature_breakup)
         for remote_ref in remote.refs:
-            if lower_feature in remote_ref.remote_head.lower():
+            if re.search(regex, remote_ref.remote_head):
                 affected.append((remote_ref.remote_head,
                                  str(remote_ref.commit)))
 
