@@ -23,7 +23,8 @@ class IBuildInfoPlugin(interface.Interface):
         :returns:
             A dictionary containing keys and values for at least:
                 - timestamp (of the build - a datetime object)
-                - result (one of "success", "failure", "unstable", "partial")
+                - result (one of "success", "failure", "unstable", "partial",
+                          "pending")
                 - commit (of the build)
                 - url
         """

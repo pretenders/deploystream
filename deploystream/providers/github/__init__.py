@@ -10,6 +10,16 @@ FEATURE_MAP = {
     'body_html': 'description',
     'assignee': 'owner',
 }
+BUILD_MAP = {
+    'created_at': 'timestamp',
+    'result': ('state', {
+                'success': 'success',
+                'pending': 'pending',
+                'failed': 'failure',
+                'error': 'unstable',
+              }),
+    'target_url': 'url',
+}
 
 
 class GithubProvider(object):
@@ -48,3 +58,9 @@ class GithubProvider(object):
 
     def get_feature_info(self, feature_id):
         pass
+
+    def get_build_information(self, repo, owner, branch, commit):
+        ghrepo = self.github.repository(owner, repo)
+        for status in ghrepo.iter_statuses(commit):
+            build_info = transforms.remap(status.__dict__, BUILD_MAP)
+            build_info['commit'] = commit
