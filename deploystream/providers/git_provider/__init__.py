@@ -23,7 +23,7 @@ class GitProvider(object):
                 1: branch name
                 2: latest commit
         """
-        # Every folder in side self.code_dir that is a git repo will be looked
+        # Every folder inside self.code_dir that is a git repo will be looked
         # at
         repo_branches = []
         for repo_name in os.listdir(self.code_dir):
@@ -31,8 +31,8 @@ class GitProvider(object):
             if exists(join(repo_location, ".git")):
                 branches = self.get_branches_involved(repo_location,
                                                       feature_id)
-                repo_branches.extend([(repo_name, ) + branch
-                                            for branch in branches])
+                repo_branches.extend([
+                    (repo_name, ) + branch for branch in branches])
         return repo_branches
 
     def get_branches_involved(self, repo_location, feature_id):

@@ -10,7 +10,7 @@ DUMMY_CODE_DIR = join(dirname(__file__), 'data')
 
 def ensure_dummy_clone_available():
     """
-    Check that we have access to pretenderers' dummyrepo
+    Check that we have access to pretenders' dummyrepo
     """
     if not os.path.exists(DUMMY_CODE_DIR):
         os.mkdir(DUMMY_CODE_DIR)
@@ -32,7 +32,6 @@ def test_git_plugin_finds_branches_across_repos():
     The data in this test is found by looking at the dummyrepo and getting
     the branch names and latest commit of any branches that match "FeAtUrE".
     """
-    ensure_dummy_clone_available()
     provider = GitProvider(code_dir=DUMMY_CODE_DIR)
     branches = provider.get_repo_branches_involved('FeAtUrE')
 

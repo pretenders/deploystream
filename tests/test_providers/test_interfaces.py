@@ -12,6 +12,7 @@ class TestSourceCodeControlPluginInterface(object):
         class MyPlugin(object):
             def get_repo_branches_involved(self, feature_id):
                 pass
+
             def set_merged_status(self, repo_name, hierarchy_tree):
                 pass
 
@@ -21,6 +22,7 @@ class TestSourceCodeControlPluginInterface(object):
         class MyPlugin(object):
             def get_repo_branches_involved(self, feature_id):
                 pass
+
             def set_merged_status(self, repo_name):
                 pass
 
@@ -49,6 +51,7 @@ class TestPlanningPluginInterface(object):
         class MyPlugin(object):
             def get_features(self, **filters):
                 pass
+
             def get_feature_info(self, feature_id):
                 pass
 
