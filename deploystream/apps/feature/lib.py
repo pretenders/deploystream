@@ -1,5 +1,3 @@
-import itertools
-
 from deploystream import app
 from deploystream.providers import (
     PLANNING_PLUGINS, SOURCE_CODE_PLUGINS, BUILD_INFO_PLUGINS
@@ -13,8 +11,6 @@ def get_all_features():
 
     for plugin in PLANNING_PLUGINS:
         features += plugin.get_features()
-
-    # features = itertools.chain([plugin.get_features() for plugin in PLANNING_PLUGINS])
 
     return features
 

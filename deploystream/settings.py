@@ -1,8 +1,8 @@
-from local_settings import GITHUB_CONFIG
+from local_settings import GITHUB_CONFIG, GIT_CONFIG
 
 
 SOURCE_CODE_PLUGINS = [
-    ('deploystream.providers.git_plugin.plugin.GitPlugin', {}),
+    ('deploystream.providers.git_provider.GitProvider', GIT_CONFIG),
 ]
 
 PLANNING_PLUGINS = [
