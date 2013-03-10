@@ -21,8 +21,9 @@ class Feature(object):
                             the front end to display information about what
                             branches are merged into their parents etc.
     """
-    def __init__(self, plugin, id):
+    def __init__(self, plugin, id, project=None):
         self._plugin = plugin
+        self.project = project
         self.id = id
         self.branches = []
         self.planning_info = None
@@ -53,7 +54,8 @@ class PlanningInfo(object):
     """
 
     def __init__(self, plugin, id, title, feature_type='story',
-                 owner=None, description=None, url=None, **kwargs):
+                 owner=None, description=None, url=None,
+                 **kwargs):
         self.title = title
         self.id = id
         self.url = url

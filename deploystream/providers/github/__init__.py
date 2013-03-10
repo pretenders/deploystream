@@ -37,8 +37,9 @@ class GithubProvider(object):
 
         for owner, repo in self.repositories:
             ghrepo = self.github.repository(owner, repo)
+            project = '{0}/{1}'.format(owner, repo)
             for issue in ghrepo.iter_issues(**filters):
-                feature = Feature(self, issue.number)
+                feature = Feature(self, issue.number, project=project)
                 issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
                 issue_info['feature_type'] = 'defect'
                 feature.planning_info = PlanningInfo(self, **issue_info)
