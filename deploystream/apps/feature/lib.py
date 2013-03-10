@@ -3,7 +3,7 @@ from deploystream.providers import (
     PLANNING_PLUGINS, SOURCE_CODE_PLUGINS, BUILD_INFO_PLUGINS
 )
 
-from .models import Feature, Branch, PlanningInfo, BuildInfo
+from .models import Branch, BuildInfo, Feature
 
 
 def get_all_features():
@@ -16,14 +16,20 @@ def get_all_features():
 
 
 def get_feature_info(feature_id):
-    # TODO: we need to provide a way to identify where the feature came from,
-    # possibly by namespacing the feature_id parameter. For now we use None
-    feature = Feature(None, feature_id)
-    # First get any feature info from any management providers
+    # TODO: since features may come from various origins, we need
+    # at this stage to either use a feature id that is a string such as
+    # "github:pretenders/deploystream:15" or to have additional arguments
+    # for plugin and project. In any case we probably need providers to
+    # have an identifying string such as "github", "jira", "sprintly"...
+
+    # First get feature info from the management providers
+    # This needs rewriting according to previous paragraph. For now:
+    # Only one management provider should know about this feature,
+    # so we stop on first success
     for plugin in PLANNING_PLUGINS:
-        feature.planning_info = PlanningInfo(
-            plugin=plugin,
-            **plugin.get_feature_info(feature_id))
+        feature = Feature(plugin, None, **plugin.get_feature_info(feature_id))
+        if feature:
+            break
 
     # Then get any branch info from any source control providers
     for plugin in SOURCE_CODE_PLUGINS:

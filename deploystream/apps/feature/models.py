@@ -2,31 +2,42 @@ class Feature(object):
     """
     The class used for encapsulating ``Feature`` data across repos & branches.
 
+    It contains planning information obtained from a management tool.
     An internal convenience class, instances of which are intended to be
     exposed via the API to front end clients.
 
     Instances of this class contain:
 
-        ``plugin``        - the plugin where this issue came from.
+        ``plugin``          - The plugin that provided all of these values.
+        ``project``         - The project where this feature belongs.
+        ``id``              - The id of the feature.
+        ``title``           - The name of the feature.
+        ``feature_type``    - The type of the feature.
+        ``owner``           - The owner of the feature.
+        ``description``     - Long description of the feature.
+        ``url``             - The url to the feature.
 
-        ``id``            - the feature identifier.
+        ``branches``        - a list of ``Branch`` objects
 
-        ``branches``      - a list of ``Branch`` objects
-
-        ``planning_info`` - an instance of ``PlanningInfo`` or ``None`` if not
-                            available.
-
-        ``trees``         - A tree of how the branches in ``branches`` relate
-                            to one another. This will be especially useful at
-                            the front end to display information about what
-                            branches are merged into their parents etc.
+        ``trees``           - A tree of how the branches in ``branches`` relate
+                              to one another. This will be especially useful at
+                              the front end to display information about what
+                              branches are merged into their parents etc.
     """
-    def __init__(self, plugin, id, project=None):
+    def __init__(self, plugin, project, id, title,
+                 feature_type='story', owner=None, description=None, url=None,
+                 **kwargs):
         self._plugin = plugin
         self.project = project
         self.id = id
+        self.title = title
+        self.feature_type = feature_type
+        self.owner = owner
+        self.description = description
+        self.url = url
+        self._extras = kwargs
+
         self.branches = []
-        self.planning_info = None
         self.trees = []
 
     def create_hierarchy_trees(self, regexes):
@@ -36,34 +47,6 @@ class Feature(object):
     def add_branch(self, branch):
         assert isinstance(branch, Branch)
         self.branches.append(branch)
-
-
-class PlanningInfo(object):
-    """
-    A class encapsulating planning information from a management tool.
-
-    Instances of this class contain values for:
-
-        ``title``           - The name of the feature.
-        ``id``              - The id of the feature.
-        ``url``             - The url to the feature.
-        ``feature_type``    - The type of the feature.
-        ``owner``           - The owner of the feature.
-        ``description``     - Long description of the feature.
-        ``plugin``          - The plugin that provided all of these values.
-    """
-
-    def __init__(self, plugin, id, title, feature_type='story',
-                 owner=None, description=None, url=None,
-                 **kwargs):
-        self.title = title
-        self.id = id
-        self.url = url
-        self.feature_type = feature_type
-        self.owner = owner
-        self.description = description
-        self._plugin = plugin
-        self._extras = kwargs
 
 
 class Branch(object):
