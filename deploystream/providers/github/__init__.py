@@ -5,9 +5,9 @@ from deploystream.providers.interfaces import IPlanningPlugin
 from deploystream.lib import transforms
 
 
+# Map fields from the Github API to deploystream names
 FEATURE_MAP = {
     'body_html': 'description',
-    'assignee': 'owner',
     'number': 'id',
     'id': 'github_id',
 }
@@ -43,6 +43,10 @@ class GithubProvider(object):
                 issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
                 issue_info['feature_type'] = 'defect'
                 issue_info['project'] = project
+                owner = issue_info['assignee']
+                if owner is not None:
+                    # take only login name from User object
+                    issue_info['owner'] = owner.login
                 features.append(issue_info)
 
         return features

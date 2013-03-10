@@ -7,12 +7,16 @@ from .models import Branch, BuildInfo, Feature
 
 
 def get_all_features():
-    features = []
+    """
+    Collect all features from the configured providers.
+    """
+    all_features = []
 
-    for plugin in PLANNING_PLUGINS:
-        features += plugin.get_features()
+    for provider in PLANNING_PLUGINS:
+        for feature in provider.get_features():
+            all_features.append(Feature(provider, **feature))
 
-    return features
+    return all_features
 
 
 def get_feature_info(feature_id):
