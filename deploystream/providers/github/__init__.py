@@ -1,14 +1,15 @@
 import github3
 from zope import interface
 
-from deploystream.apps.feature.models import Feature, PlanningInfo
 from deploystream.providers.interfaces import IPlanningPlugin
 from deploystream.lib import transforms
 
 
+# Map fields from the Github API to deploystream names
 FEATURE_MAP = {
     'body_html': 'description',
-    'assignee': 'owner',
+    'number': 'id',
+    'id': 'github_id',
 }
 
 
@@ -37,12 +38,16 @@ class GithubProvider(object):
 
         for owner, repo in self.repositories:
             ghrepo = self.github.repository(owner, repo)
+            project = '{0}/{1}'.format(owner, repo)
             for issue in ghrepo.iter_issues(**filters):
-                feature = Feature(self, issue.number)
                 issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
                 issue_info['feature_type'] = 'defect'
-                feature.planning_info = PlanningInfo(self, **issue_info)
-                features.append(feature)
+                issue_info['project'] = project
+                owner = issue_info['assignee']
+                if owner is not None:
+                    # take only login name from User object
+                    issue_info['owner'] = owner.login
+                features.append(issue_info)
 
         return features
 
