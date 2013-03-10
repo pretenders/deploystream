@@ -22,4 +22,5 @@ from providers import init_plugins
 init_plugins()
 
 # Import any views we want to register here at the bottom of the file:
+import deploystream.views  # NOQA
 import deploystream.apps.feature.views  # NOQA
