@@ -2,7 +2,11 @@
 from github_auth import TOKEN
 
 GITHUB_CONFIG = {
-    'repositories': [('pretenders', 'deploystream')],
+    'repositories': [
+        ('pretenders', 'deploystream'),
+        ('pretenders', 'pretenders'),
+        ('txels', 'autojenkins'),
+    ],
     'token': TOKEN,
 }
 

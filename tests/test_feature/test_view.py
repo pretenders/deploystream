@@ -48,7 +48,7 @@ class TestEndToEndWithDummyPlugins(object):
     @patch("deploystream.apps.feature.lib.BUILD_INFO_PLUGINS",
            [BuildInfoPlugin()])
     def test_feature_view_shows_details(self):
-        response = self.client.get('/feature/FT101')
+        response = self.client.get('/features/FT101')
         assert "Amazing feature that will blow your mind" in response.data
         # TODO: Add further assertions here to do with links etc. Probably
         # with the use of beautiful soup.

@@ -10,7 +10,7 @@ angular.module('deploystream', [
     ])
 .config(['$routeProvider', function ($routeProvider) {
         $routeProvider.when('/features', {
-            templateUrl: 'partials/features.html',
+            templateUrl: '/static/partials/features.html',
             controller: FeatureListCtrl
         });
         $routeProvider.otherwise({

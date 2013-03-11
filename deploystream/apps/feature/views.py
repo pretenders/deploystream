@@ -27,7 +27,7 @@ def list_features():
     return features
 
 
-@app.route('/feature/<feature_id>', methods=['GET'])
+@app.route('/features/<feature_id>', methods=['GET'])
 @as_json
 def view_feature(feature_id):
     feature = get_feature_info(feature_id)
