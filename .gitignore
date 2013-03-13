@@ -39,3 +39,5 @@ nosetests.xml
 tags
 
 logs
+
+local_settings.py
