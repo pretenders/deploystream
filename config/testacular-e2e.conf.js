@@ -6,11 +6,10 @@ files = [
     'test/e2e/**/*.js'
 ];
 
+singleRun = true;
 autoWatch = false;
 
 browsers = ['Chrome'];
-
-singleRun = true;
 
 proxies = {
     '/': 'http://localhost:5000/'
