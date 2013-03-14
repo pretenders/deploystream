@@ -1,3 +1,4 @@
+// global JASMINE, JASMINE_ADAPTER
 basePath = '../deploystream/static';
 
 files = [
@@ -13,8 +14,9 @@ files = [
 autoWatch = true;
 
 browsers = ['Chrome'];
+reporters = ['junit', 'progress'];
 
 junitReporter = {
-    outputFile: 'test_out/unit.xml',
+    outputFile: '../../reports/junit.xml',
     suite: 'unit'
 };

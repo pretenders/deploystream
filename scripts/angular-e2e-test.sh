@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# Run angular end to end tests.
+# Requires a running server that must be started separately,
+# e.g. with runserver.sh
+
 BASE_DIR=`dirname $0`
 
 echo ""

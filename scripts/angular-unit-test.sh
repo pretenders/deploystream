@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Run all angular unit tests with testacular
+# 
+# When run without arguments, it will do a single run (e.g. as part of a build)
+# 
+# When run with '-w', it will stay running, watch over file changes and
+# trigger a re-run when these are modified (useful during development).
+
 BASE_DIR=`dirname $0`
 options="--single-run"
 

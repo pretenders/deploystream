@@ -39,6 +39,7 @@ nosetests.xml
 tags
 
 logs
+/reports
 
 local_settings.py
 tests/test_providers/data/
