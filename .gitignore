@@ -41,3 +41,5 @@ tags
 logs
 
 local_settings.py
+tests/test_providers/data/
+github_auth.py
