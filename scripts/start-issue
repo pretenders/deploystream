@@ -1,0 +1,17 @@
+#!/bin/bash
+# Start a new branch for a github issue off develop, and assign to self
+
+if [ "$3" == "" ]
+then
+    echo "Usage: $0 issue github-username github-password"
+    exit -1
+fi
+
+issue=$1
+ghuser=$2
+pass=$3
+
+http --auth $ghuser:$pass PATCH https://api.github.com/repos/pretenders/deploystream/issues/$issue assignee=$ghuser
+git checkout develop
+git pull origin develop
+git checkout -b story/$1/$USER

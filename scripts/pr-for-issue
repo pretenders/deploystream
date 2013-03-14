@@ -1,0 +1,12 @@
+#!/bin/bash
+# Convert an issue into a PR
+
+if [ "$1" == "" ]
+then
+    echo "Usage: $0 issue"
+    exit -1
+fi
+
+issue=$1
+
+hub pull-request -i $issue -b develop -h pretenders:story/$issue/$USER

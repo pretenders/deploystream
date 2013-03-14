@@ -1,0 +1,14 @@
+#!/bin/bash
+# Remove assignee from an issue
+
+if [ "$3" == "" ]
+then
+    echo "Usage: $0 issue github-username github-password"
+    exit -1
+fi
+
+issue=$1
+ghuser=$2
+pass=$3
+
+http --auth $ghuser:$pass PATCH https://api.github.com/repos/pretenders/deploystream/issues/$issue assignee=
