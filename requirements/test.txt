@@ -3,3 +3,6 @@
 nose                # test discovery and execution
 mock                # create mock objects and patch code for unit tests
 pyhamcrest          # matchers for use in test assertions
+
+nodeenv             # For creating an isolated node/npm environment inside the
+                    # python virtualenv, to install node.js packages
