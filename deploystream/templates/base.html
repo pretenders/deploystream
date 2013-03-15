@@ -1,17 +1,36 @@
 <!doctype html>
-<html>
- <head>
+<html lang="en" ng-app="deploystream">
+    
+    <head>
     {% block head %}
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <title>{% block title %}{% endblock %}</title>
+        <meta charset="utf-8">
+        <title>DeployStream {% block extratitle %}{% endblock %}</title>
+        <link rel="stylesheet" href="/static/css/app.css">
+        <style>
+            [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+            .ng-cloak, .x-ng-cloak {
+                display: none;
+            }
+        </style>
+        {% block extrahead %}
+        {% endblock %}
     {% endblock %}
-  </head>
-<body>
-  <div id="content">{% block content %}{% endblock %}</div>
-  <div id="footer">
-    {% block footer %}
-    Produced by <a href="http://github.com/pretenders/">Pretenders</a>.
-    {% endblock %}
-  </div>
-</body>
+    </head>
+    
+    <body ng-cloak>
+        <header>
+        {% block header %}{% endblock %}
+        </header>
+        <section id="content" ng-view>
+        {% block content %}{% endblock %}
+        </section>
+        <footer>
+        {% block footer %}
+            Produced by <a href="http://github.com/pretenders/">Pretenders</a>. 
+        {% endblock %}
+        </footer>
+
+        {% block scripts %}{% endblock %}
+    </body>
+
 </html>
