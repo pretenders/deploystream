@@ -9,12 +9,15 @@ angular.module('deploystream', [
         'deploystream.directives'
     ])
 .config(['$routeProvider', function ($routeProvider) {
+        $routeProvider.when('/', {
+            templateUrl: '/static/partials/home.html'
+        });
         $routeProvider.when('/features', {
             templateUrl: '/static/partials/features.html',
             controller: FeatureListCtrl
         });
         $routeProvider.otherwise({
-            redirectTo: '/features'
+            redirectTo: '/'
         });
     }]
 );

@@ -1,13 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <style>
-    [ng-cloak] {
-      display: none;
-    }
-  </style>
-  <script>
+{% extends "base.html" %}
+
+{% block scripts %}
+<script>
     // include angular loader, which allows the files to load in any order
     /*
      AngularJS v1.0.0rc1
@@ -29,23 +23,16 @@
 
     // load all of the dependencies asynchronously.
     $script([
-      'lib/angular/angular.js',
-      'js/app.js',
-      'js/services.js',
-      'js/controllers.js',
-      'js/filters.js',
-      'js/directives.js'
+        '/static/lib/angular/angular.js',
+        '/static/js/app.js',
+        '/static/js/services.js',
+        '/static/js/controllers.js',
+        '/static/js/filters.js',
+        '/static/js/directives.js',
+        '/static/lib/angular/angular-resource.js'
     ], function() {
-      // when all is done, execute bootstrap angular application
-      angular.bootstrap(document, ['deploystream']);
+        // when all is done, execute bootstrap angular application
+        angular.bootstrap(document, ['deploystream']);
     });
-  </script>
-  <title>DeployStream</title>
-  <link rel="stylesheet" href="css/app.css">
-</head>
-<body ng-cloak>
-
-  <div ng-view></div>
-
-</body>
-</html>
+</script>
+{% endblock %}
