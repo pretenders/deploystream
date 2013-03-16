@@ -44,4 +44,8 @@ body {
     margin: 0 auto;
 }
 
+.hero-unit {
+    padding: 32px;
+}
+
 /* end sticky footer */
