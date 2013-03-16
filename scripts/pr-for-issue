@@ -12,4 +12,4 @@ ghuser=$2
 pass=$3
 
 #hub pull-request -i $issue -b develop -h pretenders:story/$issue/$USER
-http --auth $ghuser:$pass POST https://api.github.com/repos/pretenders/deploystream/pulls issue=$issue head="pretenders:story/$issue/carles" base=develop
+http --auth $ghuser:$pass POST https://api.github.com/repos/pretenders/deploystream/pulls issue=$issue head="pretenders:story/$issue/$USER" base=develop
