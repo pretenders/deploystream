@@ -4,6 +4,7 @@
     <head>
     {% block head %}
         <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DeployStream {% block extratitle %}{% endblock %}</title>
         <link rel="stylesheet" href="/static/css/app.css">
         <style>
@@ -12,24 +13,55 @@
                 display: none;
             }
         </style>
+        <!-- Bootstrap: -->
+        <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <style>
+        #content {
+            padding-top: 60px; /* make space for the fixed top navbar */
+        }
+        </style>
+        <link href="../assets/css/bootstrap-responsive.css" rel="stylesheet">
         {% block extrahead %}
         {% endblock %}
     {% endblock %}
     </head>
     
     <body ng-cloak>
-        <header>
-        {% block header %}{% endblock %}
-        </header>
-        <section id="content" ng-view>
-        {% block content %}{% endblock %}
-        </section>
-        <footer>
-        {% block footer %}
-            Produced by <a href="http://github.com/pretenders/">Pretenders</a>. 
-        {% endblock %}
+        <div id="wrap">
+            <header>
+                <nav class="navbar navbar-inverse navbar-fixed-top">
+                    <div class="navbar-inner">
+                        <div class="container-fluid">
+                        <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="brand" href="#">Deploystream</a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav">
+                                <li class="active"><a href="#/features">Features</a></li>
+                            </ul>
+                        </div><!--/.nav-collapse -->
+                        </div>
+                    </div>
+                </nav>
+            </header>
+            <section id="content" class="container-fluid" ng-view>
+                {% block content %}{% endblock %}
+            </section>
+            <div id="push"></div>
+        </div>
+        <footer id="footer">
+            <div class="container-fluid">
+            <p class="muted">Produced by <a href="http://github.com/pretenders/">Pretenders</a>.</p>
+            </div>
         </footer>
 
+        <!-- Bootstrap { -->
+        <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+        <!-- } -->
         {% block scripts %}{% endblock %}
     </body>
 

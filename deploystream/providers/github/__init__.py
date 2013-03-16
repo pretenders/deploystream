@@ -41,10 +41,12 @@ class GithubProvider(object):
             project = '{0}/{1}'.format(owner, repo)
             for issue in ghrepo.iter_issues(**filters):
                 issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
-                issue_info['feature_type'] = 'defect'
+                issue_info['type'] = 'defect'
                 issue_info['project'] = project
                 owner = issue_info['assignee']
-                if owner is not None:
+                if owner is None:
+                    issue_info['owner'] = ''
+                else:
                     # take only login name from User object
                     issue_info['owner'] = owner.login
                 features.append(issue_info)

@@ -12,7 +12,7 @@ class Feature(object):
         ``project``         - The project where this feature belongs.
         ``id``              - The id of the feature.
         ``title``           - The name of the feature.
-        ``feature_type``    - The type of the feature.
+        ``type``            - The type of the feature.
         ``owner``           - The owner of the feature.
         ``description``     - Long description of the feature.
         ``url``             - The url to the feature.
@@ -25,13 +25,13 @@ class Feature(object):
                               branches are merged into their parents etc.
     """
     def __init__(self, plugin, project, id, title,
-                 feature_type='story', owner=None, description=None, url=None,
+                 type='story', owner=None, description=None, url=None,
                  **kwargs):
         self._plugin = plugin
         self.project = project
         self.id = id
         self.title = title
-        self.feature_type = feature_type
+        self.type = type
         self.owner = owner
         self.description = description
         self.url = url
