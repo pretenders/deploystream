@@ -1,12 +1,13 @@
 <!doctype html>
 <html lang="en" ng-app="deploystream">
-    
+
     <head>
     {% block head %}
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DeployStream {% block extratitle %}{% endblock %}</title>
         <link rel="stylesheet" href="/static/css/app.css">
+        <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <style>
             [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
             .ng-cloak, .x-ng-cloak {
@@ -26,7 +27,7 @@
         {% endblock %}
     {% endblock %}
     </head>
-    
+
     <body ng-cloak>
         <div id="wrap">
             <header>

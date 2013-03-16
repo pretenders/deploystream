@@ -16,8 +16,5 @@ angular.module('deploystream', [
             templateUrl: '/static/partials/features.html',
             controller: FeatureListCtrl
         });
-        $routeProvider.otherwise({
-            redirectTo: '/'
-        });
     }]
 );
