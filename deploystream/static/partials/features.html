@@ -11,9 +11,9 @@
     </thead>
     <tbody>
         <tr ng-repeat="feature in features">
-            <td>{{feature.project}}</td>
-            <td><i class="icon-tasks"></i> #{{feature.id}}</td>
-            <td><span class="label label-info">{{feature.type}}</span></td>
+            <td><i class="icon-{{feature.provider}}"></i> {{feature.project}}</td>
+            <td>#{{feature.id}}</td>
+            <td><span class="badge badge-info">{{feature.type}}</span></td>
             <td>{{feature.owner}}</td>
             <td>{{feature.title}}</td>
         </tr>

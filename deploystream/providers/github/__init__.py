@@ -18,6 +18,7 @@ class GithubProvider(object):
     An implementation of the planning plugin that gets issues from GitHub
     """
     interface.implements(IPlanningPlugin)
+    name = 'github'
 
     def __init__(self, token, repositories, **kwargs):
         """
