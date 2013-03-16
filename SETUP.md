@@ -2,6 +2,10 @@
 
 ## Install dependencies
 
+OS-level dependencies, use whatever install procedure works on your OS:
+* `curl` (for `nodeenv`)
+* `chrome` (the Google browser, for `testacular`)
+
 * Make yourself a virtual environment, and activate it
 * Install python packages with `pip install -r requirements/test.txt`
 * Make yourself a node environment within the virtualenv with `nodeenv -p`
