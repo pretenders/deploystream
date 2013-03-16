@@ -39,3 +39,6 @@ nosetests.xml
 tags
 
 logs
+
+# Dependency management tools (pip, npm, bower):
+/components

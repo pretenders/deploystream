@@ -1,9 +1,21 @@
-<h3>Features</h3>
-<p>These are your projects' features:</p>
-<table>
-    <tr ng-repeat="feature in features">
-        <td>{{feature.project}}</td>
-        <td>#{{feature.id}}</td>
-        <td>{{feature.title}}</td>
-    </tr>
+<h1>Features</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>project</th>
+            <th>id</th>
+            <th>type</th>
+            <th>owner</th>
+            <th>title</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="feature in features">
+            <td><i class="icon-{{feature.provider}}"></i> {{feature.project}}</td>
+            <td>#{{feature.id}}</td>
+            <td><span class="badge badge-info">{{feature.type}}</span></td>
+            <td>{{feature.owner}}</td>
+            <td>{{feature.title}}</td>
+        </tr>
+    </tbody>
 </table>
