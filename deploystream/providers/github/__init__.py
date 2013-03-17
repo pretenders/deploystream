@@ -8,6 +8,7 @@ from deploystream.lib import transforms
 # Map fields from the Github API to deploystream names
 FEATURE_MAP = {
     'body_html': 'description',
+    'html_url': 'url',
     'number': 'id',
     'id': 'github_id',
 }
@@ -42,7 +43,7 @@ class GithubProvider(object):
             project = '{0}/{1}'.format(owner, repo)
             for issue in ghrepo.iter_issues(**filters):
                 issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
-                issue_info['type'] = 'defect'
+                issue_info['type'] = 'story'
                 issue_info['project'] = project
                 owner = issue_info['assignee']
                 if owner is None:
