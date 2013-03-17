@@ -53,7 +53,7 @@ def github_authorized(resp):
     if resp is None:
         flash(u'You denied the request to sign in.')
         return redirect(next_url)
-    print "TOKEN", resp['access_token']
+
     add_session_token(session, resp['access_token'], "github")
     user = github_oauth.get('/user')
 
