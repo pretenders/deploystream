@@ -37,10 +37,10 @@ def get_providers(config_dict, session):
     return providers
 
 
-def init_plugins(provider_path_set):
+def init_providers(provider_path_set):
     """Import and store in memory all available plugin classes
 
-    :param plugin_set:
+    :param provider_path_set:
         A list of class paths to import.
     """
     for path in provider_path_set:
