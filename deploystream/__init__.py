@@ -34,6 +34,9 @@ except ImportError:
 =========================================================================
 """)
 
+from deploystream.apps.oauth import ensure_certifi_certs_installed
+ensure_certifi_certs_installed()
+
 # Initialise the plugins.
 from providers import init_plugins
 init_plugins()

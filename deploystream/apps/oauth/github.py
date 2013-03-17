@@ -1,4 +1,3 @@
-from os.path import join, dirname, abspath
 from flask import session, redirect, flash, request, url_for
 from flask_oauth import OAuth
 
@@ -30,7 +29,6 @@ def get_github_token(token=None):
 
 @app.route('/login')
 def login():
-    #why_oh_why()
     "Handler for calls to login via github."
     url = url_for('github_authorized',
                   next=request.args.get('next') or request.referrer or None,
@@ -42,9 +40,12 @@ def login():
 @github_oauth.authorized_handler
 def github_authorized(resp):
     "Call back for the github authorization."
+    next_url = request.args.get('next') or url_for('homepage')
     if resp is None:
-        return 'Access denied: error=%s' % (request.args['error'])
+        flash(u'You denied the request to sign in.')
+        return redirect(next_url)
     session['github_token'] = (resp['access_token'], '')
     user = github_oauth.get('/user')
-    return 'Logged in as id=%s login=%s redirect=%s' % \
-        (user.data['id'], user.data['login'], request.args.get('next'))
+
+    flash('You were signed in as {0}'.format(user.data['login']))
+    return redirect(next_url)
