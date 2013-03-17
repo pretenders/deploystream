@@ -7,12 +7,14 @@ information from a multitude of sources.
 Getting started
 ---------------
 
-You'll need to create a ``github_auth.py`` file with your TOKEN information from
-github.
+You'll need to create a ``github_auth.py`` file with an application's APP_ID
+and APP_SECRET from github.
 
-Do this by running ``get_github_token.py`` and follow the steps. That will
-enable access to github. Alter the configuration of GITHUB_CONFIG in
-local_settings.py to point to the repo of choice.
+These are used to represent deploystream as an application that will be granted
+access to your own GitHub account.
+
+Alter the configuration of GITHUB_CONFIG in local_settings.py to point to the
+repo of choice.
 
 Running the server locally
 --------------------------
