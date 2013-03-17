@@ -23,10 +23,10 @@ body {
     height: 80px;
 }
 #footer {
-    background-color: #555;
+    background-color: #222;
     color: white;
     padding-top: 30px;
-    border-top: 2px dashed #777; 
+    border-top: 4px solid #666;
 }
 
 /* Lastly, apply responsive CSS fixes as necessary */
@@ -46,6 +46,7 @@ body {
 
 .hero-unit {
     padding: 32px;
+    background-image: url('../img/story.jpg')
 }
 
 /* end sticky footer */

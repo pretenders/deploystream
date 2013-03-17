@@ -49,9 +49,12 @@
                     </div>
                 </nav>
             </header>
+
+            {# Main area where angular views will display #}
             <section id="content" class="container-fluid" ng-view>
                 {% block content %}{% endblock %}
             </section>
+
             <div id="push"></div>
         </div>
         <footer id="footer">
