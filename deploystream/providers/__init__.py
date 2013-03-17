@@ -1,40 +1,48 @@
-from interfaces import (
-    ISourceCodeControlPlugin, IBuildInfoPlugin, IPlanningPlugin,
-    is_implementation
-)
-
-PLANNING_PLUGINS = []
-SOURCE_CODE_PLUGINS = []
-BUILD_INFO_PLUGINS = []
-
-PLUGIN_INTERFACES = (
-    ('SOURCE_CODE_PLUGINS', ISourceCodeControlPlugin, SOURCE_CODE_PLUGINS),
-    ('BUILD_INFO_PLUGINS', IBuildInfoPlugin, BUILD_INFO_PLUGINS),
-    ('PLANNING_PLUGINS', IPlanningPlugin, PLANNING_PLUGINS),
-)
-# A list of tuples of ('setting conf name', plugin interface class, holder_ref)
+ALL_PROVIDER_CLASSES = {}
+"Populated by init_provider with keys of names and values of imported classes"
 
 
-def get_plugin_class(path):
+def get_provider_class(path):
     "Given a path to a class import the module and return the class"
     mod_path, class_name = path.rsplit('.', 1)
     mod = __import__(mod_path, globals(), locals(), [class_name])
     return getattr(mod, class_name)
 
 
-def init_plugin_set(plugin_set, plugin_interface, plugin_holder):
-    "Create a set of plugins, check they are correct, add to a placeholder"
-    for path, options in plugin_set:
-        plugin_class = get_plugin_class(path)
-        if is_implementation(plugin_class, plugin_interface):
-            plugin_holder.append(plugin_class(**options))
-        else:
-            print('Skipping erroneous plugin: {0}'.format(path))
+def get_providers(config_dict, session):
+    """
+    Get appropriate providers for the given session.
+
+    :param config_dict:
+        A dictionary of provider name to configuration.
+
+    :param session:
+        A session in which to find things for the plugin.
+    """
+    providers = []
+    for name, config in config_dict.items():
+        provider_class = ALL_PROVIDER_CLASSES[name]
+        kwargs = {}
+        kwargs.update(config)
+        try:
+            kwargs['token'] = session.get('tokens',
+                                          {})[provider_class.oauth_required]
+        except AttributeError:
+            # The provider class doesn't define any oauth requirement.
+            pass
+        except KeyError:
+            print ("WARNING: A provider wanted a token but we didn't have one")
+            pass
+        providers.append(provider_class(**kwargs))
+    return providers
 
 
-def init_plugins():
-    from deploystream import app
-    for config_name, plugin_class, holder in PLUGIN_INTERFACES:
-        init_plugin_set(app.config[config_name],
-                        plugin_class,
-                        holder)
+def init_plugins(provider_path_set):
+    """Import and store in memory all available plugin classes
+
+    :param plugin_set:
+        A list of class paths to import.
+    """
+    for path in provider_path_set:
+        provider_class = get_provider_class(path)
+        ALL_PROVIDER_CLASSES[provider_class.name] = provider_class

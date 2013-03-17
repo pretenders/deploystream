@@ -1,14 +1,20 @@
 from local_settings import GITHUB_CONFIG, GIT_CONFIG
 
-
-SOURCE_CODE_PLUGINS = [
-    ('deploystream.providers.git_provider.GitProvider', GIT_CONFIG),
+PROVIDERS = [
+    'deploystream.providers.git_provider.GitProvider',
+    'deploystream.providers.github.GithubProvider',
 ]
+"System wide providers"
 
-PLANNING_PLUGINS = [
-    ('deploystream.providers.github.GithubProvider', GITHUB_CONFIG),
-]
+USER_SPECIFIC_INFO = {
+    'provider_config': {
+        'git': GIT_CONFIG,
+        'github': GITHUB_CONFIG,
+    }
+}
+"""Some User specific information that will end up in a db.
 
-BUILD_INFO_PLUGINS = []
+provider_config - a dictionary of provider name to config required.
+"""
 
 HIERARCHY_REGEXES = []

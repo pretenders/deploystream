@@ -4,7 +4,6 @@ from os import environ
 from os.path import join, dirname
 from flask import Flask
 
-
 APP_DIR = dirname(__file__)
 STATIC_DIR = join(APP_DIR, 'static')
 
@@ -40,7 +39,7 @@ ensure_certifi_certs_installed()
 
 # Initialise the plugins.
 from providers import init_plugins
-init_plugins()
+init_plugins(app.config['PROVIDERS'])
 
 # set the secret key. Dummy secret for flask. When using in real life, have
 # something that is actually a secret

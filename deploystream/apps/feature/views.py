@@ -1,6 +1,6 @@
 from functools import wraps
 
-from flask import json, Response
+from flask import json, Response, session
 
 from deploystream import app
 from deploystream.apps.feature.lib import get_feature_info, get_all_features

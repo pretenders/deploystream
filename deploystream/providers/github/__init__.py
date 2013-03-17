@@ -20,6 +20,7 @@ class GithubProvider(object):
     """
     interface.implements(IPlanningPlugin)
     name = 'github'
+    oauth_required = name
 
     def __init__(self, token, repositories, **kwargs):
         """

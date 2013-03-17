@@ -18,13 +18,22 @@ github_oauth = oauth.remote_app('github',
 )
 
 
+def add_session_token(sess, token, key):
+    """
+    Add a ``token`` to the given session using the name of ``key``.
+    """
+    tokens = sess.get('tokens', {})
+    tokens[key] = token
+    sess['tokens'] = tokens
+
+
 @github_oauth.tokengetter
 def get_github_token(token=None):
     """Function used in the flask-oauth library to get a token.
 
     For now just get it from the session, or return ``None``.
     """
-    return session.get('github_token')
+    return (session.get('tokens', {}).get('github'), '')
 
 
 @app.route('/login')
@@ -44,7 +53,8 @@ def github_authorized(resp):
     if resp is None:
         flash(u'You denied the request to sign in.')
         return redirect(next_url)
-    session['github_token'] = (resp['access_token'], '')
+    print "TOKEN", resp['access_token']
+    add_session_token(session, resp['access_token'], "github")
     user = github_oauth.get('/user')
 
     flash('You were signed in as {0}'.format(user.data['login']))

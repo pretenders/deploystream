@@ -8,7 +8,8 @@ from source_code_control import ISourceCodeControlPlugin
 
 __all__ = [
     IBuildInfoPlugin, IPlanningPlugin, ISourceCodeControlPlugin,
-    'is_implementation'
+    'is_implementation', 'is_planning_provider', 'is_build_info_provider',
+    'is_source_code_provider'
 ]
 
 
@@ -28,3 +29,15 @@ def is_implementation(cls, interface):
     except Exception:
         #raise
         return False
+
+
+def is_planning_provider(provider):
+    return is_implementation(provider.__class__, IPlanningPlugin)
+
+
+def is_build_info_provider(provider):
+    return is_implementation(provider.__class__, IBuildInfoPlugin)
+
+
+def is_source_code_provider(provider):
+    return is_implementation(provider.__class__, ISourceCodeControlPlugin)
