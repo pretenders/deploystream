@@ -1,0 +1,15 @@
+#!/bin/bash
+# Convert an issue into a PR
+
+if [ "$3" == "" ]
+then
+    echo "Usage: $0 issue github-username github-password"
+    exit -1
+fi
+
+issue=$1
+ghuser=$2
+pass=$3
+
+#hub pull-request -i $issue -b develop -h pretenders:story/$issue/$USER
+http --auth $ghuser:$pass POST https://api.github.com/repos/pretenders/deploystream/pulls issue=$issue head="pretenders:story/$issue/$USER" base=develop

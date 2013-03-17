@@ -1,0 +1,21 @@
+basePath = '../deploystream/static';
+
+files = [
+    ANGULAR_SCENARIO,
+    ANGULAR_SCENARIO_ADAPTER,
+    'test/e2e/**/*.js'
+];
+
+singleRun = true;
+autoWatch = false;
+
+browsers = ['Chrome'];
+
+proxies = {
+    '/': 'http://localhost:5000/'
+};
+
+junitReporter = {
+    outputFile: 'test_out/e2e.xml',
+    suite: 'e2e'
+};
