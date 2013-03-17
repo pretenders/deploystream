@@ -1,7 +1,13 @@
 from zope import interface
 
 
-class ISourceCodeControlPlugin(interface.Interface):
+class ISourceCodeControlProvider(interface.Interface):
+
+    name = interface.Attribute(
+                "The name the provider will be referred to in configs etc.")
+    oauth_token_required = interface.Attribute(
+                "If an oauth token is required, the name of it as defined by "
+                "the oauth provider.")
 
     def get_repo_branches_involved(feature_id):
         """
@@ -9,12 +15,6 @@ class ISourceCodeControlPlugin(interface.Interface):
 
         :param feature_id:
             The id of the feature to look for in this all repos and branches.
-
-        :param **kwargs:
-            Additional configuration for the plugin. If this plugin was written
-            by you then this will only be information you have added in the
-            configuration of it. See :ref:`<configure_provider>` for more
-            information about configuring plugins.
 
         :returns:
             A list of iterables containing at position:

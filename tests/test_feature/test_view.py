@@ -4,7 +4,7 @@ from mock import patch
 import deploystream
 
 
-class SourceCodePlugin(object):
+class SourceCodeProvider(object):
     def get_repo_branches_involved(self, feature_id, **kwargs):
         return [('repo_01', "{0}_branch".format(feature_id), "232323")]
 
@@ -12,7 +12,10 @@ class SourceCodePlugin(object):
         return {}
 
 
-class PlanningPlugin(object):
+class PlanningProvider(object):
+    def get_features(self, **filters):
+        return []
+
     def get_feature_info(self, feature_id, **kwargs):
         return {
             "title": "Amazing feature that will blow your mind",
@@ -24,7 +27,7 @@ class PlanningPlugin(object):
         }
 
 
-class BuildInfoPlugin(object):
+class BuildInfoProvider(object):
     def get_build_information(self, repo, branch, commit, **kwargs):
         return {
             "timestamp": datetime.now(),
@@ -34,21 +37,34 @@ class BuildInfoPlugin(object):
         }
 
 
-class TestEndToEndWithDummyPlugins(object):
-    "A test case for checking that the site uses and displays plugins info."
+class TestViewFeatureEndToEndWithDummyProviders(object):
+    "A test case for checking that the site uses and displays providers info."
 
     def setUp(self):
         deploystream.app.config['TESTING'] = True
+        deploystream.app.config['USER_SPECIFIC_INFO'] = {
+                    'provider_config': {
+                            'testplan': {},
+                            'testsource': {},
+                    }
+        }
         self.client = deploystream.app.test_client()
 
-    @patch("deploystream.apps.feature.lib.PLANNING_PLUGINS",
-           [PlanningPlugin()])
-    @patch("deploystream.apps.feature.lib.SOURCE_CODE_PLUGINS",
-           [SourceCodePlugin()])
-    @patch("deploystream.apps.feature.lib.BUILD_INFO_PLUGINS",
-           [BuildInfoPlugin()])
+    @patch("deploystream.providers.ALL_PROVIDER_CLASSES",
+           {'testplan': PlanningProvider,
+            'testsource': SourceCodeProvider,
+            'testbuild': BuildInfoProvider})
     def test_feature_view_shows_details(self):
         response = self.client.get('/features/FT101')
         assert "Amazing feature that will blow your mind" in response.data
-        # TODO: Add further assertions here to do with links etc. Probably
-        # with the use of beautiful soup.
+
+    @patch("deploystream.providers.ALL_PROVIDER_CLASSES",
+           {'testplan': PlanningProvider,
+            'testsource': SourceCodeProvider,
+            'testbuild': BuildInfoProvider})
+    def test_only_uses_providers_user_specifies(self):
+        conf = deploystream.app.config
+        del conf['USER_SPECIFIC_INFO']['provider_config']['testplan']
+
+        response = self.client.get('/features/FT101')
+        assert "Amazing feature that will blow your mind" not in response.data

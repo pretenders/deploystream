@@ -4,7 +4,6 @@ from os import environ
 from os.path import join, dirname
 from flask import Flask
 
-
 APP_DIR = dirname(__file__)
 STATIC_DIR = join(APP_DIR, 'static')
 
@@ -38,9 +37,9 @@ except ImportError:
 from deploystream.apps.oauth import ensure_certifi_certs_installed
 ensure_certifi_certs_installed()
 
-# Initialise the plugins.
-from providers import init_plugins
-init_plugins()
+# Initialise the providers.
+from providers import init_providers
+init_providers(app.config['PROVIDERS'])
 
 # set the secret key. Dummy secret for flask. When using in real life, have
 # something that is actually a secret

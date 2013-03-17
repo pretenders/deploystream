@@ -7,6 +7,8 @@ import git
 
 class GitProvider(object):
 
+    name = 'git'
+
     def __init__(self, code_dir='.',
                  feature_breakup_regex='',
                  branch_finder_template=''):
