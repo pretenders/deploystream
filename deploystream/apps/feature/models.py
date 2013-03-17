@@ -28,7 +28,7 @@ class Feature(object):
                  type='story', owner=None, description=None, url=None,
                  **kwargs):
         self._plugin = plugin
-        self.provider = plugin.name
+        self.provider = getattr(plugin, 'name', plugin.__class__.__name__)
         self.project = project
         self.id = id
         self.title = title

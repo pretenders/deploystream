@@ -12,7 +12,7 @@
     <tbody>
         <tr ng-repeat="feature in features">
             <td><i class="icon-{{feature.provider}}"></i> {{feature.project}}</td>
-            <td>#{{feature.id}}</td>
+            <td><a href="{{feature.url}}">#{{feature.id}}</a></td>
             <td><span class="badge badge-info">{{feature.type}}</span></td>
             <td>{{feature.owner}}</td>
             <td>{{feature.title}}</td>

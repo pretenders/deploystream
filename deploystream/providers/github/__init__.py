@@ -8,6 +8,7 @@ from deploystream.lib import transforms
 # Map fields from the Github API to deploystream names
 FEATURE_MAP = {
     'body_html': 'description',
+    'html_url': 'url',
     'number': 'id',
     'id': 'github_id',
 }
