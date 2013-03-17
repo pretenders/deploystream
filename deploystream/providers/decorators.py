@@ -1,3 +1,5 @@
+from functools import wraps
+
 from flask import session
 
 from deploystream import app
@@ -6,7 +8,8 @@ from deploystream.providers import get_providers
 
 def needs_providers(func):
     "Decorator to make sure we have providers available for this request"
-    def new_func(*args, **kwargs):
+    @wraps(func)
+    def _wrapped(*args, **kwargs):
         # For now, get the user specific conf from settings. This will
         # need to change when we're DB-driven.
         config = (
@@ -14,4 +17,4 @@ def needs_providers(func):
 
         providers = get_providers(config, session)
         return func(providers=providers, *args, **kwargs)
-    return new_func
+    return _wrapped

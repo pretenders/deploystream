@@ -1,11 +1,9 @@
 from deploystream import app
 from deploystream.providers.interfaces import (
     is_planning_provider, is_build_info_provider, is_source_code_provider)
-from deploystream.providers.decorators import needs_providers
 from .models import Branch, BuildInfo, Feature
 
 
-@needs_providers
 def get_all_features(providers):
     """
     Collect all features from the configured providers.
@@ -20,7 +18,6 @@ def get_all_features(providers):
     return all_features
 
 
-@needs_providers
 def get_feature_info(feature_id, providers):
     """
     Get the information associated with the given feature from the providers
