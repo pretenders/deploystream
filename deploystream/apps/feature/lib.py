@@ -29,7 +29,7 @@ def get_feature_info(feature_id, providers):
     # TODO: since features may come from various origins, we need
     # at this stage to either use a feature id that is a string such as
     # "github:pretenders/deploystream:15" or to have additional arguments
-    # for plugin and project. In any case we probably need providers to
+    # for provider and project. In any case we probably need providers to
     # have an identifying string such as "github", "jira", "sprintly"...
 
     # First get feature info from the management providers
@@ -54,7 +54,7 @@ def get_feature_info(feature_id, providers):
     for provider in providers:
         if is_source_code_provider(provider):
             for branch_data in provider.get_repo_branches_involved(feature_id):
-                feature.add_branch(Branch(*branch_data, plugin=provider))
+                feature.add_branch(Branch(*branch_data, provider=provider))
 
     # Use that branch info, along with configuration regexes to create a
     # hierarchy of the branches involved in the feature.
@@ -71,7 +71,7 @@ def get_feature_info(feature_id, providers):
         if is_build_info_provider(provider):
             for branch in feature.branches:
                 branch.build_info = BuildInfo(
-                                        plugin=provider,
+                                        provider=provider,
                                         **provider.get_build_information(
                                             branch.repo_name,
                                             branch.branch_name,

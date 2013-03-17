@@ -1,7 +1,7 @@
 import github3
 from zope import interface
 
-from deploystream.providers.interfaces import IPlanningPlugin
+from deploystream.providers.interfaces import IPlanningProvider
 from deploystream.lib import transforms
 
 
@@ -16,15 +16,15 @@ FEATURE_MAP = {
 
 class GithubProvider(object):
     """
-    An implementation of the planning plugin that gets issues from GitHub
+    An implementation of the planning provider that gets issues from GitHub
     """
-    interface.implements(IPlanningPlugin)
+    interface.implements(IPlanningProvider)
     name = 'github'
-    oauth_required = name
+    oauth_token_required = name
 
     def __init__(self, token, repositories, **kwargs):
         """
-        Initialise the plugin by giving it GitHub credentials and repos.
+        Initialise the provider by giving it GitHub credentials and repos.
 
         :param repositories:
             A list of tuples containing (<owner>, <name>) that identify

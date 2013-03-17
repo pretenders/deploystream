@@ -17,7 +17,7 @@ def get_providers(config_dict, session):
         A dictionary of provider name to configuration.
 
     :param session:
-        A session in which to find things for the plugin.
+        A session in which to find things for the provider.
     """
     providers = []
     for name, config in config_dict.items():
@@ -39,7 +39,7 @@ def get_providers(config_dict, session):
 
 
 def init_providers(provider_path_set):
-    """Import and store in memory all available plugin classes
+    """Import and store in memory all available provider classes
 
     :param provider_path_set:
         A list of class paths to import.

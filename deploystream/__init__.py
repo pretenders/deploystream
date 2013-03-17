@@ -37,7 +37,7 @@ except ImportError:
 from deploystream.apps.oauth import ensure_certifi_certs_installed
 ensure_certifi_certs_installed()
 
-# Initialise the plugins.
+# Initialise the providers.
 from providers import init_providers
 init_providers(app.config['PROVIDERS'])
 

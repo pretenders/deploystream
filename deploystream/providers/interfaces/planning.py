@@ -1,7 +1,7 @@
 from zope import interface
 
 
-class IPlanningPlugin(interface.Interface):
+class IPlanningProvider(interface.Interface):
 
     name = interface.Attribute(
                 "The name the provider will be referred to in configs etc.")

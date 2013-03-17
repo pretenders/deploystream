@@ -8,7 +8,7 @@ class Feature(object):
 
     Instances of this class contain:
 
-        ``plugin``          - The plugin that provided all of these values.
+        ``provider``          - The provider that provided all of these values.
         ``project``         - The project where this feature belongs.
         ``id``              - The id of the feature.
         ``title``           - The name of the feature.
@@ -24,11 +24,11 @@ class Feature(object):
                               the front end to display information about what
                               branches are merged into their parents etc.
     """
-    def __init__(self, plugin, project, id, title,
+    def __init__(self, provider, project, id, title,
                  type='story', owner=None, description=None, url=None,
                  **kwargs):
-        self._plugin = plugin
-        self.provider = getattr(plugin, 'name', plugin.__class__.__name__)
+        self._provider = provider
+        self.provider = getattr(provider, 'name', provider.__class__.__name__)
         self.project = project
         self.id = id
         self.title = title
@@ -60,7 +60,7 @@ class Branch(object):
         ``branch_name``   - The name of the branch.
         ``latest_commit`` - The head commmit, or latest revision in this
                             branch.
-        ``plugin``        - The plugin instance that found this branch
+        ``provider``        - The provider instance that found this branch
                             information.
 
     Instances are eventually populated with these values:
@@ -75,7 +75,7 @@ class Branch(object):
                             or would have the same parent if one existed.
     """
 
-    def __init__(self, repo_name, branch_name, latest_commit, plugin):
+    def __init__(self, repo_name, branch_name, latest_commit, provider):
         self.parent = None
         self.children = []
         self.siblings = []  # Will be needed in the cases where we have no
@@ -84,7 +84,7 @@ class Branch(object):
         self.repo_name = repo_name
         self.branch_name = branch_name
         self.latest_commit = latest_commit
-        self._plugin = plugin
+        self._provider = provider
 
 
 class BuildInfo(object):
@@ -97,16 +97,16 @@ class BuildInfo(object):
         ``result``          - The result of the build. Currently one of
                               "success", "failure", "unstable", "partial".
                               TODO:
-                              Validate these from plugin and convert to
+                              Validate these from provider and convert to
                               internal constants as per @txels request :)
         ``commit``          - The commit or revision built.
         ``url``             - The url to the results of the build.
-        ``plugin``          - The plugin that provided all of these values.
+        ``provider``          - The provider that provided all of these values.
     """
 
-    def __init__(self, timestamp, result, commit, url, plugin):
+    def __init__(self, timestamp, result, commit, url, provider):
         self.timestamp = timestamp
         self.result = result
         self.commit = commit
         self.url = url
-        self._plugin = plugin
+        self._provider = provider

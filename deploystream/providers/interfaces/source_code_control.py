@@ -1,7 +1,7 @@
 from zope import interface
 
 
-class ISourceCodeControlPlugin(interface.Interface):
+class ISourceCodeControlProvider(interface.Interface):
 
     name = interface.Attribute(
                 "The name the provider will be referred to in configs etc.")
@@ -17,10 +17,10 @@ class ISourceCodeControlPlugin(interface.Interface):
             The id of the feature to look for in this all repos and branches.
 
         :param **kwargs:
-            Additional configuration for the plugin. If this plugin was written
+            Additional configuration for the provider. If this provider was written
             by you then this will only be information you have added in the
             configuration of it. See :ref:`<configure_provider>` for more
-            information about configuring plugins.
+            information about configuring providers.
 
         :returns:
             A list of iterables containing at position:
