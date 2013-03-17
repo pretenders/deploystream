@@ -8,6 +8,7 @@
             </button>
             <a class="brand" href="#">Deploystream</a>
             <div class="nav-collapse collapse">
+                {% if session.username %}
                 <ul class="nav">
                     <li><a href="#/features">My Features</a></li>
                 </ul>
@@ -23,6 +24,7 @@
                         </ul>
                     </li>
                 </ul>
+                {% endif %}
             </div><!--/.nav-collapse -->
         </div>
     </div>
