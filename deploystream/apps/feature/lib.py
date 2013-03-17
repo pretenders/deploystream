@@ -36,12 +36,19 @@ def get_feature_info(feature_id, providers):
     # This needs rewriting according to previous paragraph. For now:
     # Only one management provider should know about this feature,
     # so we stop on first success
+    feature = None
+    print providers
     for provider in providers:
         if is_planning_provider(provider):
+            print "is planning!"
             feature = Feature(provider, None,
                               **provider.get_feature_info(feature_id))
             if feature:
                 break
+        else:
+            print "NOT PLANNING"
+    if not feature:
+        return
 
     # Then get any branch info from any source control providers
     for provider in providers:
