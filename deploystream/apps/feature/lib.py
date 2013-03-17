@@ -37,16 +37,13 @@ def get_feature_info(feature_id, providers):
     # Only one management provider should know about this feature,
     # so we stop on first success
     feature = None
-    print providers
     for provider in providers:
         if is_planning_provider(provider):
-            print "is planning!"
             feature = Feature(provider, None,
                               **provider.get_feature_info(feature_id))
             if feature:
                 break
-        else:
-            print "NOT PLANNING"
+
     if not feature:
         return
 

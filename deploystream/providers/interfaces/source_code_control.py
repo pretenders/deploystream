@@ -16,12 +16,6 @@ class ISourceCodeControlProvider(interface.Interface):
         :param feature_id:
             The id of the feature to look for in this all repos and branches.
 
-        :param **kwargs:
-            Additional configuration for the provider. If this provider was written
-            by you then this will only be information you have added in the
-            configuration of it. See :ref:`<configure_provider>` for more
-            information about configuring providers.
-
         :returns:
             A list of iterables containing at position:
 

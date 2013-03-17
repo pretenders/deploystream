@@ -8,7 +8,7 @@ class Feature(object):
 
     Instances of this class contain:
 
-        ``provider``          - The provider that provided all of these values.
+        ``provider``        - The provider that provided all of these values.
         ``project``         - The project where this feature belongs.
         ``id``              - The id of the feature.
         ``title``           - The name of the feature.
@@ -60,7 +60,7 @@ class Branch(object):
         ``branch_name``   - The name of the branch.
         ``latest_commit`` - The head commmit, or latest revision in this
                             branch.
-        ``provider``        - The provider instance that found this branch
+        ``provider``      - The provider instance that found this branch
                             information.
 
     Instances are eventually populated with these values:
@@ -101,7 +101,7 @@ class BuildInfo(object):
                               internal constants as per @txels request :)
         ``commit``          - The commit or revision built.
         ``url``             - The url to the results of the build.
-        ``provider``          - The provider that provided all of these values.
+        ``provider``        - The provider that provided all of these values.
     """
 
     def __init__(self, timestamp, result, commit, url, provider):
