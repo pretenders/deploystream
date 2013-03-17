@@ -38,6 +38,8 @@ nosetests.xml
 *.sw[op]
 tags
 
+*.orig
+
 logs
 /reports
 
