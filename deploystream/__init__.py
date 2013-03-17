@@ -25,13 +25,14 @@ try:
     })
 except ImportError:
     print ("""
-=========================================================================
+=============================================================================
 * WARNING: Github authentication will not work.
-* Assuming you are a member of the pretenders organization, run
-  get_github_token.py and retry.
-* If not, then you should set up your own application and add APP_ID and
-  APP_SECRET configuration details to github_auth.py
-=========================================================================
+* If you have access to the pretenders organisation, you should use the
+  ``DeployStream (Pretenders-Test)`` application in Github.
+* Take the Client ID and Client Secret from the web interface and assign them
+  to APP_ID and APP_SECRET respectively inside github_auth.py somewhere on your
+  Python path.
+=============================================================================
 """)
 
 from deploystream.apps.oauth import ensure_certifi_certs_installed
