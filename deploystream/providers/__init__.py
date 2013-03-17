@@ -25,8 +25,9 @@ def get_providers(config_dict, session):
         kwargs = {}
         kwargs.update(config)
         try:
-            kwargs['token'] = session.get('tokens',
-                                          {})[provider_class.oauth_required]
+            kwargs['token'] = session.get(
+                                'tokens',
+                                {})[provider_class.oauth_token_required]
         except AttributeError:
             # The provider class doesn't define any oauth requirement.
             pass

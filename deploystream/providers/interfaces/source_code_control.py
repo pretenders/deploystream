@@ -3,6 +3,12 @@ from zope import interface
 
 class ISourceCodeControlPlugin(interface.Interface):
 
+    name = interface.Attribute(
+                "The name the provider will be referred to in configs etc.")
+    oauth_token_required = interface.Attribute(
+                "If an oauth token is required, the name of it as defined by "
+                "the oauth provider.")
+
     def get_repo_branches_involved(feature_id):
         """
         Get the set of repo, branches involved in the given feature.
