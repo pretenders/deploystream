@@ -33,7 +33,7 @@
 
     <body ng-cloak>
         <div id="wrap">
-            <header>
+            <header id="header">
             {% include 'navbar.html' %}
             </header>
 
@@ -45,13 +45,14 @@
             <div id="push"></div>
         </div>
         <footer id="footer">
-            <div class="container-fluid">
+            <div class="muted container-fluid">
             <p class="muted">Produced by <a href="http://github.com/pretenders/">Pretenders</a>.</p>
+            <p><small>&copy; 2013 Alex Couper and Carles Barrob&eacute;s.</small></p>
             </div>
         </footer>
 
         <!-- Bootstrap { -->
-        <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="http://code.jquery.com/jquery.min.js"></script>
         <script src="/static/bootstrap/js/bootstrap.min.js"></script>
         <!-- } -->
         {% block scripts %}{% endblock %}
