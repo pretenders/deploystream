@@ -10,7 +10,7 @@ OS-level dependencies, use whatever install procedure works on your OS:
 * Install python packages with `pip install -r requirements/test.txt`
 * Make yourself a node environment within the virtualenv with `nodeenv -p`
   (this installs node and npm and takes quite a while)
-* Install node packages with `./nodereqs.py`
+* Install node packages with `scripts/nodereqs.py`
   (this installs the required files listed in `requirements/nodeenv.txt`)
 
 ## Run the tests
