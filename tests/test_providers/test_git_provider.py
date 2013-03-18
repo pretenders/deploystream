@@ -23,9 +23,9 @@ def ensure_dummy_clone_available():
 
 
 @with_setup(ensure_dummy_clone_available)
-def test_git_plugin_finds_branches_across_repos():
+def test_git_provider_finds_branches_across_repos():
     """
-    Test that the GitPlugin finds branches in repos in the dir given.
+    Test that the GitProvider finds branches in repos in the dir given.
 
     Clone the dummyrepo into the data folder if not already there.
 
@@ -43,9 +43,9 @@ def test_git_plugin_finds_branches_across_repos():
         ], branches)
 
 
-def test_git_plugin_feature_breakup_regex():
+def test_git_provider_feature_breakup_regex():
     """
-    Test that GitPlugin breaks up feature ids into appropriate parts.
+    Test that GitProvider breaks up feature ids into appropriate parts.
     """
     provider = GitProvider(
                  feature_breakup_regex="(?P<project>[a-zA-Z]+)-?(?P<id>[0-9]+)")
