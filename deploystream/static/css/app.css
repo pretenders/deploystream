@@ -39,6 +39,14 @@ body {
     }
 }
 
+#brand {
+    font-family: 'YanoneKaffeesatzBold';
+    color: #984C3F;
+    font-size: 24px;
+    text-transform: lowercase;
+    padding: 8px 15px 12px;
+}
+
 .marketing {
     max-width: 960px;
     margin: 0 auto;
@@ -46,7 +54,7 @@ body {
 
 .hero-unit {
     padding: 32px;
-    background-image: url('../img/story.jpg')
+    background-color: #EDD7B2;
 }
 
 /* end sticky footer */
