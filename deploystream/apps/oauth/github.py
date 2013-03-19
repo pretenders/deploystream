@@ -56,6 +56,8 @@ def github_authorized(resp):
 
     add_session_token(session, resp['access_token'], "github")
     user = github_oauth.get('/user')
+    username = user.data['login']
 
-    flash('You were signed in as {0}'.format(user.data['login']))
+    flash('You were signed in as {0}'.format(username))
+    session['username'] = username
     return redirect(next_url)
