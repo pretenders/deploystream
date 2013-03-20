@@ -12,17 +12,19 @@
                 display: none;
             }
         </style>
-        <!-- Bootstrap: -->
+        <link rel="stylesheet" href="/static/css/fonts.css">
+
+        <!-- <bootstrap> -->
         <link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
         <link href="/static/font-awesome/css/font-awesome.min.css" rel="stylesheet" media="screen">
         <style>
         @media (min-width: 980px) {
-            #content {
-                padding-top: 60px; /* make space for the fixed top navbar */
-            }
+            #content { padding-top: 60px; /* make space for fixed top navbar */ }
         }
         </style>
         <link href="/static/bootstrap/css/bootstrap-responsive.min.css" rel="stylesheet">
+        <!-- </bootstrap> -->
+
         <link rel="stylesheet" href="/static/css/app.css">
         {% block extrahead %}
         {% endblock %}
@@ -31,7 +33,7 @@
 
     <body ng-cloak>
         <div id="wrap">
-            <header>
+            <header id="header">
             {% include 'navbar.html' %}
             </header>
 
@@ -43,13 +45,14 @@
             <div id="push"></div>
         </div>
         <footer id="footer">
-            <div class="container-fluid">
+            <div class="muted container-fluid">
             <p class="muted">Produced by <a href="http://github.com/pretenders/">Pretenders</a>.</p>
+            <p><small>&copy; 2013 Alex Couper and Carles Barrob&eacute;s.</small></p>
             </div>
         </footer>
 
         <!-- Bootstrap { -->
-        <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="http://code.jquery.com/jquery.min.js"></script>
         <script src="/static/bootstrap/js/bootstrap.min.js"></script>
         <!-- } -->
         {% block scripts %}{% endblock %}
