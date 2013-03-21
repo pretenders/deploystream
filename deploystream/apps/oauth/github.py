@@ -27,7 +27,7 @@ def get_github_token(token=None):
 
     For now just get it from the session, or return ``None``.
     """
-    return get_oauth_token(session, NAME)
+    return (get_oauth_token(session, NAME), '')
 
 
 @app.route('/login')
