@@ -1,3 +1,9 @@
+from collections import defaultdict
+
+from deploystream.providers.interfaces import (
+    IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider,
+    is_implementation)
+
 ALL_PROVIDER_CLASSES = {}
 "Populated by init_provider with keys of names and values of imported classes"
 
@@ -18,8 +24,12 @@ def get_providers(config_dict, session):
 
     :param session:
         A session in which to find things for the provider.
+
+    :returns:
+        A dictionary of interface: list of providers that implement the
+        interface
     """
-    providers = []
+    providers = defaultdict(list)
     for name, config in config_dict.items():
         provider_class = ALL_PROVIDER_CLASSES[name]
         kwargs = {}
@@ -34,7 +44,13 @@ def get_providers(config_dict, session):
         except KeyError:
             print ("WARNING: A provider wanted a token but we didn't have one")
             pass
-        providers.append(provider_class(**kwargs))
+
+        provider = provider_class(**kwargs)
+
+        for iface in [IBuildInfoProvider, IPlanningProvider,
+                      ISourceCodeControlProvider]:
+            if is_implementation(provider.__class__, iface):
+                providers[iface].append(provider)
     return providers
 
 
