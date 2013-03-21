@@ -55,9 +55,10 @@ def get_feature_info(feature_id, providers):
     feature.create_hierarchy_trees(app.config['HIERARCHY_REGEXES'])
 
     # Ask source control providers for merging information at this point.
-    for provider in providers[ISourceCodeControlProvider]:
-        for tree in feature.trees:
-            provider.set_merged_status(tree.repo, tree)
+    for provider in providers:
+        if is_source_code_provider(provider):
+            for tree in feature.trees:
+                provider.set_merged_status(tree.repo, tree)
 
     # Finally get any build information from any BuildInfo providers.
     for provider in providers[IBuildInfoProvider]:

@@ -6,3 +6,4 @@ GitPython            # access git repositories
 jsonpickle           # encode/decode arbitrary objects to JSON
 zope.interface       # define and enforce interfaces
 certifi              # Module for Mozilla's CA bundle
+apitopy              # Required to implement the sprint.ly client
