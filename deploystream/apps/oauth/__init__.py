@@ -13,3 +13,13 @@ def ensure_certifi_certs_installed():
     if not filecmp.cmp(source, destination, shallow=False):
         print ("Writing new cacerts.txt")
         shutil.copyfile(source, destination)
+
+oauth_suffix = "oauth-token"
+
+
+def get_oauth_token(session, name):
+    return session.get("{0}.{1}".format(name, oauth_suffix), '')
+
+
+def set_oauth_token(session, name, value):
+    session["{0}.{1}".format(name, oauth_suffix)] = value

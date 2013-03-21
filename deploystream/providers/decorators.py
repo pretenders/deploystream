@@ -13,7 +13,8 @@ def needs_providers(func):
         # For now, get the user specific conf from settings. This will
         # need to change when we're DB-driven.
         config = (
-                app.config['USER_SPECIFIC_INFO']['provider_config'])
+            app.config['USER_SPECIFIC_INFO']['provider_config']
+        )
 
         providers = get_providers(config, session)
         return func(providers=providers, *args, **kwargs)
