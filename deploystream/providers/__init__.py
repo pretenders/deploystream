@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from deploystream.apps.oauth import get_oauth_token
+from deploystream.apps import oauth
 from deploystream.providers.interfaces import (
     IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider,
     is_implementation)
@@ -36,7 +36,7 @@ def get_providers(configs, session):
         kwargs = {}
         kwargs.update(config)
         try:
-            kwargs['token'] = get_oauth_token(
+            kwargs['token'] = oauth.get_token(
                                     session,
                                     provider_class.oauth_token_required)
         except AttributeError:
