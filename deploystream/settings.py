@@ -8,11 +8,11 @@ PROVIDERS = [
 "System wide providers"
 
 USER_SPECIFIC_INFO = {
-    'provider_config': {
-        'git': GIT_CONFIG,
-        'github': GITHUB_CONFIG,
-        'sprintly': SPRINTLY_CONFIG,
-    }
+    'provider_config': [
+        ('git', GIT_CONFIG),
+        ('github', GITHUB_CONFIG),
+        ('sprintly', SPRINTLY_CONFIG),
+    ]
 }
 """Some User specific information that will end up in a db.
 

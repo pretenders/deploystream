@@ -16,12 +16,12 @@ def get_provider_class(path):
     return getattr(mod, class_name)
 
 
-def get_providers(config_dict, session):
+def get_providers(configs, session):
     """
     Get appropriate providers for the given session.
 
-    :param config_dict:
-        A dictionary of provider name to configuration.
+    :param configs:
+        A list of tuples with provider name and configuration.
 
     :param session:
         A session in which to find things for the provider.
@@ -31,7 +31,7 @@ def get_providers(config_dict, session):
         interface
     """
     providers = defaultdict(list)
-    for name, config in config_dict.items():
+    for name, config in configs:
         provider_class = ALL_PROVIDER_CLASSES[name]
         kwargs = {}
         kwargs.update(config)
@@ -41,9 +41,11 @@ def get_providers(config_dict, session):
                                     provider_class.oauth_token_required)
         except AttributeError:
             # The provider class doesn't define any oauth requirement.
+            print ("INFO: provider {0} does not want a token".format(name))
             pass
         except KeyError:
-            print ("WARNING: A provider wanted a token but we didn't have one")
+            print ("WARNING: provider {0} wanted a token "
+                   "but we didn't have one".format(name))
             pass
 
         provider = provider_class(**kwargs)
