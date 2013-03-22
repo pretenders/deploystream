@@ -58,3 +58,15 @@ body {
 }
 
 /* end sticky footer */
+.icon-sprintly {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  .ie7-restore-right-whitespace();
+  line-height: 14px;
+  vertical-align: text-top;
+  background-image: url("../img/sprintly.ico");
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  margin-top: 1px;
+}
