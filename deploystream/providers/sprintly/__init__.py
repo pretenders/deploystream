@@ -32,7 +32,7 @@ class SprintlyProvider(object):
     interface.implements(IPlanningProvider)
     name = 'sprintly'
 
-    def __init__(self, user, token, status, **kwargs):
+    def __init__(self, user, token, current, **kwargs):
         """
         Initialise by providing credentials and project IDs.
 
@@ -41,7 +41,7 @@ class SprintlyProvider(object):
         self.api = Api('https://sprint.ly/api/',
                        (user, token), verify_ssl_cert=False, suffix='.json')
         self.projects = self.api.products()
-        self.status = status
+        self.current = current
 
     def get_features(self, **filters):
         """
@@ -50,9 +50,8 @@ class SprintlyProvider(object):
         features = []
 
         for project in self.projects:
-            stories = self.api.products[project.id].items
-            for status in self.status:
-                features += stories(status=status)
+            features = self.api.products[project.id].items
+            features = features(**self.current)
             for feature in features:
                 feature['project'] = project.name
 
