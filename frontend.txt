@@ -34,8 +34,9 @@ Edit only LESS files in static/less.
 
 Compile with:
 
-$ recess site.less --compile [--compress] > ../css/site.css
-...or just use static/compile-css.sh
+$ cd deploystream/static
+$ recess less/site.less --compile [--compress] > css/site.css
+...or just use ./compile-css.sh
 
 (compile other less files if they need to be standalone CSS, else
 import from site)
@@ -48,4 +49,4 @@ In order to compile css dynamically as you work with the less files:
 
 $ cd deploystream/static
 $ recess less/site.less:css/site.css --watch less/
-...or just use static/watch-less.sh
+...or just use ./watch-less.sh
