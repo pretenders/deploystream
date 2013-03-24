@@ -9,10 +9,14 @@ $ npm install -g recess
 ...both done by ./scripts/nodereqs.py
 
 
-Install bootstrap as a bower component:
+Install bootstrap, font-awesome as a bower components:
 
 $ bower install bootstrap#2.3.1
-...this will create a folder components/bootstrap
+$ bower install font-awesome#3.0.2
+...this will create folders components/bootstrap, components/font-awesome...
+
+Copy font-awesome font to our static font directory as post-install:
+$ cp components/font-awesome/font/* deploystream/static/font/
 
 
 INITIAL STEPS TO USE BOOTSTRAP AS A BASE
