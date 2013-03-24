@@ -35,6 +35,7 @@ Edit only LESS files in static/less.
 Compile with:
 
 $ recess site.less --compile [--compress] > ../css/site.css
+...or just use static/compile-css.sh
 
 (compile other less files if they need to be standalone CSS, else
 import from site)
@@ -43,5 +44,8 @@ import from site)
 DYNAMIC WORKFLOW
 ================
 
-TBD: define a dynamic workflow for automatic compilation of LESS to CSS,
-either using watchr or flask-assets...
+In order to compile css dynamically as you work with the less files:
+
+$ cd deploystream/static
+$ recess less/site.less:css/site.css --watch less/
+...or just use static/watch-less.sh
