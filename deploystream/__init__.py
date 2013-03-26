@@ -18,6 +18,7 @@ if environ.get("DEPLOYSTREAM_SETTINGS"):
     app.config.from_envvar("DEPLOYSTREAM_SETTINGS")
 
 try:
+    # TODO find a more appropriate way to initialise these (env vars?)
     from github_auth import APP_ID, APP_SECRET
     app.config.update({
         "GITHUB_APP_ID": APP_ID,
@@ -34,6 +35,12 @@ except ImportError:
   Python path.
 =============================================================================
 """)
+    # this is here so that tests can run on Travis, but we should have a nicer
+    # way to set these up
+    app.config.update({
+        "GITHUB_APP_ID": '',
+        "GITHUB_APP_SECRET": '',
+    })
 
 from deploystream.apps.oauth import ensure_certifi_certs_installed
 ensure_certifi_certs_installed()
