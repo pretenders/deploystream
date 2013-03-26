@@ -5,4 +5,4 @@ python:
   - 3.2
 install: pip install -r requirements/test.txt
 script:
-    - nosetests
+    - ./scripts/test
