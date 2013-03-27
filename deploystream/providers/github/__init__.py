@@ -44,7 +44,11 @@ class GithubProvider(object):
             project = '{0}/{1}'.format(owner, repo)
             for issue in ghrepo.iter_issues(**filters):
                 issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
-                issue_info['type'] = 'story'
+                if issue.pull_request:
+                    issue_type = 'PR'
+                else:
+                    issue_type = 'story'
+                issue_info['type'] = issue_type
                 issue_info['project'] = project
                 owner = issue_info['assignee']
                 if owner is None:
@@ -53,6 +57,9 @@ class GithubProvider(object):
                     # take only login name from User object
                     issue_info['owner'] = owner.login
                 features.append(issue_info)
+
+        # sort by putting PRs first, stories second
+        features = sorted(features, key=lambda f: f['type'] == 'story')
 
         return features
 
