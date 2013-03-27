@@ -49,3 +49,6 @@ github_auth.py
 
 # Dependency management tools (pip, npm, bower):
 /components
+
+# CSS is generated from LESS files
+/deploystream/static/css
