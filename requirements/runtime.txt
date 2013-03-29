@@ -3,7 +3,6 @@ Flask                # web framework
 Flask-OAuth          # Oauth library for flask
 github3.py           # client for the GitHub v3 API
 GitPython            # access git repositories
-jsonpickle           # encode/decode arbitrary objects to JSON
 zope.interface       # define and enforce interfaces
 certifi              # Module for Mozilla's CA bundle
 apitopy              # Required to implement the sprint.ly client
