@@ -50,8 +50,9 @@ class SprintlyProvider(object):
         features = []
 
         for project in self.projects:
-            features = self.api.products[project.id].items
-            features = features(**self.current)
+            feature_endpoint = self.api.products[project.id].items
+            for criterion in self.current:
+                features += feature_endpoint(**criterion)
             for feature in features:
                 feature['project'] = project.name
 

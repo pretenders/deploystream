@@ -48,12 +48,16 @@ def get_providers(configs, session):
                    "but we didn't have one".format(name))
             pass
 
-        provider = provider_class(**kwargs)
+        try:
+            provider = provider_class(**kwargs)
 
-        for iface in [IBuildInfoProvider, IPlanningProvider,
-                      ISourceCodeControlProvider]:
-            if is_implementation(provider.__class__, iface):
-                providers[iface].append(provider)
+            for iface in [IBuildInfoProvider, IPlanningProvider,
+                          ISourceCodeControlProvider]:
+                if is_implementation(provider.__class__, iface):
+                    providers[iface].append(provider)
+            print("INFO: Initialised provider {0}".format(name))
+        except Exception:
+            print("ERROR: Failed to initialise provider {0}".format(name))
     return providers
 
 

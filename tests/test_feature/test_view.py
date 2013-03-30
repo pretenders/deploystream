@@ -43,10 +43,10 @@ class TestViewFeatureEndToEndWithDummyProviders(object):
     def setUp(self):
         deploystream.app.config['TESTING'] = True
         deploystream.app.config['USER_SPECIFIC_INFO'] = {
-                    'provider_config': {
-                            'testplan': {},
-                            'testsource': {},
-                    }
+            'provider_config': [
+                ('testplan', {}),
+                ('testsource', {}),
+            ]
         }
         self.client = deploystream.app.test_client()
 
@@ -64,7 +64,7 @@ class TestViewFeatureEndToEndWithDummyProviders(object):
             'testbuild': BuildInfoProvider})
     def test_only_uses_providers_user_specifies(self):
         conf = deploystream.app.config
-        del conf['USER_SPECIFIC_INFO']['provider_config']['testplan']
+        del conf['USER_SPECIFIC_INFO']['provider_config'][0]
 
         response = self.client.get('/features/FT101')
         assert "Amazing feature that will blow your mind" not in response.data

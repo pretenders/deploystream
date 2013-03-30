@@ -1,3 +1,3 @@
 #!/bin/bash
 
-deploystream/runserver.py
+`dirname $0`/runserver.py $*
