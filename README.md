@@ -19,7 +19,21 @@ repo of choice.
 Running the server locally
 --------------------------
 
-``python runserver.py``
+``CONFIG=<config_name> ./scripts/runserver.sh``
+
+Where config_name is found in a file named:
+
+    ``config/local_settings_<config_name>.py``
+
+
+Running the tests
+-----------------
+
+``CONFIG=test nosetests``
+
+or
+
+``./scripts/tests``
 
 
 Contributing - writing a provider

@@ -2,7 +2,7 @@ from flask import session, redirect, flash, request, url_for
 from flask_oauth import OAuth
 
 from deploystream import app
-from deploystream.apps.oauth import get_oauth_token, set_oauth_token
+from deploystream.apps import oauth
 
 
 oauth = OAuth()
@@ -27,7 +27,7 @@ def get_github_token(token=None):
 
     For now just get it from the session, or return ``None``.
     """
-    return (get_oauth_token(session, NAME), '')
+    return (oauth.get_token(session, NAME), '')
 
 
 @app.route('/login')
@@ -48,7 +48,7 @@ def github_authorized(resp):
         flash(u'You denied the request to sign in.')
         return redirect(next_url)
 
-    set_oauth_token(session, NAME, resp['access_token'])
+    oauth.set_token(session, NAME, resp['access_token'])
 
     user = github_oauth.get('/user')
     username = user.data['login']
