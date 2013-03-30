@@ -34,7 +34,8 @@ def get_providers(configs, session):
     for name, config in configs:
         provider_class = ALL_PROVIDER_CLASSES[name]
         kwargs = {}
-        kwargs.update(config)
+        if config:
+            kwargs.update(config)
         try:
             kwargs['token'] = oauth.get_token(
                                     session,
