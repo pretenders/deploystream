@@ -22,41 +22,46 @@ class GithubProvider(object):
     name = 'github'
     oauth_token_required = name
 
-    def __init__(self, token, repositories, **kwargs):
+    def __init__(self, token, organization=None, **kwargs):
         """
         Initialise the provider by giving it GitHub credentials and repos.
 
-        :param repositories:
-            A list of tuples containing (<owner>, <name>) that identify
-            a repository in GitHub
+        :param organization:
+            The name of the organization who's repository issues should be
+            identified in GitHub. If ``None`` then the authenticated
+            user's issues will be tracked.
         """
         self.github = github3.login(token=token)
-        self.repositories = repositories
+        if not organization:
+            self.repositories = list(self.github.iter_repos())
+        else:
+            org = self.github.organization(organization)
+            self.repositories = list(org.iter_repos())
 
     def get_features(self, **filters):
         """
         Get a list of all features.
         """
         features = []
-
-        for owner, repo in self.repositories:
-            ghrepo = self.github.repository(owner, repo)
-            project = '{0}/{1}'.format(owner, repo)
-            for issue in ghrepo.iter_issues(**filters):
-                issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
-                if issue.pull_request:
-                    issue_type = 'PR'
-                else:
-                    issue_type = 'story'
-                issue_info['type'] = issue_type
-                issue_info['project'] = project
-                owner = issue_info['assignee']
-                if owner is None:
-                    issue_info['owner'] = ''
-                else:
-                    # take only login name from User object
-                    issue_info['owner'] = owner.login
-                features.append(issue_info)
+        for repository in self.repositories:
+            project = '{0}/{1}'.format(repository.owner.login,
+                                       repository.name)
+            if repository.has_issues:
+                for issue in repository.iter_issues(**filters):
+                    issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
+                    if issue.pull_request:
+                        issue_type = 'PR'
+                    else:
+                        issue_type = 'story'
+                    issue_info['type'] = issue_type
+                    issue_info['project'] = project
+                    owner = issue_info['assignee']
+                    if owner is None:
+                        issue_info['owner'] = ''
+                    else:
+                        # take only login name from User object
+                        issue_info['owner'] = owner.login
+                    features.append(issue_info)
 
         # sort by putting PRs first, stories second
         features = sorted(features, key=lambda f: f['type'] == 'story')

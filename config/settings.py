@@ -4,6 +4,7 @@ APP_PACKAGE = path.basename(path.dirname(__file__))
 
 # The following is the programmatic equivalent of
 # from deploystream.local_settings_<CONFIG> import *
+GITHUB_CONFIG = GIT_CONFIG = SPRINTLY_CONFIG = None
 
 try:
     CONFIG = environ.get('CONFIG', 'sample')
@@ -14,7 +15,7 @@ try:
     for attr in dir(submod):
         if not attr.startswith('__'):
             where[attr] = getattr(submod, attr)
-            print("imported " + attr)
+            print("imported " + attr + " from {0}".format(LOCAL_SETTINGS))
 except (AttributeError, ImportError):
     import sys
     print("ERROR: could not import {0}.{1}".format(APP_PACKAGE,
