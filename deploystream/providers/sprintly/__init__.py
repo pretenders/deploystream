@@ -5,6 +5,9 @@ from deploystream.providers.interfaces import IPlanningProvider
 from deploystream.lib import transforms
 
 
+__all__ = ['SprintlyProvider']
+
+
 # Map fields from the Sprint.ly API to deploystream names
 FEATURE_MAP = {
     'number': 'id',
