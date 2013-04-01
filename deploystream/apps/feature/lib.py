@@ -11,7 +11,9 @@ def get_all_features(providers):
     all_features = []
 
     for provider in providers[IPlanningProvider]:
+        print("INFO: getting features from {0}".format(provider.name))
         for feature in provider.get_features():
+            print("INFO: found {0}".format(feature['title']))
             all_features.append(Feature(provider, **feature))
 
     return all_features
@@ -62,11 +64,10 @@ def get_feature_info(feature_id, providers):
     # Finally get any build information from any BuildInfo providers.
     for provider in providers[IBuildInfoProvider]:
         for branch in feature.branches:
-            branch.build_info = BuildInfo(
-                                    provider=provider,
-                                    **provider.get_build_information(
-                                        branch.repo_name,
-                                        branch.branch_name,
-                                        branch.latest_commit)
-                                    )
+            build_info = provider.get_build_information(
+                branch.repo_name,
+                branch.branch_name,
+                branch.latest_commit
+            )
+            branch.build_info = BuildInfo(provider=provider, **build_info)
     return feature
