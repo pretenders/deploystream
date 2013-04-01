@@ -1,4 +1,5 @@
 GITHUB_CONFIG = {
+    'organization': None,
     'repositories': [
         ('pretenders', 'deploystream'),
         ('pretenders', 'pretenders'),
