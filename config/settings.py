@@ -1,4 +1,6 @@
 from os import path, environ
+import traceback
+
 
 APP_PACKAGE = path.basename(path.dirname(__file__))
 
@@ -16,13 +18,15 @@ try:
         if not attr.startswith('__'):
             where[attr] = getattr(submod, attr)
             print("imported " + attr + " from {0}".format(LOCAL_SETTINGS))
-except (AttributeError, ImportError):
+except (AttributeError, ImportError) as e:
     import sys
     print("ERROR: could not import {0}.{1}".format(APP_PACKAGE,
                                                    LOCAL_SETTINGS))
     print("Try running with 'CONFIG=<name> runserver'")
     print("...where you have a {0}.local_settings_<name> file'".format(
         APP_PACKAGE))
+    print("Original error was: {0}".format(str(e)))
+    traceback.print_exc()
     sys.exit(-1)
 
 

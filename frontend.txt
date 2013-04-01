@@ -6,7 +6,7 @@ Install twitter bower and recess as npm modules, within the virtualenv:
 
 $ npm install -g bower
 $ npm install -g recess
-...both done by ./scripts/nodereqs.py
+...both done by ./scripts/get_dependencies.py
 
 
 Install bootstrap, font-awesome as a bower components:
