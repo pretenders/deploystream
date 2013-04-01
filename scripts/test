@@ -1,5 +1,5 @@
 #!/bin/bash
 coverage erase
-CONFIG=test coverage run --branch --omit="*/tests/*,${HOME}/*virtualenv*" -m nose.core --verbosity=2
+CONFIG=test coverage run --branch --omit="*/tests/*,${HOME}/*virtualenv*" -m nose.core --verbosity=2 $*
 coverage report --show-missing
 coverage html
