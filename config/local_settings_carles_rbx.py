@@ -1,6 +1,7 @@
 from sprintly_auth import TOKEN
 
 GITHUB_CONFIG = {
+    'organization': 'rockabox',
     'repositories': [
         ('rockabox', 'rbx_web'),
         ('rockabox', 'conf'),
