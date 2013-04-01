@@ -5,6 +5,9 @@ from deploystream.providers.interfaces import IPlanningProvider
 from deploystream.lib import transforms
 
 
+__all__ = ['GithubProvider']
+
+
 # Map fields from the Github API to deploystream names
 FEATURE_MAP = {
     'body_html': 'description',
