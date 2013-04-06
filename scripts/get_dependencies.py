@@ -16,8 +16,9 @@ def install_from_file(command, filename, version_separator):
     dependencies = join(THIS_DIR, '..', 'requirements', filename + '.txt')
     with open(dependencies, 'r') as f:
         for dependency in f.readlines():
-            dependency = version_separator.join(dependency.split('=='))
-            os.system('{0} {1}'.format(command, dependency))
+            if not dependency.strip().startswith('#'):
+                dependency = version_separator.join(dependency.split('=='))
+                os.system('{0} {1}'.format(command, dependency))
 
 
 install_from_file('npm install -g', 'npm-modules', '@')

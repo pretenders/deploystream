@@ -32,12 +32,12 @@
 @import "bootstrap/dropdowns.less";
 @import "bootstrap/wells.less";
 @import "bootstrap/component-animations.less";
-@import "bootstrap/close.less";
+// @import "bootstrap/close.less";
 
 // Components: Buttons & Alerts
 @import "bootstrap/buttons.less";
-@import "bootstrap/button-groups.less";
-@import "bootstrap/alerts.less"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
+// @import "bootstrap/button-groups.less";
+// @import "bootstrap/alerts.less"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
 
 // Components: Nav
 @import "bootstrap/navs.less";
@@ -47,8 +47,8 @@
 // @import "bootstrap/pager.less";
 
 // Components: Popovers
-@import "bootstrap/modals.less";
-@import "bootstrap/tooltip.less";
+// @import "bootstrap/modals.less";
+// @import "bootstrap/tooltip.less";
 @import "bootstrap/popovers.less";
 
 // Components: Misc
@@ -70,3 +70,31 @@
 
 // Site-wide specific styles
 @import "app.less";
+
+// stuff that needs to access imported mixins:
+
+.marketing-hero {
+    .makeRow();
+    article {
+        .makeColumn(12);
+        .hero-unit;
+        padding: 32px;
+        //margin-right: @gridGutterWidth;
+    }
+    blockquote {
+        border-color: @mainDarkBackground;
+        color: @grayDarker;
+    }
+}
+
+.marketing-detail {
+    .makeRow();
+    article {
+        .makeColumn(4);
+        border: 2px solid @discreteBackground;
+        background-color: lighten(@discreteBackground, 10%);
+        padding: @paddingMedium;
+        .border-radius(@baseBorderRadius);
+        min-height: 232px;
+    }
+}
