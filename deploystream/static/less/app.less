@@ -1,7 +1,9 @@
 /* app css stylesheet */
 
 @media (min-width: 980px) {
-    #content { padding-top: 60px; /* make space for fixed top navbar */ }
+    #content {
+        padding-top: 60px; /* make space for fixed top navbar */
+    }
 }
 
 /* sticky footer ----------------------------------------------------- */
@@ -10,6 +12,15 @@ html,
 body {
     height: 100%;
     /* The html and body elements cannot have any padding or margin. */
+}
+
+// Main page header, contains main navigation bar
+
+#header {
+   .navbar {
+       border-bottom: 4px solid @brandColor;
+       .box-shadow(0 3px 6px @grayLight);
+   }
 }
 
 /* Wrapper for page content to push down footer */
@@ -27,10 +38,10 @@ body {
     height: 120px;  /* make sure you modify negative margin in #wrap accordingly */
 }
 #footer {
-    background-color: #222;
-    color: white;
+    background-color: @altDarkBackground;
+    border-top: 4px solid @altBrightBackground;
+    color: @white;
     padding-top: 30px;
-    border-top: 4px solid #666;
 }
 
 /* Lastly, apply responsive CSS fixes as necessary */
@@ -45,19 +56,16 @@ body {
 
 #brand {
     font-family: 'YanoneKaffeesatzBold';
-    color: #984C3F;
+    color: @brandColor;
     font-size: 24px;
     text-transform: lowercase;
     padding: 8px 15px 12px;
 }
 
-.marketing {
+#marketing {
+    padding-top: 20px;
     max-width: 960px;
     margin: 0 auto;
-}
-
-.hero-unit {
-    padding: 32px;
 }
 
 /* end sticky footer */
