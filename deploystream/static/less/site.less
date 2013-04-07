@@ -4,97 +4,139 @@
  * Bootstrap - Copyright 2012 Twitter, Inc
  *             Licensed under the Apache License v2.0
  *             http://www.apache.org/licenses/LICENSE-2.0
- *             Designed and built with all the love in the world @twitter
- *             by @mdo and @fat.
  */
 
-// Core variables and mixins
 @import "fonts.less";
-@import "variables.less"; // Modify this for custom colors, font-sizes, etc
-@import "bootstrap/mixins.less";
 
-// CSS Reset
-@import "bootstrap/reset.less";
-
-// Grid system and page structure
-@import "bootstrap/scaffolding.less";
-@import "bootstrap/grid.less";
-@import "bootstrap/layouts.less";
-
-// Base CSS
-@import "bootstrap/type.less";
-@import "bootstrap/code.less";
-// @import "bootstrap/forms.less";
-@import "bootstrap/tables.less";
-
-// Components: common
-// @import "bootstrap/sprites.less";
-@import "bootstrap/dropdowns.less";
-@import "bootstrap/wells.less";
-@import "bootstrap/component-animations.less";
-// @import "bootstrap/close.less";
-
-// Components: Buttons & Alerts
-@import "bootstrap/buttons.less";
-// @import "bootstrap/button-groups.less";
-// @import "bootstrap/alerts.less"; // Note: alerts share common CSS with buttons and thus have styles in buttons.less
-
-// Components: Nav
-@import "bootstrap/navs.less";
-@import "bootstrap/navbar.less";
-// @import "bootstrap/breadcrumbs.less";
-// @import "bootstrap/pagination.less";
-// @import "bootstrap/pager.less";
-
-// Components: Popovers
-// @import "bootstrap/modals.less";
-// @import "bootstrap/tooltip.less";
-@import "bootstrap/popovers.less";
-
-// Components: Misc
-// @import "bootstrap/thumbnails.less";
-// @import "bootstrap/media.less";
-@import "bootstrap/labels-badges.less";
-// @import "bootstrap/progress-bars.less";
-// @import "bootstrap/accordion.less";
-// @import "bootstrap/carousel.less";
-@import "bootstrap/hero-unit.less";
-
-// Utility classes
-@import "bootstrap/utilities.less"; // Has to be last to override when necessary
-
-// END base bootstrap --------------------------------------------------------
+// Core variables and base bootstrap modules
+@import "variables.less";
+@import "bootstrap-modules.less";
 
 // Iconic font-awesome
 @import "font-awesome/font-awesome.less";
 
-// Site-wide specific styles
-@import "app.less";
 
-// stuff that needs to access imported mixins:
+// Custom Site-wide styles
 
-.marketing-hero {
-    .makeRow();
-    article {
-        .makeColumn(12);
-        .hero-unit;
-        padding: 32px;
-        //margin-right: @gridGutterWidth;
-    }
-    blockquote {
-        border-color: @mainDarkBackground;
-        color: @grayDarker;
+@media (min-width: 980px) {
+    #content {
+        padding-top: 60px; /* make space for fixed top navbar */
     }
 }
 
-.marketing-detail {
-    .makeRow();
-    article {
-        .makeColumn(4);
-        border: 2px solid @discreteBackground;
-        background-color: lighten(@discreteBackground, 10%);
-        padding: @paddingMedium;
-        .border-radius(@baseBorderRadius);
-        min-height: 232px;
+
+html,
+body {
+    height: 100%;
+    /* The html and body elements cannot have any padding or margin. */
+}
+
+// Main page header, contains main navigation bar
+
+#header {
+   .navbar {
+       border-bottom: 4px solid @brandColor;
+       .box-shadow(0 3px 6px @grayLight);
+   }
+}
+
+#content {
+    margin-bottom: 32px;
+}
+
+/* sticky footer ----------------------------------------------------- */
+
+/* Wrapper for page content to push down footer */
+#wrap {
+    min-height: 100%;
+    height: auto !important;
+    height: 100%;
+    /* Negative indent footer by it's height */
+    margin: 0 auto -120px;
+}
+
+/* Set the fixed height of the footer here */
+#push,
+#footer {
+    height: 120px;  /* make sure you modify negative margin in #wrap accordingly */
+}
+#footer {
+    background-color: @altDarkBackground;
+    border-top: 4px solid @altBrightBackground;
+    color: @white;
+    padding-top: 30px;
+}
+
+/* Lastly, apply responsive CSS fixes as necessary */
+@media (max-width: 767px) {
+    #footer {
+        margin-left: -20px;
+        margin-right: -20px;
+        padding-left: 20px;
+        padding-right: 20px;
     }
+}
+
+/* end sticky footer */
+
+#brand {
+    font-family: @brandFont;
+    color: @brandColor;
+    font-size: 24px;
+    text-transform: lowercase;
+    padding: 8px 15px 12px;
+}
+
+#marketing {
+    padding-top: 20px;
+    max-width: 960px;
+    margin: 0 auto;
+
+    .marketing-hero {
+        article {
+            .hero-unit;
+            padding: 32px;
+        }
+        blockquote {
+            border-color: @mainDarkBackground;
+            color: @grayDarker;
+        }
+    }
+
+    .marketing-detail {
+        article {
+            border: 2px solid @discreteBackground;
+            background-color: lighten(@discreteBackground, 10%);
+            padding: @paddingMedium;
+            .border-radius(@baseBorderRadius);
+            min-height: 240px !important;
+            margin-bottom: @gridGutterWidth;
+        }
+    }
+}
+
+// Custom icons
+
+.icon {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  .ie7-restore-right-whitespace();
+  line-height: 14px;
+  vertical-align: text-top;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+}
+
+.icon-sprintly {
+  .icon;
+  background-image: url("../img/sprintly.ico");
+  margin-top: 1px;
+}
+
+.icon-loading {
+  .icon;
+  width: 16px;
+  height: 16px;
+  background-image: url("../img/loading.gif");
 }
