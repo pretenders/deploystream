@@ -6,3 +6,8 @@ GitPython            # access git repositories
 zope.interface       # define and enforce interfaces
 certifi              # Module for Mozilla's CA bundle
 apitopy              # Required to implement the sprint.ly client
+
+requests==0.13.6     # Some hand holding for jira-python which (as of 0.12)
+                     # isn't compatible with requests 1.X. A fix has been made
+                     # to the code base, but awaiting the 0.13 release.
+jira-python          # Required to access JIRA api
