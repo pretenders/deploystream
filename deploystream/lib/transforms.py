@@ -26,7 +26,7 @@ def nativify(data):
 
 def remap(original, keymap):
     """
-    Generate a new dictionary by mapping certain keys to others.
+    Return a new dictionary using data from original mapped using keymap.
 
     This is a base adaptation layer to simplify translating various
     field names as provided by 3rd party services so that they are
@@ -35,18 +35,35 @@ def remap(original, keymap):
     :param original:
         The original dictionary (typically, a response from a JSON
         API).
+
     :param keymap:
         A dictionary mapping original field name => transformation.
         Transformation can be a single string, representing the new
         name for the field, if only the name changes, or a tuple
         containing `(new_name, value_mapping)`.
-    """
-    def _transform(k, v):
-        newk = keymap.get(k, k)
-        if isinstance(newk, tuple):
-            newk, valuemap = newk
-            return newk, valuemap.get(v, v)
-        else:
-            return newk, v
+        Original field name can be a single string, representing the location
+        in the original dict to find the value, or a tuple of keys if the value
+        is nested.
 
-    return dict([_transform(k, v) for k, v in original.iteritems()])
+    .. note::
+
+        Only keys defined in keymap will be moved across to the new dictionary.
+
+    """
+    new_dict = {}
+
+    for find_key, new_key in keymap.iteritems():
+        if isinstance(find_key, tuple):
+            # Get the nested value of the composite key
+            found_value = original
+            for sub_key in find_key:
+                found_value = found_value[sub_key]
+        else:
+            found_value = original.get(find_key)
+
+        if isinstance(new_key, tuple):
+            new_key, valuemap = new_key
+            found_value = valuemap.get(found_value, found_value)
+        new_dict[new_key] = found_value
+
+    return new_dict

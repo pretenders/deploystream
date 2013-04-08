@@ -34,3 +34,15 @@ class TestRemap(object):
 
         assert_that(mapped, equal_to(expected))
         assert_that(mapped2, equal_to(expected2))
+
+    def test_nested_name_remap(self):
+        """
+        Test nested field names can be mapped.
+        """
+        original = {"somekey": {"identifier": 123, "other_data": 445}}
+        mapping = {('somekey', 'identifier'): "id"}
+        expected = {"id": 123}
+
+        mapped = remap(original, mapping)
+
+        assert_that(mapped, equal_to(expected))

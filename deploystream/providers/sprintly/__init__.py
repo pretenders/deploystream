@@ -12,6 +12,8 @@ __all__ = ['SprintlyProvider']
 FEATURE_MAP = {
     'number': 'id',
     'short_url': 'url',
+    'type': 'type',
+    'owner': 'owner',
 }
 
 
