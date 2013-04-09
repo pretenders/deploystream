@@ -10,9 +10,11 @@ describe('my app', function () {
     });
 
 
-    it('should redirect to /features when location fragment is empty', function () {
-        browser().navigateTo('/');
-        expect(browser().location().url()).toBe("/features");
+    it('should show a login button when location fragment is empty', function () {
+        expect(browser().location().url()).toBe("/");
+        expect(element('a.btn-primary').text()).toContain('Sign in via Github');
+        //element('a.btn-primary').click();
+        //expect(browser().location().url()).toBe("/login");
     });
 
 });
