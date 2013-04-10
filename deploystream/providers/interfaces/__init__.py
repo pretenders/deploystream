@@ -32,6 +32,22 @@ def is_implementation(obj, interface):
         return False
 
 
+def class_implements(cls, interface):
+    """
+    Check that the given class looks likes it implements the given interface.
+
+    Note that this is the same as ``is_implementation`` except that it is
+    unable to verify any ``Attribute``s defined in the interface (as they may
+    be declared upon instantiation).
+    """
+    zinterface.classImplements(cls, interface)
+    try:
+        verify.verifyClass(interface, cls)
+        return True
+    except Exception:
+        #raise
+        return False
+
 def is_planning_provider(provider):
     return is_implementation(provider, IPlanningProvider)
 

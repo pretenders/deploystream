@@ -21,8 +21,8 @@ try:
     # TODO find a more appropriate way to initialise these (env vars?)
     from github_auth import APP_ID, APP_SECRET
     app.config.update({
-        "GITHUB_APP_ID": APP_ID,
-        "GITHUB_APP_SECRET": APP_SECRET,
+        "github_APP_ID": APP_ID,
+        "github_APP_SECRET": APP_SECRET,
     })
 except ImportError:
     print ("""
@@ -38,20 +38,24 @@ except ImportError:
     # this is here so that tests can run on Travis, but we should have a nicer
     # way to set these up
     app.config.update({
-        "GITHUB_APP_ID": '',
-        "GITHUB_APP_SECRET": '',
+        "github_APP_ID": '',
+        "github_APP_SECRET": '',
     })
 
-from deploystream.apps.oauth import ensure_certifi_certs_installed
+from deploystream.lib import ensure_certifi_certs_installed
 ensure_certifi_certs_installed()
-
-# Initialise the providers.
-from providers import init_providers
-init_providers(app.config['PROVIDERS'])
 
 # set the secret key. Dummy secret for flask. When using in real life, have
 # something that is actually a secret
 app.secret_key = 'mysecret'
+
+# Initialise the providers.
+from providers import init_providers
+classes = init_providers(app.config['PROVIDERS'])
+
+# Configure additional routes needed for oauth
+from deploystream.apps.oauth.views import configure_oauth_routes
+configure_oauth_routes(classes)
 
 # Import any views we want to register here at the bottom of the file:
 import deploystream.views  # NOQA

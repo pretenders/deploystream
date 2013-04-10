@@ -2,6 +2,7 @@ from collections import defaultdict
 import traceback
 
 from deploystream.apps import oauth
+from deploystream.exceptions import MissingTokenException
 from deploystream.providers.interfaces import (
     IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider,
     is_implementation)
@@ -42,6 +43,11 @@ def get_providers(configs, session):
                 token = oauth.get_token(
                                     session,
                                     provider_class.oauth_token_required)
+                print "token is ", token
+                if not token:
+                    raise MissingTokenException(
+                            missing_token=provider_class.oauth_token_required)
+
                 kwargs['token'] = token
         except KeyError:
             print ("WARNING: provider {0} wanted a token "
@@ -71,3 +77,4 @@ def init_providers(provider_path_set):
     for path in provider_path_set:
         provider_class = get_provider_class(path)
         ALL_PROVIDER_CLASSES[provider_class.name] = provider_class
+    return ALL_PROVIDER_CLASSES

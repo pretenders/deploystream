@@ -1,8 +1,9 @@
-from mock import patch
+from mock import patch, Mock
 from nose.tools import assert_equal, assert_true
 
 import deploystream
 from deploystream.apps import oauth
+from deploystream.apps.oauth.views import configure_oauth_routes
 
 
 class OAuthProvider(object):
@@ -43,10 +44,15 @@ class PlanningProvider(object):
         }
 
 
+DummyOAuth = Mock()
+
+
 class TestAutoGetToken(object):
 
     def setUp(self):
         deploystream.app.config['TESTING'] = True
+        deploystream.app.config['api_APP_ID'] = "some-key"
+        deploystream.app.config['api_APP_SECRET'] = "some-secret"
         deploystream.app.config['USER_SPECIFIC_INFO'] = {
             'provider_config': [
                 ('prov101', {}),
@@ -58,12 +64,14 @@ class TestAutoGetToken(object):
     @patch("deploystream.providers.ALL_PROVIDER_CLASSES",
            {'prov101': PlanningProvider,
             'api': OAuthProvider})
-    @patch("whatever.imports.flask_oauth")
-    def test_providers_requiring_oauth_token_force_redirect(self, OAuth):
+    def test_providers_requiring_oauth_token_force_redirect(self):
         "Test that the site attempts to get tokens for providers"
+
+        configure_oauth_routes(deploystream.providers.ALL_PROVIDER_CLASSES)
+
         response = self.client.get('/features/FT101')
-        assert_equal(response.status, 302)
-        assert_equal(response.location, "http://access_token_url")
+        assert_equal(response.status_code, 302)
+        assert_true("http://auth_url" in response.location)
 
     @patch("deploystream.providers.ALL_PROVIDER_CLASSES",
            {'prov101': PlanningProvider,
