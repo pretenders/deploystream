@@ -73,3 +73,14 @@ class GithubProvider(object):
 
     def get_feature_info(self, feature_id):
         pass
+
+    def get_oauth_data(self):
+        return {
+            'base_url': 'https://api.github.com/',
+            'request_token_url': None,
+            'access_token_url': 'https://github.com/login/oauth/access_token',
+            'authorize_url': 'https://github.com/login/oauth/authorize',
+            'request_token_params': {
+                'scope': 'user,repo'
+            },
+        }
