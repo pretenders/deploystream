@@ -58,7 +58,6 @@ def get_oauth_token(oauth_name):
 
 def oauth_authorized(resp):
     "Call back for the oauth authorization."
-    print "OAUTH AUTHORIZED", request.args
     next_url = request.args.get('next') or url_for('homepage')
     oauth_name = request.args.get('oauth_name')
     if resp is None:
@@ -88,5 +87,4 @@ def start_token_processing(oauth_name, islogin=None):
                   oauth_name=oauth_name,
                   islogin=islogin,
                   _external=True)
-    print "URL is ", url
     return OAUTH_OBJECTS[oauth_name].authorize(callback=url)

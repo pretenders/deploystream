@@ -43,7 +43,6 @@ def get_providers(configs, session):
                 token = oauth.get_token(
                                     session,
                                     provider_class.oauth_token_required)
-                print "token is ", token
                 if not token:
                     raise MissingTokenException(
                             missing_token=provider_class.oauth_token_required)
