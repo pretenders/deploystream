@@ -39,9 +39,10 @@ def get_providers(configs, session):
             kwargs.update(config)
         try:
             if provider_class.oauth_token_required:
-                kwargs['token'] = oauth.get_token(
+                token = oauth.get_token(
                                     session,
                                     provider_class.oauth_token_required)
+                kwargs['token'] = token
         except KeyError:
             print ("WARNING: provider {0} wanted a token "
                    "but we didn't have one".format(name))

@@ -6,7 +6,7 @@ from deploystream.providers.interfaces.base import ProviderInterface
 class IOAuthProvider(ProviderInterface):
 
     def get_oauth_data():
-        """Return a dictionary of items used for getting OAuth data.
+        """Class method. Return a dict of items used for getting OAuth data.
 
         The dictionary should return values for at least::
 
