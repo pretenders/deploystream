@@ -7,3 +7,7 @@ from deploystream.providers.interfaces import (
 
 def test_is_planning_provider():
     assert_true(is_implementation(JiraProvider, IPlanningProvider))
+
+
+def test_jira_provider_features():
+    raise Exception("Not implemented yet")
