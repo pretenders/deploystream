@@ -5,6 +5,9 @@ import deploystream
 
 
 class SourceCodeProvider(object):
+    name = 'source'
+    oauth_token_required = None
+
     def get_repo_branches_involved(self, feature_id, **kwargs):
         return [('repo_01', "{0}_branch".format(feature_id), "232323")]
 
@@ -13,6 +16,9 @@ class SourceCodeProvider(object):
 
 
 class PlanningProvider(object):
+    name = 'plan'
+    oauth_token_required = None
+
     def get_features(self, **filters):
         return []
 
@@ -28,6 +34,9 @@ class PlanningProvider(object):
 
 
 class BuildInfoProvider(object):
+    name = 'build'
+    oauth_token_required = None
+
     def get_build_information(self, repo, branch, commit, **kwargs):
         return {
             "timestamp": datetime.now(),
