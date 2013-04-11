@@ -39,13 +39,13 @@ def get_providers(configs, session):
         if config:
             kwargs.update(config)
         try:
-            if provider_class.oauth_token_required:
+            if provider_class.oauth_token_name:
                 token = oauth.get_token(
                                     session,
-                                    provider_class.oauth_token_required)
+                                    provider_class.oauth_token_name)
                 if not token:
                     raise MissingTokenException(
-                            missing_token=provider_class.oauth_token_required)
+                            missing_token=provider_class.oauth_token_name)
 
                 kwargs['token'] = token
         except KeyError:

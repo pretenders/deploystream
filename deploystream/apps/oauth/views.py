@@ -18,14 +18,10 @@ def configure_route(oauth_name, oauth_data):
     """
     Configure some app routes for the given oauth provider.
 
-    It is assumed that config exists for::
-
-        <oauth_name>_APP_ID
-        <oauth_name>_APP_SECRET
-
+    The given oauth provider should have a key and secret in configuration at
+    ``['oauth'][<oauth_name>]``.
     """
-    key = app.config['{0}_APP_ID'.format(oauth_name)]
-    secret = app.config['{0}_APP_SECRET'.format(oauth_name)]
+    key, secret = app.config['oauth'][oauth_name]
 
     oauth = OAuth().remote_app(
         oauth_name,

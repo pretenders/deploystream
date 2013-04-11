@@ -12,7 +12,7 @@ class TestSourceCodeControlProviderInterface(object):
     def test_implements_source_control_provider(self):
         class MyProvider(object):
             name = "provider"
-            oauth_token_required = "oauth"
+            oauth_token_name = "oauth"
             def get_repo_branches_involved(self, feature_id):
                 pass
 
@@ -37,7 +37,7 @@ class TestBuildInfoProviderInterface(object):
     def test_implements_build_info_provider(self):
         class MyProvider(object):
             name = "provider"
-            oauth_token_required = "oauth"
+            oauth_token_name = "oauth"
 
             def get_build_information(self, repo, branch, commit):
                 pass
@@ -56,7 +56,7 @@ class TestPlanningProviderInterface(object):
     def test_implements_planning_provider(self):
         class MyProvider(object):
             name = "provider"
-            oauth_token_required = "oauth"
+            oauth_token_name = "oauth"
 
             def get_features(self, **filters):
                 pass
@@ -78,7 +78,7 @@ class TestOAuthProviderInterface(object):
     def test_implements_oauth(self):
         class MyProvider(object):
             name = "provider"
-            oauth_token_required = "oauth"
+            oauth_token_name = "oauth"
 
             def get_oauth_data(self):
                 pass

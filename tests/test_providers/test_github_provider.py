@@ -47,6 +47,6 @@ def test_get_features(github3):
 
 
 @patch('deploystream.providers.github.github3')
-def test_implements_expected_interfaces(github3):
+def test_implements_expected_interfaces(_):
     assert_true(is_implementation(GithubProvider('token'), IPlanningProvider))
     assert_true(is_implementation(GithubProvider('token'), IOAuthProvider))

@@ -1,10 +1,10 @@
 from zope import interface as zinterface
 from zope.interface import verify
 # These imports are here for convenience, to be re-imported by others
-from build_info import IBuildInfoProvider
-from planning import IPlanningProvider
-from source_code_control import ISourceCodeControlProvider
-from oauth import IOAuthProvider
+from .build_info import IBuildInfoProvider
+from .planning import IPlanningProvider
+from .source_code_control import ISourceCodeControlProvider
+from .oauth import IOAuthProvider
 
 __all__ = [
     IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider,

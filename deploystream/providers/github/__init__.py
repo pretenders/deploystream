@@ -23,7 +23,7 @@ class GithubProvider(object):
     """
     interface.implements(IPlanningProvider)
     name = 'github'
-    oauth_token_required = name
+    oauth_token_name = name
 
     def __init__(self, token, organization=None, **kwargs):
         """

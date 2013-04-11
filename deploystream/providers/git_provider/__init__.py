@@ -8,7 +8,7 @@ import git
 class GitProvider(object):
 
     name = 'git'
-    oauth_token_required = None
+    oauth_token_name = None
 
     def __init__(self, code_dir='.',
                  feature_breakup_regex='',

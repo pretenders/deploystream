@@ -21,8 +21,9 @@ try:
     # TODO find a more appropriate way to initialise these (env vars?)
     from github_auth import APP_ID, APP_SECRET
     app.config.update({
-        "github_APP_ID": APP_ID,
-        "github_APP_SECRET": APP_SECRET,
+        "oauth": {
+            'github': (APP_ID, APP_SECRET)
+        }
     })
 except ImportError:
     print ("""
@@ -38,8 +39,9 @@ except ImportError:
     # this is here so that tests can run on Travis, but we should have a nicer
     # way to set these up
     app.config.update({
-        "github_APP_ID": '',
-        "github_APP_SECRET": '',
+        "oauth": {
+            'github': ("", "")
+        }
     })
 
 from deploystream.lib import ensure_certifi_certs_installed
@@ -60,4 +62,3 @@ configure_oauth_routes(classes)
 # Import any views we want to register here at the bottom of the file:
 import deploystream.views  # NOQA
 import deploystream.apps.feature.views  # NOQA
-import deploystream.apps.oauth.github  # NOQA

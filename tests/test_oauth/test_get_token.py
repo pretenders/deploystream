@@ -8,7 +8,7 @@ from deploystream.apps.oauth.views import configure_oauth_routes
 
 class OAuthProvider(object):
     name = 'api'
-    oauth_token_required = None
+    oauth_token_name = None
 
     @classmethod
     def get_oauth_data(cls):
@@ -25,7 +25,7 @@ class OAuthProvider(object):
 
 class PlanningProvider(object):
     name = 'prov101'
-    oauth_token_required = 'api'
+    oauth_token_name = 'api'
 
     def __init__(self, token):
         pass
@@ -51,8 +51,7 @@ class TestAutoGetToken(object):
 
     def setUp(self):
         deploystream.app.config['TESTING'] = True
-        deploystream.app.config['api_APP_ID'] = "some-key"
-        deploystream.app.config['api_APP_SECRET'] = "some-secret"
+        deploystream.app.config['oauth']['api'] = ("some-key", "some-secret")
         deploystream.app.config['USER_SPECIFIC_INFO'] = {
             'provider_config': [
                 ('prov101', {}),
@@ -80,7 +79,7 @@ class TestAutoGetToken(object):
         "Test that the site doesn't go to get the token if it already has it"
         with self.client.session_transaction() as sess:
             oauth.set_token(
-                sess, PlanningProvider.oauth_token_required, "FRED")
+                sess, PlanningProvider.oauth_token_name, "FRED")
         response = self.client.get('/features/FT101')
         assert_equal(response.status_code, 200)
         assert_true("Amazing feature" in response.data)
