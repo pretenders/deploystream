@@ -5,7 +5,7 @@ from flask import json, Response
 from deploystream import app
 from deploystream.apps.feature.lib import get_feature_info, get_all_features
 from deploystream.lib.transforms import nativify
-from deploystream.providers.decorators import needs_providers
+from deploystream.decorators import needs_providers
 
 
 def as_json(func):

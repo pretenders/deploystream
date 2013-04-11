@@ -1,7 +1,9 @@
 from mock import Mock, patch
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_true
 
 from deploystream.providers.github import GithubProvider
+from deploystream.providers.interfaces import (
+        IPlanningProvider, IOAuthProvider, is_implementation)
 
 
 @patch('deploystream.providers.github.github3')
@@ -42,3 +44,9 @@ def test_get_features(github3):
     assert_equal(features[1]['id'], '2')
     assert_equal(features[1]['type'], 'story')
     assert_equal(features[1]['owner'], '')
+
+
+@patch('deploystream.providers.github.github3')
+def test_implements_expected_interfaces(_):
+    assert_true(is_implementation(GithubProvider('token'), IPlanningProvider))
+    assert_true(is_implementation(GithubProvider('token'), IOAuthProvider))

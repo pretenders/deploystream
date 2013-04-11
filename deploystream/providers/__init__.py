@@ -1,6 +1,8 @@
 from collections import defaultdict
+import traceback
 
 from deploystream.apps import oauth
+from deploystream.exceptions import MissingTokenException
 from deploystream.providers.interfaces import (
     IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider,
     is_implementation)
@@ -37,13 +39,15 @@ def get_providers(configs, session):
         if config:
             kwargs.update(config)
         try:
-            kwargs['token'] = oauth.get_token(
+            if provider_class.oauth_token_name:
+                token = oauth.get_token(
                                     session,
-                                    provider_class.oauth_token_required)
-        except AttributeError:
-            # The provider class doesn't define any oauth requirement.
-            print ("INFO: provider {0} does not want a token".format(name))
-            pass
+                                    provider_class.oauth_token_name)
+                if not token:
+                    raise MissingTokenException(
+                            missing_token=provider_class.oauth_token_name)
+
+                kwargs['token'] = token
         except KeyError:
             print ("WARNING: provider {0} wanted a token "
                    "but we didn't have one".format(name))
@@ -54,11 +58,12 @@ def get_providers(configs, session):
 
             for iface in [IBuildInfoProvider, IPlanningProvider,
                           ISourceCodeControlProvider]:
-                if is_implementation(provider.__class__, iface):
+                if is_implementation(provider, iface):
                     providers[iface].append(provider)
             print("INFO: Initialised provider {0}".format(name))
         except Exception:
-            print("ERROR: Failed to initialise provider {0}".format(name))
+            print("ERROR: Failed to initialise provider {0}: {1}"
+                  .format(name, traceback.format_exc()))
     return providers
 
 
@@ -71,3 +76,4 @@ def init_providers(provider_path_set):
     for path in provider_path_set:
         provider_class = get_provider_class(path)
         ALL_PROVIDER_CLASSES[provider_class.name] = provider_class
+    return ALL_PROVIDER_CLASSES
