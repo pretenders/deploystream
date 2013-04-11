@@ -82,6 +82,6 @@ class GithubProvider(object):
             'access_token_url': 'https://github.com/login/oauth/access_token',
             'authorize_url': 'https://github.com/login/oauth/authorize',
             'request_token_params': {
-                'scope': 'user,repo'
+                'scope': 'repo'
             },
         }
