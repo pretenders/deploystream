@@ -23,7 +23,7 @@ class GithubProvider(object):
     """
     interface.implements(IPlanningProvider)
     name = 'github'
-    oauth_token_required = name
+    oauth_token_name = name
 
     def __init__(self, token, organization=None, **kwargs):
         """
@@ -73,3 +73,15 @@ class GithubProvider(object):
 
     def get_feature_info(self, feature_id):
         pass
+
+    @classmethod
+    def get_oauth_data(self):
+        return {
+            'base_url': 'https://api.github.com/',
+            'request_token_url': None,
+            'access_token_url': 'https://github.com/login/oauth/access_token',
+            'authorize_url': 'https://github.com/login/oauth/authorize',
+            'request_token_params': {
+                'scope': 'repo'
+            },
+        }

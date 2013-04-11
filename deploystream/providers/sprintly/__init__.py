@@ -34,6 +34,7 @@ class SprintlyProvider(object):
     """
     interface.implements(IPlanningProvider)
     name = 'sprintly'
+    oauth_token_name = None
 
     def __init__(self, user, token, current, **kwargs):
         """
