@@ -24,7 +24,7 @@ def nativify(data):
         return '"{0}"'.format(data)
 
 
-def remap(original, keymap):
+def remap(original, keymap, defaults=None):
     """
     Return a new dictionary using data from original mapped using keymap.
 
@@ -50,6 +50,8 @@ def remap(original, keymap):
         Only keys defined in keymap will be moved across to the new dictionary.
 
     """
+    if defaults is None:
+        defaults = {}
     new_dict = {}
 
     for find_key, new_key in keymap.iteritems():
@@ -57,6 +59,8 @@ def remap(original, keymap):
             # Get the nested value of the composite key
             found_value = original
             for sub_key in find_key:
+                if not found_value:
+                    break
                 found_value = found_value[sub_key]
         else:
             found_value = original.get(find_key)

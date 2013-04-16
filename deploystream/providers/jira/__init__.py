@@ -9,7 +9,7 @@ FEATURE_MAP = {
     'key': 'id',
     'self': 'url',
     ('fields', 'issuetype', 'name'): 'type',
-    'owner': 'owner',
+    ('fields', 'assignee', 'name'): ('owner', {None: ""}),
     ('fields', 'project', 'name'): 'project',
 }
 
@@ -18,6 +18,7 @@ def _transform(feature):
     """
     Adapt feature to match normalised field names.
     """
+    print feature.raw['key']
     feature = transforms.remap(feature.raw, FEATURE_MAP)
     return feature
 
@@ -25,6 +26,7 @@ def _transform(feature):
 class JiraProvider(object):
 
     name = 'jira'
+    oauth_token_name = None#name
 
     def __init__(self, user, password, url, issue_types=None):
         """
@@ -44,10 +46,20 @@ class JiraProvider(object):
             Filtering parameters, such as owner, state, project...
 
         :returns:
-            A list of features that follow the specified criteria
+            A list of features that follow the specified criteria.
+
+        .. note::
+
+            JIRA api returns up to 1000 results at a time. ``search_issues``
+            has params for looping through additional results.
+
+            See http://jira-python.readthedocs.org/en/latest/#searching for
+            more details.
         """
         type_list = ', '.join(self.issue_types)
-        features = self._conn.search_issues("type in ({0})".format(type_list))
+        features = self._conn.search_issues(
+            'type in ({0}) and status!=closed and "Sprint" != Null'
+            .format(type_list), maxResults=1000)
         features = map(_transform, features)
         return features
 

@@ -15,6 +15,7 @@ FEATURE_MAP = {
     'number': 'id',
     'id': 'github_id',
     'assignee': 'assignee',
+    'title': 'title',
 }
 
 

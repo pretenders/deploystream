@@ -13,6 +13,7 @@ def get_all_features(providers):
     for provider in providers[IPlanningProvider]:
         print("INFO: getting features from {0}".format(provider.name))
         for feature in provider.get_features():
+            print feature
             print("INFO: found {0}".format(feature['title']))
             all_features.append(Feature(provider, **feature))
 
