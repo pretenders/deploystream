@@ -12,9 +12,9 @@ GIT_CONFIG = {
 
 
 JIRA_CONFIG = {
-    'url': 'https://glassesdirect.atlassian.net',
-    'user': None,
-    'password': None,
+    'url': '',
+    # 'user': None,
+    # 'password': None,
 }
 
 

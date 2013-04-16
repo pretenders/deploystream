@@ -18,7 +18,6 @@ def _transform(feature):
     """
     Adapt feature to match normalised field names.
     """
-    print feature.raw['key']
     feature = transforms.remap(feature.raw, FEATURE_MAP)
     return feature
 
@@ -26,7 +25,7 @@ def _transform(feature):
 class JiraProvider(object):
 
     name = 'jira'
-    oauth_token_name = None#name
+    oauth_token_name = None
 
     def __init__(self, user, password, url, issue_types=None):
         """
