@@ -13,8 +13,8 @@ GIT_CONFIG = {
 
 JIRA_CONFIG = {
     'url': '',
-    # 'user': None,
-    # 'password': None,
+    'user': None,
+    'password': None,
 }
 
 
