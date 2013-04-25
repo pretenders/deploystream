@@ -78,4 +78,5 @@ class JiraProvider(object):
 
             ``None`` otherwise
         """
-        pass
+        raise NotImplementedError("get_feature_info() not implemented in {0}"
+                                  .format(self.__class__.__name__))

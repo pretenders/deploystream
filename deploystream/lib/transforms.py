@@ -24,7 +24,7 @@ def nativify(data):
         return '"{0}"'.format(data)
 
 
-def remap(original, keymap, defaults=None):
+def remap(original, keymap):
     """
     Return a new dictionary using data from original mapped using keymap.
 
@@ -50,8 +50,6 @@ def remap(original, keymap, defaults=None):
         Only keys defined in keymap will be moved across to the new dictionary.
 
     """
-    if defaults is None:
-        defaults = {}
     new_dict = {}
 
     for find_key, new_key in keymap.iteritems():
