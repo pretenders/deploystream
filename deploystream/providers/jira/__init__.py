@@ -18,7 +18,7 @@ def _transform(feature):
     """
     Adapt feature to match normalised field names.
     """
-    feature = transforms.remap(feature.raw, FEATURE_MAP)
+    feature = transforms.remap(feature.raw, FEATURE_MAP, keep_extra=False)
     return feature
 
 

@@ -1,3 +1,6 @@
+#!/usr/bin/env python
+#-*- coding: utf-8 -*-
+
 from deploystream import app
 from deploystream.providers.interfaces import (
     IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider)
@@ -13,7 +16,7 @@ def get_all_features(providers):
     for provider in providers[IPlanningProvider]:
         print("INFO: getting features from {0}".format(provider.name))
         for feature in provider.get_features():
-            print("INFO: found {0}".format(feature['title']))
+            print("INFO: found " + feature['title'])
             all_features.append(Feature(provider, **feature))
 
     return all_features

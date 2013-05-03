@@ -24,7 +24,7 @@ def nativify(data):
         return '"{0}"'.format(data)
 
 
-def remap(original, keymap):
+def remap(original, keymap, keep_extra=True):
     """
     Return a new dictionary using data from original mapped using keymap.
 
@@ -45,12 +45,15 @@ def remap(original, keymap):
         in the original dict to find the value, or a tuple of keys if the value
         is nested.
 
-    .. note::
-
-        Only keys defined in keymap will be moved across to the new dictionary.
-
+    :param keep_extra:
+        If ``True``, all existing keys are brought across. If ``False``, only
+        keys defined in keymap will be moved across to the new dictionary.
     """
-    new_dict = {}
+
+    if keep_extra:
+        new_dict = original.copy()
+    else:
+        new_dict = {}
 
     for find_key, new_key in keymap.iteritems():
         if isinstance(find_key, tuple):

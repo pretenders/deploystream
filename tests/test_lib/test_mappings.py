@@ -14,7 +14,7 @@ class TestRemap(object):
         mapping = {"identifier": "id", "name": "title"}
         expected = {"id": 123, "title": "A feature"}
 
-        mapped = remap(original, mapping)
+        mapped = remap(original, mapping, keep_extra=False)
 
         assert_that(mapped, equal_to(expected))
 
@@ -29,8 +29,8 @@ class TestRemap(object):
         expected = {"id": 123, "type": "defect"}
         expected2 = {"id": 124, "type": "story"}
 
-        mapped = remap(original, mapping)
-        mapped2 = remap(original2, mapping)
+        mapped = remap(original, mapping, keep_extra=False)
+        mapped2 = remap(original2, mapping, keep_extra=False)
 
         assert_that(mapped, equal_to(expected))
         assert_that(mapped2, equal_to(expected2))
@@ -43,6 +43,18 @@ class TestRemap(object):
         mapping = {('somekey', 'identifier'): "id"}
         expected = {"id": 123}
 
-        mapped = remap(original, mapping)
+        mapped = remap(original, mapping, keep_extra=False)
+
+        assert_that(mapped, equal_to(expected))
+
+    def test_name_remap_keep_original(self):
+        """
+        Test original fields can be kept if requested.
+        """
+        original = {"old_id": 123}
+        mapping = {"old_id": "new_id"}
+        expected = {"old_id": 123, "new_id": 123}
+
+        mapped = remap(original, mapping, keep_extra=True)
 
         assert_that(mapped, equal_to(expected))

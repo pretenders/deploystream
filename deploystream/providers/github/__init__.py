@@ -14,8 +14,6 @@ FEATURE_MAP = {
     'html_url': 'url',
     'number': 'id',
     'id': 'github_id',
-    'assignee': 'assignee',
-    'title': 'title',
 }
 
 
@@ -35,6 +33,9 @@ class GithubProvider(object):
             The name of the organization who's repository issues should be
             identified in GitHub. If ``None`` then the authenticated
             user's issues will be tracked.
+
+        :param pr_only:
+            Boolean. Only include PR issues from github. Defaults to False
         """
         self.github = github3.login(token=token)
         if not organization:
