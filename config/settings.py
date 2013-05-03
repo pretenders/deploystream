@@ -6,7 +6,7 @@ APP_PACKAGE = path.basename(path.dirname(__file__))
 
 # The following is the programmatic equivalent of
 # from deploystream.local_settings_<CONFIG> import *
-GITHUB_CONFIG = GIT_CONFIG = SPRINTLY_CONFIG = None
+GITHUB_CONFIG = GIT_CONFIG = SPRINTLY_CONFIG = JIRA_CONFIG = None
 
 try:
     CONFIG = environ.get('CONFIG', 'sample')
@@ -34,6 +34,7 @@ PROVIDERS = [
     'deploystream.providers.git_provider.GitProvider',
     'deploystream.providers.github.GithubProvider',
     'deploystream.providers.sprintly.SprintlyProvider',
+    'deploystream.providers.jira.JiraProvider',
 ]
 "System wide providers"
 
@@ -42,6 +43,7 @@ USER_SPECIFIC_INFO = {
         ('git', GIT_CONFIG),
         ('github', GITHUB_CONFIG),
         ('sprintly', SPRINTLY_CONFIG),
+        ('jira', JIRA_CONFIG),
     ]
 }
 """Some User specific information that will end up in a db.

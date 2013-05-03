@@ -47,6 +47,7 @@ logs
 local_settings.py
 tests/test_providers/data/
 github_auth.py
+non_github_settings.py
 
 # Dependency management tools (pip, npm, bower):
 /components

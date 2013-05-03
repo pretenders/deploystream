@@ -1,5 +1,3 @@
-from zope import interface
-
 from deploystream.providers.interfaces.base import ProviderInterface
 
 
