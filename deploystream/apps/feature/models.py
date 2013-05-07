@@ -41,7 +41,7 @@ class Feature(object):
         self.branches = []
         self.trees = []
 
-    def create_hierarchy_trees(self, regexes):
+    def create_hierarchy_trees(self):
         "Create hierarchy trees - one for each repo."
         pass
 
@@ -60,8 +60,11 @@ class Branch(object):
         ``branch_name``   - The name of the branch.
         ``latest_commit`` - The head commmit, or latest revision in this
                             branch.
+        ``level``         - The level this Branch falls in the hierarchy for
+                            the feature.
         ``provider``      - The provider instance that found this branch
                             information.
+
 
     Instances are eventually populated with these values:
 
@@ -75,7 +78,7 @@ class Branch(object):
                             or would have the same parent if one existed.
     """
 
-    def __init__(self, repo_name, branch_name, latest_commit, provider):
+    def __init__(self, repo_name, branch_name, latest_commit, level, provider):
         self.parent = None
         self.children = []
         self.siblings = []  # Will be needed in the cases where we have no
@@ -84,6 +87,7 @@ class Branch(object):
         self.repo_name = repo_name
         self.branch_name = branch_name
         self.latest_commit = latest_commit
+        self.level = level
         self._provider = provider
 
 

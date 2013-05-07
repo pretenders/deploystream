@@ -39,7 +39,6 @@ def get_feature_info(feature_provider, feature_id, providers):
 
     :raises:
         UnknownProviderException - if no such name found.
-
     """
     # First get feature info from the management provider
 
@@ -54,12 +53,13 @@ def get_feature_info(feature_provider, feature_id, providers):
 
     # Then get any branch info from any source control providers
     for provider in providers[ISourceCodeControlProvider]:
-        for branch_data in provider.get_repo_branches_involved(feature_id):
+        for branch_data in provider.get_repo_branches_involved(
+            feature_id, app.config['HIERARCHY_REGEXES']):
             feature.add_branch(Branch(*branch_data, provider=provider))
 
     # Use that branch info, along with configuration regexes to create a
     # hierarchy of the branches involved in the feature.
-    feature.create_hierarchy_trees(app.config['HIERARCHY_REGEXES'])
+    feature.create_hierarchy_trees()
 
     # Ask source control providers for merging information at this point.
     for provider in providers[ISourceCodeControlProvider]:

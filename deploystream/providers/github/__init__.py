@@ -1,8 +1,9 @@
 import github3
+import re
 from zope import interface
 
 from deploystream.providers.interfaces import IPlanningProvider
-from deploystream.lib import transforms
+from deploystream.lib import transforms, hierarchy
 
 
 __all__ = ['GithubProvider']
@@ -85,3 +86,21 @@ class GithubProvider(object):
                 'scope': 'repo'
             },
         }
+
+    def get_repo_branches_involved(self, feature_id, hierarchy_regexes):
+        branch_list = []
+
+        for repo in self.repositories:
+            for branch in repo.iter_branches():
+                level = hierarchy.match_with_levels(
+                        feature_id, branch, hierarchy_regexes)
+                if not level:
+                    continue
+                branch_list.append({
+                    "repo_name": repo.name,
+                    "branch_name": branch.name,
+                    "latest_commit": branch.commit,
+                    "level": level,
+                })
+
+        return branch_list
