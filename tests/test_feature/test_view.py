@@ -64,7 +64,7 @@ class TestViewFeatureEndToEndWithDummyProviders(object):
             'testsource': SourceCodeProvider,
             'testbuild': BuildInfoProvider})
     def test_feature_view_shows_details(self):
-        response = self.client.get('/features/FT101')
+        response = self.client.get('/features/plan...FT101')
         assert "Amazing feature that will blow your mind" in response.data
 
     @patch("deploystream.providers.ALL_PROVIDER_CLASSES",
@@ -75,5 +75,5 @@ class TestViewFeatureEndToEndWithDummyProviders(object):
         conf = deploystream.app.config
         del conf['USER_SPECIFIC_INFO']['provider_config'][0]
 
-        response = self.client.get('/features/FT101')
+        response = self.client.get('/features/plan...FT101')
         assert "Amazing feature that will blow your mind" not in response.data

@@ -22,13 +22,19 @@ def get_all_features(providers):
     return all_features
 
 
-def get_feature_info(feature_id, providers):
+def get_feature_info(feature_provider, feature_id, providers):
     """
     Get the information associated with the given feature from the providers
     given.
 
-    ``planning``, ``source_code`` and ``build_info`` are relevant providers to
-    be called.
+    :param feature_provider:
+        The name of the planning provider who knows of this feature.
+
+    :param feature_id:
+        The planning-provider specific id for the feature.
+
+    :param providers:
+        A dictionary of all providers.
     """
     # TODO: since features may come from various origins, we need
     # at this stage to either use a feature id that is a string such as
