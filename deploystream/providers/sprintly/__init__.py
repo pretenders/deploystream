@@ -12,6 +12,7 @@ __all__ = ['SprintlyProvider']
 FEATURE_MAP = {
     'number': 'id',
     'short_url': 'url',
+    ('product', 'name'): 'project',
 }
 
 
@@ -57,8 +58,6 @@ class SprintlyProvider(object):
             feature_endpoint = self.api.products[project.id].items
             for criterion in self.current:
                 features += feature_endpoint(**criterion)
-            for feature in features:
-                feature['project'] = project.name
 
         features = map(_transform, features)
         return features
