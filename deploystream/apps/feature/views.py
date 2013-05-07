@@ -1,11 +1,12 @@
 from functools import wraps
 
-from flask import json, Response
+from flask import json, Response, abort
 
 from deploystream import app
 from deploystream.apps.feature.lib import get_feature_info, get_all_features
 from deploystream.lib.transforms import nativify
 from deploystream.decorators import needs_providers
+from deploystream.exceptions import UnknownProviderException
 
 
 def as_json(func):
@@ -34,5 +35,8 @@ def list_features(providers):
 @as_json
 def view_feature(provider_feature_id, providers):
     provider_id, feature_id = provider_feature_id.split('...')
-    feature = get_feature_info(provider_id, feature_id, providers)
+    try:
+        feature = get_feature_info(provider_id, feature_id, providers)
+    except UnknownProviderException:
+        abort(404)
     return feature

@@ -33,6 +33,7 @@ def get_providers(configs, session):
         interface
     """
     providers = defaultdict(list)
+    providers['by_name'] = {}
     for name, config in configs:
         provider_class = ALL_PROVIDER_CLASSES[name]
         kwargs = {}
@@ -60,6 +61,7 @@ def get_providers(configs, session):
                           ISourceCodeControlProvider]:
                 if is_implementation(provider, iface):
                     providers[iface].append(provider)
+            providers['by_name'][provider.name] = provider
             print("INFO: Initialised provider {0}".format(name))
         except Exception:
             print("ERROR: Failed to initialise provider {0}: {1}"

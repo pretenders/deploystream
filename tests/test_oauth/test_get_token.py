@@ -40,7 +40,8 @@ class PlanningProvider(object):
             "url": "http://planning_site/{0}".format(feature_id),
             "feature_type": "story",
             "owner": "Bob",
-            "description": "Too good for words..."
+            "description": "Too good for words...",
+            "project": "p2"
         }
 
 

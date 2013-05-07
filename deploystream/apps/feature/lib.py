@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 
 from deploystream import app
+from deploystream.exceptions import UnknownProviderException
 from deploystream.providers.interfaces import (
     IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider)
 from .models import Branch, BuildInfo, Feature
@@ -35,26 +36,21 @@ def get_feature_info(feature_provider, feature_id, providers):
 
     :param providers:
         A dictionary of all providers.
+
+    :raises:
+        UnknownProviderException - if no such name found.
+
     """
-    # TODO: since features may come from various origins, we need
-    # at this stage to either use a feature id that is a string such as
-    # "github:pretenders/deploystream:15" or to have additional arguments
-    # for provider and project. In any case we probably need providers to
-    # have an identifying string such as "github", "jira", "sprintly"...
+    # First get feature info from the management provider
 
-    # First get feature info from the management providers
-    # This needs rewriting according to previous paragraph. For now:
-    # Only one management provider should know about this feature,
-    # so we stop on first success
     feature = None
-    for provider in providers[IPlanningProvider]:
-        feature = Feature(provider, None,
-                          **provider.get_feature_info(feature_id))
-        if feature:
-            break
+    try:
+        planning_provider = providers['by_name'][feature_provider]
+    except KeyError:
+        raise UnknownProviderException(feature_provider)
 
-    if not feature:
-        return
+    feature = Feature(planning_provider,
+                      **planning_provider.get_feature_info(feature_id))
 
     # Then get any branch info from any source control providers
     for provider in providers[ISourceCodeControlProvider]:
