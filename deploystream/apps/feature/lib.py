@@ -40,13 +40,11 @@ def get_feature_info(feature_provider, feature_id, providers):
     :raises:
         UnknownProviderException - if no such name found.
     """
-    # First get feature info from the management provider
-
-    feature = None
-    try:
-        planning_provider = providers['by_name'][feature_provider]
-    except KeyError:
+    if feature_provider not in providers:
         raise UnknownProviderException(feature_provider)
+
+    # First get feature info from the management provider
+    planning_provider = providers[feature_provider]
 
     feature = Feature(planning_provider,
                       **planning_provider.get_feature_info(feature_id))

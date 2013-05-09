@@ -60,8 +60,9 @@ class Branch(object):
         ``branch_name``   - The name of the branch.
         ``latest_commit`` - The head commmit, or latest revision in this
                             branch.
-        ``level``         - The level this Branch falls in the hierarchy for
-                            the feature.
+        ``level``         - The numerical level that this branch falls in the
+                            hierarchy for the feature - where 0 is the highest
+                            level.
         ``provider``      - The provider instance that found this branch
                             information.
 

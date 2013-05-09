@@ -37,7 +37,7 @@ def match_with_levels(feature_id, branch, hierarchical_regexes):
         A list of regexes assumed to be in descending order of branch status.
 
     :returns:
-        The positional index that the branch should be found it. Or None if it
+        The positional index that the branch should be found in. Or None if it
         does not match.
     """
     regex = create_single_regex(feature_id, hierarchical_regexes)

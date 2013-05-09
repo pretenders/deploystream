@@ -65,7 +65,7 @@ class TestViewFeatureEndToEndWithDummyProviders(object):
             'testsource': SourceCodeProvider,
             'testbuild': BuildInfoProvider})
     def test_feature_view_shows_details(self):
-        response = self.client.get('/features/plan...FT101')
+        response = self.client.get('/features/plan/FT101')
         assert "Amazing feature that will blow your mind" in response.data
 
     @patch("deploystream.providers.ALL_PROVIDER_CLASSES",
@@ -73,5 +73,5 @@ class TestViewFeatureEndToEndWithDummyProviders(object):
             'testsource': SourceCodeProvider,
             'testbuild': BuildInfoProvider})
     def test_returns_404_on_unknown_provider(self):
-        response = self.client.get('/features/planmissing...FT101')
+        response = self.client.get('/features/planmissing/FT101')
         assert 404 == response.status_code

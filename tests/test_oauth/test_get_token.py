@@ -69,7 +69,7 @@ class TestAutoGetToken(object):
 
         configure_oauth_routes(deploystream.providers.ALL_PROVIDER_CLASSES)
 
-        response = self.client.get('/features/FT101')
+        response = self.client.get('/features/prov101/FT101')
         assert_equal(response.status_code, 302)
         assert_true("http://auth_url" in response.location)
 
@@ -81,6 +81,6 @@ class TestAutoGetToken(object):
         with self.client.session_transaction() as sess:
             oauth.set_token(
                 sess, PlanningProvider.oauth_token_name, "FRED")
-        response = self.client.get('/features/prov101...FT101')
+        response = self.client.get('/features/prov101/FT101')
         assert_equal(response.status_code, 200)
         assert_true("Amazing feature" in response.data)
