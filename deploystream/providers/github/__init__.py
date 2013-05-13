@@ -36,6 +36,10 @@ class GithubProvider(object):
             user's issues will be tracked.
         """
         self.github = github3.login(token=token)
+
+        if "github_url" in kwargs:
+            self.github._github_url = kwargs['github_url']
+
         if not organization:
             self.repositories = list(self.github.iter_repos())
         else:
@@ -93,8 +97,8 @@ class GithubProvider(object):
         for repo in self.repositories:
             for branch in repo.iter_branches():
                 level = hierarchy.match_with_levels(
-                        feature_id, branch, hierarchy_regexes)
-                if not level:
+                        feature_id, branch.name, hierarchy_regexes)
+                if level is None:
                     continue
                 branch_list.append({
                     "repo_name": repo.name,

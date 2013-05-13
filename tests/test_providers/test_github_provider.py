@@ -6,10 +6,10 @@ from deploystream.providers.interfaces import (
         IPlanningProvider, IOAuthProvider, is_implementation)
 
 
-@patch('deploystream.providers.github.github3')
-def test_get_features(github3):
+def mock_github3(github3):
     mock_repo = Mock()
     mock_repo.has_issues = True
+    mock_repo.name = 'repo_1'
 
     issue1 = {
         'title': 'Hello',
@@ -31,9 +31,33 @@ def test_get_features(github3):
     mock_repo.iter_issues.return_value = [
         mock_issue1, mock_issue2
     ]
+
+    branch1 = {
+        'name': 'master',
+        'commit': 'CoMmItHaShMaStEr',
+    }
+    branch2 = {
+        'name': 'story/5/alex',
+        'commit': 'CoMmItHaSh5',
+    }
+    branch3 = {
+        'name': 'story/23/alex',
+        'commit': 'CoMmItHaSh23',
+    }
+    mock_branch1, mock_branch2, mock_branch3 = Mock(), Mock(), Mock()
+    mock_branch1.__dict__ = branch1
+    mock_branch2.__dict__ = branch2
+    mock_branch3.__dict__ = branch3
+    mock_repo.iter_branches.return_value = [
+        mock_branch1, mock_branch2, mock_branch3
+    ]
     github3.login.return_value = github3
     github3.iter_repos.return_value = [mock_repo]
 
+
+@patch('deploystream.providers.github.github3')
+def test_get_features(github3):
+    mock_github3(github3)
     github_provider = GithubProvider('token')
     features = github_provider.get_features()
 
@@ -50,3 +74,28 @@ def test_get_features(github3):
 def test_implements_expected_interfaces(_):
     assert_true(is_implementation(GithubProvider('token'), IPlanningProvider))
     assert_true(is_implementation(GithubProvider('token'), IOAuthProvider))
+
+
+@patch('deploystream.providers.github.github3')
+def test_get_repo_branches_involved(github3):
+    mock_github3(github3)
+    github_provider = GithubProvider('token')
+    branches = github_provider.get_repo_branches_involved(5,
+        hierarchy_regexes=[
+            'master',
+            'develop',
+            'story/{FEATURE_ID}(/[a-z]*)?',
+            'dev/{FEATURE_ID}/[a-z]*',
+            '[a-zA-Z]*/{FEATURE_ID}/[a-zA-Z]*'
+    ])
+    assert_equal(2, len(branches))
+    assert_true({
+        "repo_name": "repo_1",
+        "branch_name": "master",
+        "latest_commit": 'CoMmItHaShMaStEr',
+        "level": 0} in branches)
+    assert_true({
+        "repo_name": "repo_1",
+        "branch_name": "story/5/alex",
+        "latest_commit": "CoMmItHaSh5",
+        "level": 2} in branches)
