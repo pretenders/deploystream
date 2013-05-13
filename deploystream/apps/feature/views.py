@@ -4,6 +4,7 @@ from flask import json, Response
 
 from deploystream import app
 from deploystream.apps.feature.lib import get_feature_info, get_all_features
+from deploystream.lib import cache
 from deploystream.lib.transforms import nativify
 from deploystream.decorators import needs_providers
 
@@ -23,6 +24,7 @@ def as_json(func):
 
 @app.route('/features', methods=['GET'])
 @needs_providers
+@cache.cached()
 @as_json
 def list_features(providers):
     features = get_all_features(providers)

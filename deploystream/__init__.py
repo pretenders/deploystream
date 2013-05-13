@@ -4,6 +4,7 @@ from os import environ
 from os.path import join, dirname
 from flask import Flask
 
+
 APP_DIR = dirname(__file__)
 CONFIG_DIR = join(dirname(APP_DIR), 'config')
 STATIC_DIR = join(APP_DIR, 'static')
@@ -44,7 +45,7 @@ except ImportError:
         }
     })
 
-from deploystream.lib import ensure_certifi_certs_installed
+from .lib import ensure_certifi_certs_installed
 ensure_certifi_certs_installed()
 
 # set the secret key. Dummy secret for flask. When using in real life, have
@@ -52,13 +53,18 @@ ensure_certifi_certs_installed()
 app.secret_key = 'mysecret'
 
 # Initialise the providers.
-from providers import init_providers
+from .providers import init_providers
 classes = init_providers(app.config['PROVIDERS'])
 
 # Configure additional routes needed for oauth
-from deploystream.apps.oauth.views import configure_oauth_routes
+from .apps.oauth.views import configure_oauth_routes
 configure_oauth_routes(classes)
 
 # Import any views we want to register here at the bottom of the file:
-import deploystream.views  # NOQA
-import deploystream.apps.feature.views  # NOQA
+from . import views  # NOQA
+from .apps.feature import views as feature_views  # NOQA
+
+# As this requests caching monkey patches requests.Session, it must be done
+# at the end, else the Jira provider fails
+from .lib import cache
+cache.activate_requests_caching()
