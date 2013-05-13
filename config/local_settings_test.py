@@ -1,11 +1,5 @@
 GITHUB_CONFIG = {
-    'repositories': [
-        ('pretenders', 'deploystream'),
-        ('pretenders', 'pretenders'),
-        ('txels', 'autojenkins'),
-        ('txels', 'ddt'),
-        ('txels', 'apitopy'),
-    ],
+    'organization': 'pretenders',
 }
 
 SPRINTLY_CONFIG = {

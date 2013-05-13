@@ -1,6 +1,7 @@
-from deploystream.lib.hierarchy import match_with_levels
-
 from nose.tools import assert_equals
+
+from deploystream.lib.hierarchy import match_with_levels
+from tests import DEFAULT_HIERARCHY_REGEXES
 
 
 def test_match_with_levels():
@@ -12,17 +13,12 @@ def test_match_with_levels():
         ('dev/23/alex', 3),
         ('dev/23/carles', 3),
 
+        ('somestory/234/carles', None),
+        ('story/234/carles', None),
         ('story/45/alex', None),
         ('dev/99/carles', None),
     ]
-    regexes = [
-        'master',
-        'develop',
-        'story/{FEATURE_ID}(/[a-z]*)?',
-        'dev/{FEATURE_ID}/[a-z]*',
-        '[a-zA-Z]*/{FEATURE_ID}/[a-zA-Z]*'
-    ]
 
     for branch, expected in branches_results:
-        result = match_with_levels('23', branch, regexes)
+        result = match_with_levels('23', branch, DEFAULT_HIERARCHY_REGEXES)
         assert_equals(result, expected)

@@ -26,25 +26,39 @@ class GithubProvider(object):
     name = 'github'
     oauth_token_name = name
 
-    def __init__(self, token, organization=None, **kwargs):
+    def __init__(self, token, organization=None, repositories=None, **kwargs):
         """
         Initialise the provider by giving it GitHub credentials and repos.
 
         :param organization:
             The name of the organization who's repository issues should be
-            identified in GitHub. If ``None`` then the authenticated
-            user's issues will be tracked.
+            identified in GitHub. If ``None`` and no ``repositories`` given,
+            then the authenticated user's issues will be tracked.
+
+        :param repositories:
+            A list of tuples containing (<owner>, <name>) that identify
+            a repository in GitHub. This is only looked at if ``organization``
+            is ``None``.
         """
-        self.github = github3.login(token=token)
 
-        if "github_url" in kwargs:
-            self.github._github_url = kwargs['github_url']
-
-        if not organization:
-            self.repositories = list(self.github.iter_repos())
+        if token is None and "username" in kwargs and "password" in kwargs:
+            # We can login using username and password for testing purposes
+            self.github = github3.login(
+                kwargs['username'],
+                password=kwargs['password']
+            )
         else:
+            self.github = github3.login(token=token)
+
+        if organization:
             org = self.github.organization(organization)
             self.repositories = list(org.iter_repos())
+        elif repositories:
+            self.repositories = []
+            for owner, repo in repositories:
+                self.repositories.append(self.github.repository(owner, repo))
+        else:
+            self.repositories = list(self.github.iter_repos())
 
     def get_features(self, **filters):
         """
@@ -103,7 +117,7 @@ class GithubProvider(object):
                 branch_list.append({
                     "repo_name": repo.name,
                     "branch_name": branch.name,
-                    "latest_commit": branch.commit,
+                    "latest_commit": branch.commit.sha,
                     "level": level,
                 })
 

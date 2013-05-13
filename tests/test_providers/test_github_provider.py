@@ -4,6 +4,7 @@ from nose.tools import assert_equal, assert_true
 from deploystream.providers.github import GithubProvider
 from deploystream.providers.interfaces import (
         IPlanningProvider, IOAuthProvider, is_implementation)
+from tests import DEFAULT_HIERARCHY_REGEXES
 
 
 def mock_github3(github3):
@@ -34,15 +35,15 @@ def mock_github3(github3):
 
     branch1 = {
         'name': 'master',
-        'commit': 'CoMmItHaShMaStEr',
+        'commit': Mock(sha='CoMmItHaSh-MaStEr'),
     }
     branch2 = {
         'name': 'story/5/alex',
-        'commit': 'CoMmItHaSh5',
+        'commit': Mock(sha='CoMmItHaSh-5'),
     }
     branch3 = {
         'name': 'story/23/alex',
-        'commit': 'CoMmItHaSh23',
+        'commit': Mock(sha='CoMmItHaSh-23'),
     }
     mock_branch1, mock_branch2, mock_branch3 = Mock(), Mock(), Mock()
     mock_branch1.__dict__ = branch1
@@ -81,21 +82,15 @@ def test_get_repo_branches_involved(github3):
     mock_github3(github3)
     github_provider = GithubProvider('token')
     branches = github_provider.get_repo_branches_involved(5,
-        hierarchy_regexes=[
-            'master',
-            'develop',
-            'story/{FEATURE_ID}(/[a-z]*)?',
-            'dev/{FEATURE_ID}/[a-z]*',
-            '[a-zA-Z]*/{FEATURE_ID}/[a-zA-Z]*'
-    ])
+        hierarchy_regexes=DEFAULT_HIERARCHY_REGEXES)
     assert_equal(2, len(branches))
     assert_true({
         "repo_name": "repo_1",
         "branch_name": "master",
-        "latest_commit": 'CoMmItHaShMaStEr',
+        "latest_commit": 'CoMmItHaSh-MaStEr',
         "level": 0} in branches)
     assert_true({
         "repo_name": "repo_1",
         "branch_name": "story/5/alex",
-        "latest_commit": "CoMmItHaSh5",
+        "latest_commit": "CoMmItHaSh-5",
         "level": 2} in branches)
