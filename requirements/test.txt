@@ -7,4 +7,3 @@ pyhamcrest          # matchers for use in test assertions
 
 nodeenv             # For creating an isolated node/npm environment inside the
                     # python virtualenv, to install node.js packages
-supermutes          # To dotify dictionaries.
