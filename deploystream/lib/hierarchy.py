@@ -17,7 +17,7 @@ def create_single_regex(feature_id, hierarchical_regexes):
     """
     subs = []
     for index, regex in enumerate(hierarchical_regexes):
-        subs.append("(?P<level_{0}>{1})".format(index, regex))
+        subs.append("(?P<level_{0}>^{1}$)".format(index, regex))
     full_regex = "|".join(subs)
     full_regex = full_regex.format(FEATURE_ID=feature_id)
     return full_regex
