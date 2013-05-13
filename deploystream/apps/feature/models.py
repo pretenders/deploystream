@@ -1,3 +1,6 @@
+from collections import defaultdict
+
+
 class Feature(object):
     """
     The class used for encapsulating ``Feature`` data across repos & branches.
@@ -115,3 +118,103 @@ class BuildInfo(object):
         self.commit = commit
         self.url = url
         self._provider = provider
+
+
+class HierarchyNode(object):
+
+    def __init__(self, level, repo, branch=None):
+        self.children = []
+        self._parent = None
+
+        self.level = level
+        self.repo = repo
+        self.branch = branch
+
+    def add_node(self, level, **kwargs):
+        print "add_node", level, kwargs, self.level
+        parent_level = level - 1
+        if self.level == parent_level:
+            # I am an appropriate parent
+            print "adding {0} (level: {1}) to myself: ({2}, {3})".format(kwargs['branch'], level, self.branch, self.level)
+            return self._add(level=level, **kwargs)
+        elif self.level < parent_level:
+            # There may be someone on a lower level more appropriate
+            if self.children and self.children[0].level == parent_level:
+                print "passing to child"
+                self.children[0].add_node(level, **kwargs)
+            else:
+                print "adding {0} (level: {1}) to myself: ({2}, {3})".format(kwargs['branch'], level, self.branch, self.level)
+                # I'm the best hope for the kid.
+                return self._add(level=level, **kwargs)
+        else:
+            print "passing to parent"
+            # I've got no right to father someone higher than me.
+            return self.parent.add_node(level, **kwargs)
+
+    def _add(self, **kwargs):
+        print "ADDING as child of {0}".format(self.level)
+        new_node = HierarchyNode(**kwargs)
+        new_node.parent = self
+        for child in self.children:
+            # TODO: this actually needs to do more than this to move the item
+            # further down the chain
+            if child.level > new_node.level:
+                child.parent = new_node
+        print "children are now:", self.children, self.children[0].branch
+        return new_node
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @parent.setter
+    def parent(self, node):
+        if self._parent:
+            # remove first
+            self._parent.remove_child(self)
+        self._parent = node
+        node.ensure_child(self)
+
+    def ensure_child(self, node):
+        if node not in self.children:
+            self.children.append(node)
+
+    def remove_child(self, node):
+        try:
+            self.children.remove(node)
+        except ValueError:
+            pass
+
+    def as_tree_string(self, indent=0):
+        me = "{0}- {1}\n".format(indent * ' ', self.branch)
+        if not self.branch:
+            indent = -4
+            me = ""
+
+        for c in self.children:
+            me += c.as_tree_string(indent + 4)
+        return me
+
+
+# class HierarchyTree(object):
+
+#     def __init__(self, root_picker):
+#         """
+#         A hierarchy tree to link nodes to one another
+
+#         :param root_picker:
+#             An attribute to be expected on each node that decides which sub
+#             tree to assign a node to. Eg "repository"
+#         """
+#         self.root_picker = root_picker
+#         self.roots = defaultdict(lambda: HierarchyNode(-1))
+
+#     def add_node(self, **kwargs):
+#         return self.roots[kwargs[self.root_picker]].add_node(**kwargs)
+
+#     def as_tree_string(self):
+#         u = u''
+#         for root_name, root in self.roots.items():
+#             u += "Root: {0}\n".format(root_name)
+#             u += root.as_tree_string(0)
+#         return u

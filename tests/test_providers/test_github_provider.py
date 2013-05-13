@@ -84,6 +84,7 @@ def test_get_repo_branches_involved(github3):
     branches = github_provider.get_repo_branches_involved(5,
         hierarchy_regexes=DEFAULT_HIERARCHY_REGEXES)
     assert_equal(2, len(branches))
+    print branches
     assert_true({
         "repo_name": "repo_1",
         "branch_name": "master",
@@ -93,4 +94,4 @@ def test_get_repo_branches_involved(github3):
         "repo_name": "repo_1",
         "branch_name": "story/5/alex",
         "latest_commit": "CoMmItHaSh-5",
-        "level": 2} in branches)
+        "level": 3} in branches)

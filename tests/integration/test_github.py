@@ -29,4 +29,4 @@ def test_get_repo_branches_involved():
         "repo_name": "dummyrepo",
         "branch_name": "story/101/fred",
         "latest_commit": "0f6eefefc14f362a2c6f804df69aa83bac48c20b",
-        "level": 2} in branches)
+        "level": 3} in branches)
