@@ -37,7 +37,7 @@ class SprintlyProvider(object):
     name = 'sprintly'
     oauth_token_name = None
 
-    def __init__(self, user, token, current, **kwargs):
+    def __init__(self, user, token, current, products=None, **kwargs):
         """
         Initialise by providing credentials and project IDs.
 
@@ -45,7 +45,10 @@ class SprintlyProvider(object):
         """
         self.api = Api('https://sprint.ly/api/',
                        (user, token), verify_ssl_cert=False, suffix='.json')
-        self.projects = self.api.products()
+        if products:
+            self.projects = products
+        else:
+            self.projects = [p.id for p in self.api.products()]
         self.current = current
 
     def get_features(self, **filters):
@@ -54,8 +57,8 @@ class SprintlyProvider(object):
         """
         features = []
 
-        for project in self.projects:
-            feature_endpoint = self.api.products[project.id].items
+        for project_id in self.projects:
+            feature_endpoint = self.api.products[project_id].items
             for criterion in self.current:
                 features += feature_endpoint(**criterion)
 
