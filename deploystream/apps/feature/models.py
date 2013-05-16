@@ -133,17 +133,21 @@ class HierarchyNode(object):
     def add_node(self, level, **kwargs):
         print "add_node", level, kwargs, self.level
         parent_level = level - 1
+
         if self.level == parent_level:
             # I am an appropriate parent
-            print "adding {0} (level: {1}) to myself: ({2}, {3})".format(kwargs['branch'], level, self.branch, self.level)
+            print "A: adding {0} (level: {1}) to myself: ({2}, {3})".format(
+                        kwargs['branch'], level, self.branch, self.level)
             return self._add(level=level, **kwargs)
         elif self.level < parent_level:
             # There may be someone on a lower level more appropriate
-            if self.children and self.children[0].level == parent_level:
+            if self.children and self.children[0].level <= parent_level:
                 print "passing to child"
                 self.children[0].add_node(level, **kwargs)
             else:
-                print "adding {0} (level: {1}) to myself: ({2}, {3})".format(kwargs['branch'], level, self.branch, self.level)
+                print ("B: adding {0} (level: {1}) to myself: "
+                       "({2}, {3})".format(
+                            kwargs['branch'], level, self.branch, self.level))
                 # I'm the best hope for the kid.
                 return self._add(level=level, **kwargs)
         else:
@@ -196,25 +200,7 @@ class HierarchyNode(object):
         return me
 
 
-# class HierarchyTree(object):
-
-#     def __init__(self, root_picker):
-#         """
-#         A hierarchy tree to link nodes to one another
-
-#         :param root_picker:
-#             An attribute to be expected on each node that decides which sub
-#             tree to assign a node to. Eg "repository"
-#         """
-#         self.root_picker = root_picker
-#         self.roots = defaultdict(lambda: HierarchyNode(-1))
-
-#     def add_node(self, **kwargs):
-#         return self.roots[kwargs[self.root_picker]].add_node(**kwargs)
-
-#     def as_tree_string(self):
-#         u = u''
-#         for root_name, root in self.roots.items():
-#             u += "Root: {0}\n".format(root_name)
-#             u += root.as_tree_string(0)
-#         return u
+class RootHierarchyNode(HierarchyNode):
+    def __init__(self, repo):
+        super(RootHierarchyNode, self).__init__(
+            level=-1, repo=repo, branch=None)
