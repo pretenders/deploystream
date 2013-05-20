@@ -7,3 +7,4 @@ zope.interface       # define and enforce interfaces
 certifi              # Module for Mozilla's CA bundle
 apitopy              # Required to implement the sprint.ly client
 jira-python>=0.13    # Required to access JIRA api
+requests-cache       # A transparent caching library for 'requests'
