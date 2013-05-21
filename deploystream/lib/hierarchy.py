@@ -1,3 +1,4 @@
+from collections import defaultdict
 import re
 
 
@@ -50,3 +51,44 @@ def match_with_levels(feature_id, branch, hierarchical_regexes):
         if match:
             index = int(level.split('level_')[1])
             return index
+
+
+def match_with_geneology(feature_id, branches, hierarchical_regexes):
+    matched_branches = defaultdict(list)
+    hierarchy = []
+    for index, regex in enumerate(hierarchical_regexes):
+        print "- REGEX:", regex, "INDEX:", index
+        try:
+            parent_regex = hierarchical_regexes[max(index - 1, 0)]
+        except IndexError:
+            parent_regex = None
+
+        possible_parents = matched_branches[index - 1]
+        fake_parent = False
+        if not possible_parents:
+            fake_parent = True
+            possible_parents = [parent_regex]
+
+        for branch in branches[:]:
+            print "  - BRANCH:", branch
+            for parent in possible_parents:
+                print "    - PARENT?:", parent
+
+                full_regex = regex.format(FEATURE_ID=feature_id,
+                                          PARENT=parent)
+                print "    - REGEX:", full_regex, "BRANCH:", branch
+                result = re.match(full_regex, branch)
+                if result:
+                    print "  ---MATCHED---"
+                    matched_branches[index].append(branch)
+                    branches.remove(branch)
+                    if fake_parent:
+                        parent = None
+                    hierarchy.append((branch, parent))
+                    break
+                else:
+                    print "  ---FAILED---"
+
+    print "hierarchy", hierarchy
+    return hierarchy
+

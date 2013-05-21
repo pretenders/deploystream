@@ -122,3 +122,35 @@ class GithubProvider(object):
                 })
 
         return branch_list
+
+    def get_branch_hierarchy(self, feature_id, hierarchy_regexes):
+        """
+        Get the list of branches involved for the given ``feature_id``.
+
+        :returns:
+            A list of dictionaries containing keys for:
+                - repo_name
+                - branch_name
+                - parent_branch_name
+                - in_parent
+                - has_parent
+                - latest_commit
+        """
+        branch_list = []
+
+        for repo in self.repositories:
+            repo_branches = {}
+            for branch in repo.iter_branches():
+                repo_branches[branch.name] = {'sha': branch.commit.sha}
+            geneology = hierarchy.match_with_geneology(
+                feature_id, repo_branches, hierarchy_regexes)
+            for branch, parent in geneology:
+
+                branch_list.append({
+                    "repo_name": repo.name,
+                    "branch_name": branch,
+                    "latest_commit": repo_branches[branch]['sha'],
+                    "parent_branch_name": parent,
+                    "in_parent": None,
+                    "has_parent": None,
+                })
