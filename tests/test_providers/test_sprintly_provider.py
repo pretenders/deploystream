@@ -1,5 +1,5 @@
 from mock import MagicMock, Mock, patch
-from nose.tools import assert_equal
+from nose.tools import assert_equal, assert_false
 
 from deploystream.providers.sprintly import SprintlyProvider
 from supermutes.dot import dotify
@@ -91,6 +91,9 @@ ISSUES_P2 = [dotify(x) for x in [
 
 @patch('deploystream.providers.sprintly.Api')
 def test_get_features(Api):
+    """
+    Test getting the features when the user has a single sprintly product
+    """
     mock_api = Mock()
     Api.return_value = mock_api
     mock_project = Mock()
@@ -116,6 +119,9 @@ def test_get_features(Api):
 
 @patch('deploystream.providers.sprintly.Api')
 def test_get_features_multiproject(Api):
+    """
+    Test getting the features when the user has a multiple sprintly products
+    """
     mock_api = Mock()
     Api.return_value = mock_api
     mock_project = Mock(id=123)
@@ -124,7 +130,9 @@ def test_get_features_multiproject(Api):
     mock_project_2.name = 'Frames V2'
     mock_api.products = MagicMock()
     mock_api.products.return_value = [mock_project, mock_project_2]
-    mock_api.products[123].items.side_effect = [ISSUES, ISSUES_P2]
+    mock_items = Mock()
+    mock_items.items.side_effect = [ISSUES, ISSUES_P2]
+    mock_api.products.__getitem__.return_value = mock_items
 
     sprintly_provider = SprintlyProvider('user', 'token',
                                          [{'status': 'in-progress'}])
@@ -143,3 +151,66 @@ def test_get_features_multiproject(Api):
     assert_equal(features[2]['type'], 'story')
     assert_equal(features[2]['project'], 'Frames V2')
     assert_equal(features[2]['title'], u"As a developer, I want to be rich...")
+
+    assert_equal(mock_api.products.__getitem__.call_args_list,
+                 [((123,), {}), ((456,), {})])
+
+
+@patch('deploystream.providers.sprintly.Api')
+def test_get_features_explicit_project_list(Api):
+    """
+    Test getting the features for an explicit project list with one project
+    """
+    mock_api = Mock()
+    Api.return_value = mock_api
+    mock_items = Mock()
+    mock_items.items.side_effect = [ISSUES, ISSUES_P2]
+    mock_api.products = MagicMock()
+    mock_api.products.__getitem__.return_value = mock_items
+
+    sprintly_provider = SprintlyProvider('user', 'token',
+                                         [{'status': 'in-progress'}],
+                                         products=[456])
+    features = sprintly_provider.get_features()
+
+    assert_equal(mock_api.products.__getitem__.call_args_list,
+                 [((456,), {})])
+    assert_false(mock_api.products.called)
+
+
+@patch('deploystream.providers.sprintly.Api')
+def test_get_features_explicit_multiproject_list(Api):
+    """
+    Test getting the features for an explicit project list, several projects.
+
+    We test that the actual order is the one for the passed project list
+    (which comes from configuration) rather than the order sprintly returned
+    the projects in.
+    """
+    mock_api = Mock()
+    Api.return_value = mock_api
+    mock_items = Mock()
+    mock_items.items.side_effect = [ISSUES, ISSUES_P2]
+    mock_project = Mock(id=123)
+    mock_project.name = 'RBX'
+    mock_project_2 = Mock(id=456)
+    mock_project_2.name = 'Frames V2'
+    mock_api.products = MagicMock()
+    mock_api.products.return_value = [mock_project, mock_project_2]
+    mock_api.products.__getitem__.return_value = mock_items
+
+    sprintly_provider = SprintlyProvider('user', 'token',
+                                         [{'status': 'in-progress'}],
+                                         products=[456, 123])
+    features = sprintly_provider.get_features()
+
+    # this just verifies that the sprintly provider does not reorder
+    # features, keeps the order the API returns them in
+    assert_equal(features[0]['id'], 873)
+    assert_equal(features[1]['id'], 1096)
+    assert_equal(features[2]['id'], 22)
+
+    # Test that the API calls respect product order from initialiser args
+    assert_equal(mock_api.products.__getitem__.call_args_list,
+                 [((456,), {}), ((123,), {})])
+    assert_false(mock_api.products.called)
