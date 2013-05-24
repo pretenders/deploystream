@@ -29,6 +29,7 @@ class PlanningProvider(object):
             "url": "http://planning_site/{0}".format(feature_id),
             "feature_type": "story",
             "owner": "Bob",
+            "project": "P1",
             "description": "Too good for words..."
         }
 
@@ -64,16 +65,13 @@ class TestViewFeatureEndToEndWithDummyProviders(object):
             'testsource': SourceCodeProvider,
             'testbuild': BuildInfoProvider})
     def test_feature_view_shows_details(self):
-        response = self.client.get('/features/FT101')
+        response = self.client.get('/features/plan/FT101')
         assert "Amazing feature that will blow your mind" in response.data
 
     @patch("deploystream.providers.ALL_PROVIDER_CLASSES",
            {'testplan': PlanningProvider,
             'testsource': SourceCodeProvider,
             'testbuild': BuildInfoProvider})
-    def test_only_uses_providers_user_specifies(self):
-        conf = deploystream.app.config
-        del conf['USER_SPECIFIC_INFO']['provider_config'][0]
-
-        response = self.client.get('/features/FT101')
-        assert "Amazing feature that will blow your mind" not in response.data
+    def test_returns_404_on_unknown_provider(self):
+        response = self.client.get('/features/planmissing/FT101')
+        assert 404 == response.status_code

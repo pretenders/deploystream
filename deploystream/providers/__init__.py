@@ -60,6 +60,7 @@ def get_providers(configs, session):
                           ISourceCodeControlProvider]:
                 if is_implementation(provider, iface):
                     providers[iface].append(provider)
+            providers[provider.name] = provider
             print("INFO: Initialised provider {0}".format(name))
         except Exception:
             print("ERROR: Failed to initialise provider {0}: {1}"

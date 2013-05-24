@@ -2,6 +2,7 @@
 #-*- coding: utf-8 -*-
 
 from deploystream import app
+from deploystream.exceptions import UnknownProviderException
 from deploystream.providers.interfaces import (
     IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider)
 from .models import Branch, BuildInfo, Feature
@@ -22,42 +23,41 @@ def get_all_features(providers):
     return all_features
 
 
-def get_feature_info(feature_id, providers):
+def get_feature_info(feature_provider, feature_id, providers):
     """
     Get the information associated with the given feature from the providers
     given.
 
-    ``planning``, ``source_code`` and ``build_info`` are relevant providers to
-    be called.
+    :param feature_provider:
+        The name of the planning provider who knows of this feature.
+
+    :param feature_id:
+        The planning-provider specific id for the feature.
+
+    :param providers:
+        A dictionary of all providers.
+
+    :raises:
+        UnknownProviderException - if no such name found.
     """
-    # TODO: since features may come from various origins, we need
-    # at this stage to either use a feature id that is a string such as
-    # "github:pretenders/deploystream:15" or to have additional arguments
-    # for provider and project. In any case we probably need providers to
-    # have an identifying string such as "github", "jira", "sprintly"...
+    if feature_provider not in providers:
+        raise UnknownProviderException(feature_provider)
 
-    # First get feature info from the management providers
-    # This needs rewriting according to previous paragraph. For now:
-    # Only one management provider should know about this feature,
-    # so we stop on first success
-    feature = None
-    for provider in providers[IPlanningProvider]:
-        feature = Feature(provider, None,
-                          **provider.get_feature_info(feature_id))
-        if feature:
-            break
+    # First get feature info from the management provider
+    planning_provider = providers[feature_provider]
 
-    if not feature:
-        return
+    feature = Feature(planning_provider,
+                      **planning_provider.get_feature_info(feature_id))
 
     # Then get any branch info from any source control providers
     for provider in providers[ISourceCodeControlProvider]:
-        for branch_data in provider.get_repo_branches_involved(feature_id):
+        for branch_data in provider.get_repo_branches_involved(
+            feature_id, app.config['HIERARCHY_REGEXES']):
             feature.add_branch(Branch(*branch_data, provider=provider))
 
     # Use that branch info, along with configuration regexes to create a
     # hierarchy of the branches involved in the feature.
-    feature.create_hierarchy_trees(app.config['HIERARCHY_REGEXES'])
+    feature.create_hierarchy_trees()
 
     # Ask source control providers for merging information at this point.
     for provider in providers[ISourceCodeControlProvider]:
