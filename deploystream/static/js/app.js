@@ -1,4 +1,4 @@
-// global angular, FeatureListCtrl
+// global angular, FeatureListCtrl, FeatureDetailCtrl
 'use strict';
 
 
@@ -15,6 +15,10 @@ angular.module('deploystream', [
         $routeProvider.when('/features', {
             templateUrl: '/static/partials/features.html',
             controller: FeatureListCtrl
+        });
+        $routeProvider.when('/features/:featureId', {
+            templateUrl: '/static/partials/feature.html',
+            controller: FeatureDetailCtrl
         });
     }]
 );

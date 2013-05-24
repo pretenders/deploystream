@@ -1,0 +1,26 @@
+<h1><a href="{{feature.url}}">#{{feature.id}}</a> {{feature.title}}</h1>
+
+<p>
+    <i class="icon-{{feature.provider}}"></i> {{feature.project}}
+    <span class="label label-info">{{feature.type}}</span>
+</p>
+<p>
+    Owner: {{feature.owner}}
+</p>
+
+
+<script type="text/ng-template"  id="branch.html">
+    <p>{{branch.name}}</p>
+    <ul>
+        <li ng-repeat="child in branch.data.children" ng-include="'branch.html'"> </li>
+    </ul>
+</script>
+
+<ul>
+    <li ng-repeat="repo in repos"> <!--  ng-include="'tree_item_renderer.html'" -->
+    {{repo.name}}
+        <ul>
+            <li ng-repeat="branch in repo.branches" ng-include="'branch.html'"></li>
+        </ul>
+    </li>
+</ul>
