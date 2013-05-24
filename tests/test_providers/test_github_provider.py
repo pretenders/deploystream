@@ -81,41 +81,18 @@ def test_implements_expected_interfaces(_):
 def test_get_repo_branches_involved(github3):
     mock_github3(github3)
     github_provider = GithubProvider('token')
-    branches = github_provider.get_repo_branches_involved(5,
-        hierarchy_regexes=DEFAULT_HIERARCHY_REGEXES)
-    assert_equal(2, len(branches))
-    print branches
-    assert_true({
-        "repo_name": "repo_1",
-        "branch_name": "master",
-        "latest_commit": 'CoMmItHaSh-MaStEr',
-        "level": 0} in branches)
-    assert_true({
-        "repo_name": "repo_1",
-        "branch_name": "story/5/alex",
-        "latest_commit": "CoMmItHaSh-5",
-        "level": 3} in branches)
-
-
-def test_get_branch_hierarchy():
-    github_provider = GithubProvider('token')
-    branches = github_provider.get_branch_hierarchy("5",
+    branches = github_provider.get_repo_branches_involved("5",
                                                     DEFAULT_HIERARCHY_REGEXES)
     assert_equal(2, len(branches))
     assert_true({
         "repo_name": "repo_1",
         "branch_name": "master",
         "parent_branch_name": None,
-        "in_parent": False,
-        "has_parent": False,
-        "latest_commit": 'CoMmItHaSh-MaStEr',
-        "level": 0} in branches)
+        "latest_commit": 'CoMmItHaSh-MaStEr'
+    } in branches)
     assert_true({
         "repo_name": "repo_1",
         "branch_name": "story/5/alex",
         "parent_branch_name": "master",
-        "in_parent": False,
-        "has_parent": True,
         "latest_commit": "CoMmItHaSh-5",
-        "level": 3} in branches)
-
+    } in branches)

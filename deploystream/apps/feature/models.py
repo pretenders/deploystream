@@ -41,16 +41,19 @@ class Feature(object):
         self.url = url
         self._extras = kwargs
 
-        self.branches = []
+        self.branches = defaultdict(dict)
         self.trees = []
-
-    def create_hierarchy_trees(self):
-        "Create hierarchy trees - one for each repo."
-        pass
 
     def add_branch(self, branch):
         assert isinstance(branch, Branch)
-        self.branches.append(branch)
+        self.branches[branch.repo_name][branch.branch_name] = branch
+
+    def create_hierarchy_trees(self):
+        "Create hierarchy trees - one for each repo."
+        for branch_set in self.branches.values():
+            for branch in branch_set.values():
+                if branch.parent_branch_name:
+                    branch.parent = branch_set[branch.parent_branch_name]
 
 
 class Branch(object):
@@ -59,15 +62,13 @@ class Branch(object):
 
     Instances contain values for:
 
-        ``repo_name``     - The repository that this branch is found in.
-        ``branch_name``   - The name of the branch.
-        ``latest_commit`` - The head commmit, or latest revision in this
-                            branch.
-        ``level``         - The numerical level that this branch falls in the
-                            hierarchy for the feature - where 0 is the highest
-                            level.
-        ``provider``      - The provider instance that found this branch
-                            information.
+        ``repo_name``           - The repository that this branch is found in.
+        ``branch_name``         - The name of the branch.
+        ``latest_commit``       - The head commmit, or latest revision in this
+                                  branch.
+        ``parent_branch_name``  - The name of the branches parent.
+        ``provider``            - The provider instance that found this branch
+                                  information.
 
 
     Instances are eventually populated with these values:
@@ -77,22 +78,50 @@ class Branch(object):
         ``parent``        - The parent ``Branch`` of this branch (based on
                             hierarchy rules)
         ``children``      - A list of children ``Branch`` es of this branch.
-        ``siblings``      - A list of the sibling ``Branch`` es of this branch.
-                            A sibling is a ``Branch`` that has the same parent,
-                            or would have the same parent if one existed.
+
     """
 
-    def __init__(self, repo_name, branch_name, latest_commit, level, provider):
-        self.parent = None
+    def __init__(self, repo_name, branch_name, latest_commit,
+                 parent_branch_name, provider):
+        self._parent = None
         self.children = []
-        self.siblings = []  # Will be needed in the cases where we have no
-                            # parent
         self.build_info = None
         self.repo_name = repo_name
         self.branch_name = branch_name
         self.latest_commit = latest_commit
-        self.level = level
+        self.parent_branch_name = parent_branch_name
         self._provider = provider
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @parent.setter
+    def parent(self, branch):
+        if self._parent:
+            # remove first
+            self._parent.remove_child(self)
+        self._parent = branch
+        branch.ensure_child(self)
+
+    def ensure_child(self, branch):
+        if branch not in self.children:
+            self.children.append(branch)
+
+    def remove_child(self, branch):
+        try:
+            self.children.remove(branch)
+        except ValueError:
+            pass
+
+    def as_tree_string(self, indent=0):
+        if self.parent and not indent:
+            return self.parent.as_tree_string()
+        me = "{0}- {1}\n".format(indent * ' ', self.branch_name)
+
+        for c in self.children:
+            me += c.as_tree_string(indent + 4)
+        return me
 
 
 class BuildInfo(object):
@@ -118,89 +147,3 @@ class BuildInfo(object):
         self.commit = commit
         self.url = url
         self._provider = provider
-
-
-class HierarchyNode(object):
-
-    def __init__(self, level, repo, branch=None):
-        self.children = []
-        self._parent = None
-
-        self.level = level
-        self.repo = repo
-        self.branch = branch
-
-    def add_node(self, level, **kwargs):
-        print "add_node", level, kwargs, self.level
-        parent_level = level - 1
-
-        if self.level == parent_level:
-            # I am an appropriate parent
-            print "A: adding {0} (level: {1}) to myself: ({2}, {3})".format(
-                        kwargs['branch'], level, self.branch, self.level)
-            return self._add(level=level, **kwargs)
-        elif self.level < parent_level:
-            # There may be someone on a lower level more appropriate
-            if self.children and self.children[0].level <= parent_level:
-                print "passing to child"
-                self.children[0].add_node(level, **kwargs)
-            else:
-                print ("B: adding {0} (level: {1}) to myself: "
-                       "({2}, {3})".format(
-                            kwargs['branch'], level, self.branch, self.level))
-                # I'm the best hope for the kid.
-                return self._add(level=level, **kwargs)
-        else:
-            print "passing to parent"
-            # I've got no right to father someone higher than me.
-            return self.parent.add_node(level, **kwargs)
-
-    def _add(self, **kwargs):
-        print "ADDING as child of {0}".format(self.level)
-        new_node = HierarchyNode(**kwargs)
-        new_node.parent = self
-        for child in self.children:
-            # TODO: this actually needs to do more than this to move the item
-            # further down the chain
-            if child.level > new_node.level:
-                child.parent = new_node
-        print "children are now:", self.children, self.children[0].branch
-        return new_node
-
-    @property
-    def parent(self):
-        return self._parent
-
-    @parent.setter
-    def parent(self, node):
-        if self._parent:
-            # remove first
-            self._parent.remove_child(self)
-        self._parent = node
-        node.ensure_child(self)
-
-    def ensure_child(self, node):
-        if node not in self.children:
-            self.children.append(node)
-
-    def remove_child(self, node):
-        try:
-            self.children.remove(node)
-        except ValueError:
-            pass
-
-    def as_tree_string(self, indent=0):
-        me = "{0}- {1}\n".format(indent * ' ', self.branch)
-        if not self.branch:
-            indent = -4
-            me = ""
-
-        for c in self.children:
-            me += c.as_tree_string(indent + 4)
-        return me
-
-
-class RootHierarchyNode(HierarchyNode):
-    def __init__(self, repo):
-        super(RootHierarchyNode, self).__init__(
-            level=-1, repo=repo, branch=None)

@@ -24,9 +24,9 @@ def test_get_repo_branches_involved():
         "repo_name": "dummyrepo",
         "branch_name": "master",
         "latest_commit": '0f6eefefc14f362a2c6f804df69aa83bac48c20b',
-        "level": 0} in branches)
+        "parent_branch_name": None} in branches)
     assert_true({
         "repo_name": "dummyrepo",
         "branch_name": "story/101/fred",
         "latest_commit": "0f6eefefc14f362a2c6f804df69aa83bac48c20b",
-        "level": 3} in branches)
+        "parent_branch_name": "master"} in branches)

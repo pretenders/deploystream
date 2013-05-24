@@ -55,10 +55,6 @@ def get_feature_info(feature_provider, feature_id, providers):
             feature_id, app.config['HIERARCHY_REGEXES']):
             feature.add_branch(Branch(*branch_data, provider=provider))
 
-    # Use that branch info, along with configuration regexes to create a
-    # hierarchy of the branches involved in the feature.
-    feature.create_hierarchy_trees()
-
     # Ask source control providers for merging information at this point.
     for provider in providers[ISourceCodeControlProvider]:
         for tree in feature.trees:
