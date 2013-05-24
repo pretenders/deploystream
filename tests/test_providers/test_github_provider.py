@@ -11,6 +11,7 @@ def mock_github3(github3):
     mock_repo = Mock()
     mock_repo.has_issues = True
     mock_repo.name = 'repo_1'
+    mock_repo.iter_commits.return_value = [Mock(sha="CoMmItHaSh-MaStEr")]
 
     issue1 = {
         'title': 'Hello',
@@ -88,11 +89,15 @@ def test_get_repo_branches_involved(github3):
         "repo_name": "repo_1",
         "branch_name": "master",
         "parent_branch_name": None,
-        "latest_commit": 'CoMmItHaSh-MaStEr'
+        "latest_commit": 'CoMmItHaSh-MaStEr',
+        "has_parent": None,
+        "in_parent": None,
     } in branches)
     assert_true({
         "repo_name": "repo_1",
         "branch_name": "story/5/alex",
         "parent_branch_name": "master",
         "latest_commit": "CoMmItHaSh-5",
+        "has_parent": True,
+        "in_parent": False,
     } in branches)

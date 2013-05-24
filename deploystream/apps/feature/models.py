@@ -81,8 +81,9 @@ class Branch(object):
 
     """
 
-    def __init__(self, repo_name, branch_name, latest_commit,
-                 parent_branch_name, provider):
+    def __init__(self, provider, repo_name, branch_name, latest_commit,
+                 parent_branch_name,
+                 in_parent=None, has_parent=None):
         self._parent = None
         self.children = []
         self.build_info = None
@@ -90,6 +91,8 @@ class Branch(object):
         self.branch_name = branch_name
         self.latest_commit = latest_commit
         self.parent_branch_name = parent_branch_name
+        self.in_parent = in_parent
+        self.has_parent = has_parent
         self._provider = provider
 
     @property

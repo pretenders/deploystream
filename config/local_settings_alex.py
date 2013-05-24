@@ -13,8 +13,10 @@ HIERARCHY_REGEXES = [
         'master',
         'develop',
         'story/{FEATURE_ID}',
-        'story/{FEATURE_ID}/[a-z]*',
-        '{PARENT}/[a-z]*'
+        'story/{FEATURE_ID}/[a-z_]*',
+        '{PARENT}[/_][a-z]*',
+        'dev/{FEATURE_ID}/[a-z]*',
+        '{PARENT}[/_][a-z]*',
 ]
 
 JIRA_CONFIG = {

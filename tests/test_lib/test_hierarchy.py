@@ -57,3 +57,41 @@ def test_geneology_missing_steps():
 
     results = match_with_geneology(12, branches, regexes)
     assert_items_equal(results, expected)
+
+
+def test_gets_underscores():
+    regexes = [
+        'master',
+        'develop',
+        'story/{FEATURE_ID}',
+        'story/{FEATURE_ID}/[a-z_]*',
+        '{PARENT}[/_][a-z]*',
+        'dev/{FEATURE_ID}/[a-z]*',
+        '{PARENT}[/_][a-z]*',
+    ]
+
+    branches = [
+        'alex/19',
+        'dev/70/alex',
+        'dev/70/alex_hierarchy',
+        'dev_alex',
+        'develop',
+        'master',
+        'story/23/carles',
+        'story/43/carles',
+        'story/53/carles',
+        'story/58/carles',
+        'story/70/alex',
+        'story/72/carles',
+    ]
+    expected = [
+        ('master', None),
+        ('develop', 'master'),
+        ('story/70/alex', 'develop'),
+        ('dev/70/alex', 'story/70/alex'),
+        ('dev/70/alex_hierarchy', 'dev/70/alex'),
+    ]
+
+    results = match_with_geneology(70, branches, regexes)
+    print results
+    assert_items_equal(results, expected)

@@ -126,21 +126,42 @@ class GithubProvider(object):
         for repo in self.repositories:
             repo_branches = {}
             for branch in repo.iter_branches():
-                repo_branches[branch.name] = {'sha': branch.commit.sha}
+                repo_branches[branch.name] = {
+                    'sha': branch.commit.sha,
+                }
 
             geneology = hierarchy.match_with_geneology(
                 feature_id, repo_branches.keys(), hierarchy_regexes)
 
             for branch, parent in geneology:
+                import time
+                has_parent = None
+                in_parent = None
+                branch_data = repo_branches[branch]
+
+                if parent:
+                    print "starting...", branch, parent, time.time()
+                    for sha in [branch, parent]:
+                        if repo_branches[sha].get('commits') is None:
+                            repo_branches[sha]['commits'] = [
+                                c.sha for c in repo.iter_commits(sha=sha)
+                            ]
+                    print "finishing...", branch, parent, time.time()
+                    parent_data = repo_branches[parent]
+                    has_parent = parent_data['sha'] in branch_data['commits']
+                    in_parent = branch_data['sha'] in parent_data['commits']
 
                 branch_list.append({
                     "repo_name": repo.name,
                     "branch_name": branch,
-                    "latest_commit": repo_branches[branch]['sha'],
+                    "latest_commit": branch_data['sha'],
                     "parent_branch_name": parent,
+                    "has_parent": has_parent,
+                    "in_parent": in_parent,
                 })
 
         return branch_list
+
 
 # def iter_commits(repo, branch):
 # from github3.repos.commit import RepoCommit
