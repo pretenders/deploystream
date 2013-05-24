@@ -91,7 +91,12 @@ class GithubProvider(object):
         return features
 
     def get_feature_info(self, feature_id):
-        pass
+        # Feature ID will need to have org in it.
+        # For now we'll do a really crude search through the get_features
+        # results
+        for feat in self.get_features():
+            if str(feat['id']) == str(feature_id):
+                return feat
 
     @classmethod
     def get_oauth_data(self):
@@ -134,6 +139,7 @@ class GithubProvider(object):
                     "latest_commit": repo_branches[branch]['sha'],
                     "parent_branch_name": parent,
                 })
+
         return branch_list
 
 # def iter_commits(repo, branch):

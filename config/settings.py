@@ -7,6 +7,7 @@ APP_PACKAGE = path.basename(path.dirname(__file__))
 # The following is the programmatic equivalent of
 # from deploystream.local_settings_<CONFIG> import *
 GITHUB_CONFIG = GIT_CONFIG = SPRINTLY_CONFIG = JIRA_CONFIG = None
+HIERARCHY_REGEXES = []
 
 try:
     CONFIG = environ.get('CONFIG', 'sample')
@@ -51,4 +52,4 @@ USER_SPECIFIC_INFO = {
 provider_config - a dictionary of provider name to config required.
 """
 
-HIERARCHY_REGEXES = []
+

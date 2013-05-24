@@ -48,12 +48,16 @@ def get_feature_info(feature_provider, feature_id, providers):
 
     feature = Feature(planning_provider,
                       **planning_provider.get_feature_info(feature_id))
-
+    print providers[ISourceCodeControlProvider]
     # Then get any branch info from any source control providers
     for provider in providers[ISourceCodeControlProvider]:
+        print provider
         for branch_data in provider.get_repo_branches_involved(
             feature_id, app.config['HIERARCHY_REGEXES']):
-            feature.add_branch(Branch(*branch_data, provider=provider))
+            print branch_data
+            feature.add_branch(Branch(provider=provider, **branch_data))
+
+    feature.create_hierarchy_trees()
 
     # Ask source control providers for merging information at this point.
     for provider in providers[ISourceCodeControlProvider]:

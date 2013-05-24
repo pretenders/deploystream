@@ -13,7 +13,7 @@ class TestSourceCodeControlProviderInterface(object):
         class MyProvider(object):
             name = "provider"
             oauth_token_name = "oauth"
-            def get_repo_branches_involved(self, feature_id):
+            def get_repo_branches_involved(self, feature_id, hierarchy_regex):
                 pass
 
             def set_merged_status(self, repo_name, hierarchy_tree):
