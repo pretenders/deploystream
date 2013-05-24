@@ -120,6 +120,19 @@ class GithubProvider(object):
                 - branch_name
                 - parent_branch_name
                 - latest_commit
+                - has_parent
+                - in_parent
+
+        Look through each repo and get a set of branches that match the
+        ``hierarchy_regexes``.
+
+        Go through matching branches finding their merge status.
+
+        .. note::
+            We loop through all the commits for every matching branch exactly
+            once. This could be optimized to only check back as far as some
+            ancestor's HEAD.
+
         """
         branch_list = []
 
@@ -134,19 +147,20 @@ class GithubProvider(object):
                 feature_id, repo_branches.keys(), hierarchy_regexes)
 
             for branch, parent in geneology:
-                import time
                 has_parent = None
                 in_parent = None
                 branch_data = repo_branches[branch]
 
                 if parent:
-                    print "starting...", branch, parent, time.time()
                     for sha in [branch, parent]:
+                        # Loop through all the commits for branch and parent if
+                        # we haven't already done so and store them in the
+                        # temporary ``repo_branches`` dict
                         if repo_branches[sha].get('commits') is None:
                             repo_branches[sha]['commits'] = [
                                 c.sha for c in repo.iter_commits(sha=sha)
                             ]
-                    print "finishing...", branch, parent, time.time()
+                    # Check if we're merged in
                     parent_data = repo_branches[parent]
                     has_parent = parent_data['sha'] in branch_data['commits']
                     in_parent = branch_data['sha'] in parent_data['commits']
@@ -161,17 +175,3 @@ class GithubProvider(object):
                 })
 
         return branch_list
-
-
-# def iter_commits(repo, branch):
-# from github3.repos.commit import RepoCommit
-#     def iter_parents(commit_sha):
-#         url = repo._build_url('commits', commit_sha, base_url=repo._api)
-#         json = repo._json(repo._get(url), 200)
-#         commit = RepoCommit(json)
-#         yield commit
-#         for parent in commit.parents:
-#             for commit in iter_parents(RepoCommit(parent).sha):
-#                 yield commit
-
-#     return iter_parents(branch.commit.sha)

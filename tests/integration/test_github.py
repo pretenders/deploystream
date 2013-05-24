@@ -28,7 +28,6 @@ def test_get_repo_branches_involved():
         "has_parent": None,
         "in_parent": None,
         } in branches)
-    print branches
     assert_true({
         "repo_name": "dummyrepo",
         "branch_name": "story/101/fred",

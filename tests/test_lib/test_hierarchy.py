@@ -93,5 +93,4 @@ def test_gets_underscores():
     ]
 
     results = match_with_geneology(70, branches, regexes)
-    print results
     assert_items_equal(results, expected)
