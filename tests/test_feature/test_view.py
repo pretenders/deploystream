@@ -12,7 +12,6 @@ class SourceCodeProvider(object):
     oauth_token_name = None
 
     def get_repo_branches_involved(self, feature_id, hierarchy_tree, **kwargs):
-        print "GET REPO BRANCHES INVOLVED"
         return [
             {
                 'repo_name': 'repo_01',
@@ -84,7 +83,6 @@ class TestViewFeatureEndToEndWithDummyProviders(object):
     def test_feature_view_shows_details(self):
         response = self.client.get('/features/plan/FT101')
         feature_dict = json.loads(response.data)
-        print feature_dict
         assert_true("Amazing feature that will blow your mind" in
             feature_dict['title'])
 

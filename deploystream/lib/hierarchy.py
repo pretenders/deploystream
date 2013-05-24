@@ -19,6 +19,11 @@ def match_with_geneology(feature_id, branches, hierarchical_regexes):
         A list of tuples containing:
             - Branch name
             - Parent name
+
+    Go through the hierarchy regexes in sequence.
+    Attempt to match each one against all the branches. When a match occurs
+    remove the branch from the list to be matched against and continue.
+    Also add parental information as we go along.
     """
     matched_branches = defaultdict(list)
     hierarchy = []
