@@ -16,14 +16,6 @@ function FeatureListCtrl($scope, Feature) {
 function FeatureDetailCtrl($scope, $routeParams, Feature) {
 
     var featureId = $routeParams.featureId;
-    var get_branch_data = function (repoBranches, repo) {
-        var branches = [];
-        var branchData = repoBranches[repo];
-        for (var branch in branchData) {
-            branches.push({name: branch, data: branchData[branch]});
-        }
-        return branches;
-    };
 
     Feature.query('', function (features) {
         $scope.features = features;
@@ -31,12 +23,10 @@ function FeatureDetailCtrl($scope, $routeParams, Feature) {
 
     Feature.get({featureId: featureId}, function (feature) {
         var repos = [];
-        var repoBranches = feature.branches;
-        for (var repo in repoBranches) {
-            repos.push({name: repo, branches: get_branch_data(repoBranches, repo)});
-        }
+        var branches = feature.branch_list;
         $scope.feature = feature;
-        $scope.repos = repos;
+        $scope.branches = branches;
+        $scope.root = 'develop';
     });
 }
 

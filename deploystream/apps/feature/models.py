@@ -42,11 +42,13 @@ class Feature(object):
         self._extras = kwargs
 
         self.branches = defaultdict(dict)
+        self.branch_list = []
         self.trees = []
 
     def add_branch(self, branch):
         assert isinstance(branch, Branch)
         self.branches[branch.repo_name][branch.branch_name] = branch
+        self.branch_list.append(branch)
 
     def create_hierarchy_trees(self):
         "Create hierarchy trees - one for each repo."
