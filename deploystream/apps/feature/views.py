@@ -30,7 +30,7 @@ def list_features(providers):
     return features
 
 
-@app.route('/features/<source_id>/<feature_id>', methods=['GET'])
+@app.route('/features/<source_id>-<feature_id>', methods=['GET'])
 @needs_providers
 @as_json
 def view_feature(source_id, feature_id, providers):

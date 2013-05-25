@@ -1,0 +1,41 @@
+<div ng-show="feature">
+
+    <h2>
+        <a href="{{feature.url}}"><i class="icon-{{feature.provider}}"></i>
+            #{{feature.id}}
+        </a>
+        {{feature.title}}
+    </h2>
+
+    <p>
+        {{feature.project}}
+        <span class="label label-info">{{feature.type}}</span>
+    </p>
+    <p>
+        Owner: {{feature.owner}}
+    </p>
+
+    <h3>Branches</h3>
+    <script type="text/ng-template"  id="branch.html">
+        <p>
+            {{branch.branch_name}}
+            <span class='label'>{{branch.latest_commit}}</span>
+        </p>
+        <ul>
+            <li ng-repeat="branch in branch.children" ng-include="'branch.html'"> </li>
+        </ul>
+    </script>
+
+    <ul>
+        <li ng-repeat="branch in branches" ng-show='branch.branch_name == root'>
+        {{branch.repo_name}}-{{branch.branch_name}}
+            <ul>
+                <li ng-repeat="branch in branch.children" ng-include="'branch.html'"></li>
+            </ul>
+        </li>
+    </ul>
+
+</div>
+<p class="loading" ng-hide="feature">
+    <i class="icon-loading"/> Loading...
+</p>

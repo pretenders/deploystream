@@ -11,6 +11,7 @@ angular.module('deploystream.services', ['ngResource'])
     .factory('Feature', function ($resource) {
         return $resource(
             '/features/:featureId',
+            //'/static/:featureId.json',
             {},
             {
                 query: {
