@@ -26,7 +26,7 @@ function FeatureDetailCtrl($scope, $routeParams, Feature) {
         var branches = feature.branch_list;
         $scope.feature = feature;
         $scope.branches = branches;
-        $scope.root = 'develop';
+        $scope.root = 'master';
     });
 }
 
