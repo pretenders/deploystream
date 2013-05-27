@@ -41,7 +41,6 @@ def get_feature_info(feature_provider, feature_id, providers):
     :raises:
         UnknownProviderException - if no such name found.
     """
-    print providers
     if feature_provider not in providers:
         raise UnknownProviderException(feature_provider)
 
@@ -49,7 +48,7 @@ def get_feature_info(feature_provider, feature_id, providers):
     planning_provider = providers[feature_provider]
 
     feature_info = planning_provider.get_feature_info(feature_id)
-    print planning_provider, feature_info
+
     if not feature_info:
         raise UnknownFeatureException(feature_id)
 

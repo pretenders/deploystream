@@ -1,5 +1,8 @@
-import github3
+import datetime
+import iso8601
 import re
+
+import github3
 from zope import interface
 
 from deploystream.providers.interfaces import IPlanningProvider
@@ -144,6 +147,7 @@ class GithubProvider(object):
 
         """
         branch_list = []
+        two_months_ago = datetime.datetime.now() - datetime.timedelta(60)
 
         for repo in self.repositories:
             repo_branches = {}
@@ -166,9 +170,16 @@ class GithubProvider(object):
                         # we haven't already done so and store them in the
                         # temporary ``repo_branches`` dict
                         if repo_branches[sha].get('commits') is None:
-                            repo_branches[sha]['commits'] = [
-                                c.sha for c in repo.iter_commits(sha=sha)
-                            ]
+                            c_list = []
+                            for commit in repo.iter_commits(sha=sha):
+                                commit_date = commit.commit.committer['date']
+                                commit_date_time = iso8601.parse_date(
+                                    commit_date)
+                                if (commit_date_time.replace(tzinfo=None) <
+                                        two_months_ago):
+                                    break
+                            c_list.append(commit.sha)
+                            repo_branches[sha]['commits'] = c_list
                     # Check if we're merged in
                     parent_data = repo_branches[parent]
                     has_parent = parent_data['sha'] in branch_data['commits']

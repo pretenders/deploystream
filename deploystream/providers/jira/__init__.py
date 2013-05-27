@@ -34,6 +34,7 @@ class JiraProvider(object):
         if not issue_types:
             issue_types = ['Story', 'Bug']
         self.issue_types = issue_types
+        self.base_url = url
         options = {'server': url}
         self._conn = JIRA(options, basic_auth=(user, password))
 
@@ -78,5 +79,27 @@ class JiraProvider(object):
 
             ``None`` otherwise
         """
-        raise NotImplementedError("get_feature_info() not implemented in {0}"
-                                  .format(self.__class__.__name__))
+        jira_feature = self._conn.issue(feature_id)
+        if jira_feature:
+            return _transform(jira_feature)
+            # # url = '{0}/browse/{1}'.format(
+            # #     self.base_url, jira_feature.key)
+            # # feature = {
+            # #     'title': jira_feature.fields.summary,
+            # #     'id': jira_feature.key,
+            # #     'url': url,
+            # #     'is_blocked': False,
+            # #     'type': jira_feature.fields.issuetype.name,
+            # #     'owner': '-',
+            # # }
+
+            # # if jira_feature.fields:
+            # #     if jira_feature.fields.assignee:
+            # #         feature['owner'] = (
+            # #             jira_feature.fields.assignee.displayName)
+
+            # #     if jira_feature.fields.customfield_10200:
+            # #         feature['legacy_id'] = (
+            # #             jira_feature.fields.customfield_10200)
+
+            # return feature
