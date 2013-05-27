@@ -1,9 +1,9 @@
 from nose.tools import assert_items_equal
 
-from deploystream.lib.hierarchy import match_with_geneology
+from deploystream.lib.hierarchy import match_with_genealogy
 
 
-def test_geneology():
+def test_genealogy():
     regexes = ['master', 'develop', 'story/{FEATURE_ID}',
                'story/{FEATURE_ID}/[a-z]*',
                '{PARENT}/[a-z]*']
@@ -20,11 +20,11 @@ def test_geneology():
                 ('story/12/bill', 'story/12'),
                 ('story/12/bill/something', 'story/12/bill')]
 
-    results = match_with_geneology(12, branches, regexes)
+    results = match_with_genealogy(12, branches, regexes)
     assert_items_equal(results, expected)
 
 
-def test_geneology_unordered_list():
+def test_genealogy_unordered_list():
     regexes = ['master', 'develop', 'story/{FEATURE_ID}',
                'story/{FEATURE_ID}/[a-z]*',
                '{PARENT}/[a-z]*']
@@ -39,12 +39,12 @@ def test_geneology_unordered_list():
                 ('story/12/bill', 'story/12'),
                 ('story/12/bill/something', 'story/12/bill')]
 
-    results = match_with_geneology(12, branches, regexes)
+    results = match_with_genealogy(12, branches, regexes)
     results.sort()
     assert_items_equal(results, expected)
 
 
-def test_geneology_missing_steps():
+def test_genealogy_missing_steps():
     regexes = ['master', 'develop', 'story/{FEATURE_ID}',
                'story/{FEATURE_ID}/[a-z]*',
                '{PARENT}/[a-z]*']
@@ -55,7 +55,7 @@ def test_geneology_missing_steps():
     expected = [('master', None),
                 ('story/12/bill', 'master')]
 
-    results = match_with_geneology(12, branches, regexes)
+    results = match_with_genealogy(12, branches, regexes)
     assert_items_equal(results, expected)
 
 
@@ -92,5 +92,5 @@ def test_gets_underscores():
         ('dev/70/alex_hierarchy', 'dev/70/alex'),
     ]
 
-    results = match_with_geneology(70, branches, regexes)
+    results = match_with_genealogy(70, branches, regexes)
     assert_items_equal(results, expected)

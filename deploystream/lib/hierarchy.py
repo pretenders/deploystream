@@ -2,7 +2,7 @@ from collections import defaultdict
 import re
 
 
-def match_with_geneology(feature_id, branches, hierarchical_regexes):
+def match_with_genealogy(feature_id, branches, hierarchical_regexes):
     """
     Filter and return the branches in order with parents attached.
 

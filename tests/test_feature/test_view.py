@@ -14,16 +14,16 @@ class SourceCodeProvider(object):
     def get_repo_branches_involved(self, feature_id, hierarchy_tree, **kwargs):
         return [
             {
-                'repo_name': 'repo_01',
-                'branch_name': '{0}_branch'.format(feature_id),
-                'parent_branch_name': 'master',
-                'latest_commit': '222222',
+                'repository': 'repo_01',
+                'name': '{0}_branch'.format(feature_id),
+                'parent_name': 'master',
+                'commit_id': '222222',
             },
             {
-                'repo_name': 'repo_01',
-                'branch_name': 'master',
-                'parent_branch_name': None,
-                'latest_commit': '222223',
+                'repository': 'repo_01',
+                'name': 'master',
+                'parent_name': None,
+                'commit_id': '222223',
             },
         ]
 
@@ -88,13 +88,13 @@ class TestViewFeatureEndToEndWithDummyProviders(object):
 
         ft101_branch_output = (
             feature_dict['branches']['repo_01']['FT101_branch'])
-        assert_equal(ft101_branch_output['parent_branch_name'], 'master')
+        assert_equal(ft101_branch_output['parent_name'], 'master')
         assert_equal(ft101_branch_output['children'], [])
 
         master_branch_output = (
             feature_dict['branches']['repo_01']['master'])
-        assert_equal(master_branch_output['parent_branch_name'], None)
-        assert_equal(master_branch_output['children'][0]['branch_name'],
+        assert_equal(master_branch_output['parent_name'], None)
+        assert_equal(master_branch_output['children'][0]['name'],
                      "FT101_branch")
 
     @patch("deploystream.providers.ALL_PROVIDER_CLASSES",

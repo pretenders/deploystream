@@ -86,18 +86,18 @@ def test_get_repo_branches_involved(github3):
                                                     DEFAULT_HIERARCHY_REGEXES)
     assert_equal(2, len(branches))
     assert_true({
-        "repo_name": "repo_1",
-        "branch_name": "master",
-        "parent_branch_name": None,
-        "latest_commit": 'CoMmItHaSh-MaStEr',
+        "repository": "repo_1",
+        "name": "master",
+        "parent_name": None,
+        "commit_id": 'CoMmItHaSh-MaStEr',
         "has_parent": None,
         "in_parent": None,
     } in branches)
     assert_true({
-        "repo_name": "repo_1",
-        "branch_name": "story/5/alex",
-        "parent_branch_name": "master",
-        "latest_commit": "CoMmItHaSh-5",
+        "repository": "repo_1",
+        "name": "story/5/alex",
+        "parent_name": "master",
+        "commit_id": "CoMmItHaSh-5",
         "has_parent": True,
         "in_parent": False,
     } in branches)

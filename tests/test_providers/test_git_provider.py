@@ -43,12 +43,12 @@ def test_git_provider_finds_branches_across_repos():
 
     assert_equal(2, len(branches))
     assert_true({
-        'branch_name': 'master',
-        'latest_commit': "0f6eefefc14f362a2c6f804df69aa83bac48c20b",
-        'parent_branch_name': None,
-        'repo_name': 'dummyrepo'} in branches)
+        'name': 'master',
+        'commit_id': "0f6eefefc14f362a2c6f804df69aa83bac48c20b",
+        'parent_name': None,
+        'repository': 'dummyrepo'} in branches)
     assert_true({
-        'branch_name': 'my/feature-99',
-        'latest_commit': "7098fa31bf9663343c723d9d155c0dc6e6e28174",
-        'parent_branch_name': 'master',
-        'repo_name': 'dummyrepo'} in branches)
+        'name': 'my/feature-99',
+        'commit_id': "7098fa31bf9663343c723d9d155c0dc6e6e28174",
+        'parent_name': 'master',
+        'repository': 'dummyrepo'} in branches)

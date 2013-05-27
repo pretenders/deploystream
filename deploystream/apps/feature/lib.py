@@ -67,9 +67,9 @@ def get_feature_info(feature_provider, feature_id, providers):
     for provider in providers[IBuildInfoProvider]:
         for branch in feature.branches:
             build_info = provider.get_build_information(
-                branch.repo_name,
-                branch.branch_name,
-                branch.latest_commit
+                branch.repository,
+                branch.name,
+                branch.commit_id,
             )
             branch.build_info = BuildInfo(provider=provider, **build_info)
     return feature

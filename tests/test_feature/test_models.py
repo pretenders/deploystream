@@ -8,10 +8,10 @@ def test_feature_branches():
     for branch_name, parent_name in [('alex', 'master'), ('master', None),
                                      ('something', 'alex'), ('sthg2', 'alex')]:
         b = Branch(provider="test",
-            repo_name="repo1",
-            branch_name=branch_name,
-            latest_commit="commit",
-            parent_branch_name=parent_name
+            repository="repo1",
+            name=branch_name,
+            commit_id="commit",
+            parent_name=parent_name
         )
 
         f.add_branch(b)

@@ -46,14 +46,14 @@ class Feature(object):
 
     def add_branch(self, branch):
         assert isinstance(branch, Branch)
-        self.branches[branch.repo_name][branch.branch_name] = branch
+        self.branches[branch.repository][branch.name] = branch
 
     def create_hierarchy_trees(self):
         "Create hierarchy trees - one for each repo."
         for branch_set in self.branches.values():
             for branch in branch_set.values():
-                if branch.parent_branch_name:
-                    branch.parent = branch_set[branch.parent_branch_name]
+                if branch.parent_name:
+                    branch.parent = branch_set[branch.parent_name]
 
 
 class Branch(object):
@@ -62,13 +62,13 @@ class Branch(object):
 
     Instances contain values for:
 
-        ``repo_name``           - The repository that this branch is found in.
-        ``branch_name``         - The name of the branch.
-        ``latest_commit``       - The head commmit, or latest revision in this
-                                  branch.
-        ``parent_branch_name``  - The name of the branches parent.
-        ``provider``            - The provider instance that found this branch
-                                  information.
+        ``repository``  - The repository that this branch is found in.
+        ``name``        - The name of the branch.
+        ``commit_id``   - The head commmit, or latest revision in this
+                          branch.
+        ``parent_name`` - The name of the branches parent.
+        ``provider``    - The provider instance that found this branch
+                          information.
 
 
     Instances are eventually populated with these values:
@@ -81,16 +81,16 @@ class Branch(object):
 
     """
 
-    def __init__(self, provider, repo_name, branch_name, latest_commit,
-                 parent_branch_name,
+    def __init__(self, provider, repository, name, commit_id,
+                 parent_name,
                  in_parent=None, has_parent=None):
         self._parent = None
         self.children = []
         self.build_info = None
-        self.repo_name = repo_name
-        self.branch_name = branch_name
-        self.latest_commit = latest_commit
-        self.parent_branch_name = parent_branch_name
+        self.repository = repository
+        self.name = name
+        self.commit_id = commit_id
+        self.parent_name = parent_name
         self.in_parent = in_parent
         self.has_parent = has_parent
         self._provider = provider
@@ -120,7 +120,7 @@ class Branch(object):
     def as_tree_string(self, indent=0):
         if self.parent and not indent:
             return self.parent.as_tree_string()
-        me = "{0}- {1}\n".format(indent * ' ', self.branch_name)
+        me = "{0}- {1}\n".format(indent * ' ', self.name)
 
         for c in self.children:
             me += c.as_tree_string(indent + 4)

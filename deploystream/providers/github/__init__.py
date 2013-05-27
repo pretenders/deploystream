@@ -116,10 +116,10 @@ class GithubProvider(object):
 
         :returns:
             A list of dictionaries containing keys for:
-                - repo_name
-                - branch_name
-                - parent_branch_name
-                - latest_commit
+                - repository
+                - name
+                - parent_name
+                - commit_id
                 - has_parent
                 - in_parent
 
@@ -143,10 +143,10 @@ class GithubProvider(object):
                     'sha': branch.commit.sha,
                 }
 
-            geneology = hierarchy.match_with_geneology(
+            genealogy = hierarchy.match_with_genealogy(
                 feature_id, repo_branches.keys(), hierarchy_regexes)
 
-            for branch, parent in geneology:
+            for branch, parent in genealogy:
                 has_parent = None
                 in_parent = None
                 branch_data = repo_branches[branch]
@@ -166,10 +166,10 @@ class GithubProvider(object):
                     in_parent = branch_data['sha'] in parent_data['commits']
 
                 branch_list.append({
-                    "repo_name": repo.name,
-                    "branch_name": branch,
-                    "latest_commit": branch_data['sha'],
-                    "parent_branch_name": parent,
+                    "repository": repo.name,
+                    "name": branch,
+                    "commit_id": branch_data['sha'],
+                    "parent_name": parent,
                     "has_parent": has_parent,
                     "in_parent": in_parent,
                 })

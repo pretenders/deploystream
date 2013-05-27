@@ -32,10 +32,10 @@ class GitProvider(object):
 
         :returns:
             A list of dictionaries containing keys for:
-                - repo_name
-                - branch_name
-                - parent_branch_name
-                - latest_commit
+                - repository
+                - name
+                - parent_name
+                - commit_id
         """
         branch_list = []
 
@@ -52,15 +52,15 @@ class GitProvider(object):
                             'sha': str(remote_ref.commit)
                     }
 
-                geneology = hierarchy.match_with_geneology(
+                genealogy = hierarchy.match_with_genealogy(
                     feature_id, repo_branches.keys(), hierarchy_regexes)
 
-                for branch, parent in geneology:
+                for branch, parent in genealogy:
                     branch_list.append({
-                        "repo_name": repo_name,
-                        "branch_name": branch,
-                        "latest_commit": repo_branches[branch]['sha'],
-                        "parent_branch_name": parent,
+                        "repository": repo_name,
+                        "name": branch,
+                        "commit_id": repo_branches[branch]['sha'],
+                        "parent_name": parent,
                     })
 
         return branch_list
