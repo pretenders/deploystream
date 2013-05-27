@@ -1,3 +1,6 @@
+from collections import defaultdict
+
+
 class Feature(object):
     """
     The class used for encapsulating ``Feature`` data across repos & branches.
@@ -38,16 +41,19 @@ class Feature(object):
         self.url = url
         self._extras = kwargs
 
-        self.branches = []
+        self.branches = defaultdict(dict)
         self.trees = []
-
-    def create_hierarchy_trees(self):
-        "Create hierarchy trees - one for each repo."
-        pass
 
     def add_branch(self, branch):
         assert isinstance(branch, Branch)
-        self.branches.append(branch)
+        self.branches[branch.repository][branch.name] = branch
+
+    def create_hierarchy_trees(self):
+        "Create hierarchy trees - one for each repo."
+        for branch_set in self.branches.values():
+            for branch in branch_set.values():
+                if branch.parent_name:
+                    branch.parent = branch_set[branch.parent_name]
 
 
 class Branch(object):
@@ -56,15 +62,13 @@ class Branch(object):
 
     Instances contain values for:
 
-        ``repo_name``     - The repository that this branch is found in.
-        ``branch_name``   - The name of the branch.
-        ``latest_commit`` - The head commmit, or latest revision in this
-                            branch.
-        ``level``         - The numerical level that this branch falls in the
-                            hierarchy for the feature - where 0 is the highest
-                            level.
-        ``provider``      - The provider instance that found this branch
-                            information.
+        ``repository``  - The repository that this branch is found in.
+        ``name``        - The name of the branch.
+        ``commit_id``   - The head commmit, or latest revision in this
+                          branch.
+        ``parent_name`` - The name of the branches parent.
+        ``provider``    - The provider instance that found this branch
+                          information.
 
 
     Instances are eventually populated with these values:
@@ -74,22 +78,53 @@ class Branch(object):
         ``parent``        - The parent ``Branch`` of this branch (based on
                             hierarchy rules)
         ``children``      - A list of children ``Branch`` es of this branch.
-        ``siblings``      - A list of the sibling ``Branch`` es of this branch.
-                            A sibling is a ``Branch`` that has the same parent,
-                            or would have the same parent if one existed.
+
     """
 
-    def __init__(self, repo_name, branch_name, latest_commit, level, provider):
-        self.parent = None
+    def __init__(self, provider, repository, name, commit_id,
+                 parent_name,
+                 in_parent=None, has_parent=None):
+        self._parent = None
         self.children = []
-        self.siblings = []  # Will be needed in the cases where we have no
-                            # parent
         self.build_info = None
-        self.repo_name = repo_name
-        self.branch_name = branch_name
-        self.latest_commit = latest_commit
-        self.level = level
+        self.repository = repository
+        self.name = name
+        self.commit_id = commit_id
+        self.parent_name = parent_name
+        self.in_parent = in_parent
+        self.has_parent = has_parent
         self._provider = provider
+
+    @property
+    def parent(self):
+        return self._parent
+
+    @parent.setter
+    def parent(self, branch):
+        if self._parent:
+            # remove first
+            self._parent.remove_child(self)
+        self._parent = branch
+        branch.ensure_child(self)
+
+    def ensure_child(self, branch):
+        if branch not in self.children:
+            self.children.append(branch)
+
+    def remove_child(self, branch):
+        try:
+            self.children.remove(branch)
+        except ValueError:
+            pass
+
+    def as_tree_string(self, indent=0):
+        if self.parent and not indent:
+            return self.parent.as_tree_string()
+        me = "{0}- {1}\n".format(indent * ' ', self.name)
+
+        for c in self.children:
+            me += c.as_tree_string(indent + 4)
+        return me
 
 
 class BuildInfo(object):

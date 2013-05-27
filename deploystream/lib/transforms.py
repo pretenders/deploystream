@@ -17,7 +17,7 @@ def nativify(data):
             for k, v in data.items() if not k.startswith('_')
         }
     elif data is None:
-        return 'null'
+        return None
     elif hasattr(data, '__dict__'):
         return nativify(data.__dict__)
     else:

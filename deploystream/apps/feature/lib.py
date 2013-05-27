@@ -48,12 +48,11 @@ def get_feature_info(feature_provider, feature_id, providers):
 
     feature = Feature(planning_provider,
                       **planning_provider.get_feature_info(feature_id))
-
     # Then get any branch info from any source control providers
     for provider in providers[ISourceCodeControlProvider]:
         for branch_data in provider.get_repo_branches_involved(
             feature_id, app.config['HIERARCHY_REGEXES']):
-            feature.add_branch(Branch(*branch_data, provider=provider))
+            feature.add_branch(Branch(provider=provider, **branch_data))
 
     # Use that branch info, along with configuration regexes to create a
     # hierarchy of the branches involved in the feature.
@@ -68,9 +67,9 @@ def get_feature_info(feature_provider, feature_id, providers):
     for provider in providers[IBuildInfoProvider]:
         for branch in feature.branches:
             build_info = provider.get_build_information(
-                branch.repo_name,
-                branch.branch_name,
-                branch.latest_commit
+                branch.repository,
+                branch.name,
+                branch.commit_id,
             )
             branch.build_info = BuildInfo(provider=provider, **build_info)
     return feature

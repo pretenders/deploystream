@@ -12,7 +12,7 @@ def load_fixture(filename):
 DEFAULT_HIERARCHY_REGEXES = [
         'master',
         'develop',
-        'story/{FEATURE_ID}(/[a-z]*)?',
-        'dev/{FEATURE_ID}/[a-z]*',
-        '[a-zA-Z]*/{FEATURE_ID}/[a-zA-Z]*'
+        'story/{FEATURE_ID}',
+        'story/{FEATURE_ID}/[a-z]*',
+        '{PARENT}/[a-z]*'
 ]

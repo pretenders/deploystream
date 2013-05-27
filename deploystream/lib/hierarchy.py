@@ -1,31 +1,10 @@
+from collections import defaultdict
 import re
 
 
-def create_single_regex(feature_id, hierarchical_regexes):
+def match_with_genealogy(feature_id, branches, hierarchical_regexes):
     """
-    Create a single regex to be used to find which level a branch is on.
-
-    :param feature_id:
-        The id of the feature. This is substituted into the
-        ``hierarchical_regexes`` if they use {FEATURE_ID} anywhere.
-
-    :param hierarchical_regexes:
-        A list of regexes to be joined into one single regex.
-
-    :returns:
-        A single regex for easier matching.
-    """
-    subs = []
-    for index, regex in enumerate(hierarchical_regexes):
-        subs.append("(?P<level_{0}>^{1}$)".format(index, regex))
-    full_regex = "|".join(subs)
-    full_regex = full_regex.format(FEATURE_ID=feature_id)
-    return full_regex
-
-
-def match_with_levels(feature_id, branch, hierarchical_regexes):
-    """
-    Filter and return the branches in appropriate levels.
+    Filter and return the branches in order with parents attached.
 
     :param feature_id:
         The feature to filter the branch names on.
@@ -37,16 +16,49 @@ def match_with_levels(feature_id, branch, hierarchical_regexes):
         A list of regexes assumed to be in descending order of branch status.
 
     :returns:
-        The positional index that the branch should be found in. Or None if it
-        does not match.
+        A list of tuples containing:
+            - Branch name
+            - Parent name
+
+    Go through the hierarchy regexes in sequence.
+    Attempt to match each one against all the branches. When a match occurs
+    remove the branch from the list to be matched against and continue.
+    Also add parental information as we go along.
     """
-    regex = create_single_regex(feature_id, hierarchical_regexes)
+    matched_branches = defaultdict(list)
+    hierarchy = []
+    for index, regex in enumerate(hierarchical_regexes):
+        try:
+            parent_regex = hierarchical_regexes[max(index - 1, 0)]
+        except IndexError:
+            parent_regex = None
 
-    result = re.match(regex, branch)
-    if not result:
-        return None
+        # Find the possible parents for any branches found at this level.
+        # Simply look at the level above, and if not there then keep going back
+        parent_index = index - 1
+        fake_parent = False
+        possible_parents = matched_branches[parent_index]
+        while not possible_parents:
+            parent_index -= 1
+            if parent_index < 0:
+                fake_parent = True
+                possible_parents = [parent_regex]
+                break
+            possible_parents = matched_branches[parent_index]
 
-    for level, match in result.groupdict().items():
-        if match:
-            index = int(level.split('level_')[1])
-            return index
+        # Look through all the branches (that are left to look at) and see
+        # if any match this regex.
+        for branch in branches[:]:
+            for parent in possible_parents:
+                full_regex = regex.format(FEATURE_ID=feature_id,
+                                          PARENT=parent)
+                result = re.match("^{0}$".format(full_regex), branch)
+                if result:
+                    matched_branches[index].append(branch)
+                    branches.remove(branch)
+                    if fake_parent:
+                        parent = None
+                    hierarchy.append((branch, parent))
+                    break
+
+    return hierarchy
