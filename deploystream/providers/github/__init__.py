@@ -91,7 +91,12 @@ class GithubProvider(object):
         return features
 
     def get_feature_info(self, feature_id):
-        pass
+        # Feature ID will need to have org in it.
+        # For now we'll do a really crude search through the get_features
+        # results
+        for feat in self.get_features():
+            if str(feat['id']) == str(feature_id):
+                return feat
 
     @classmethod
     def get_oauth_data(self):
@@ -106,19 +111,67 @@ class GithubProvider(object):
         }
 
     def get_repo_branches_involved(self, feature_id, hierarchy_regexes):
+        """
+        Get the list of branches involved for the given ``feature_id``.
+
+        :returns:
+            A list of dictionaries containing keys for:
+                - repository
+                - name
+                - parent_name
+                - commit_id
+                - has_parent
+                - in_parent
+
+        Look through each repo and get a set of branches that match the
+        ``hierarchy_regexes``.
+
+        Go through matching branches finding their merge status.
+
+        .. note::
+            We loop through all the commits for every matching branch exactly
+            once. This could be optimized to only check back as far as some
+            ancestor's HEAD.
+
+        """
         branch_list = []
 
         for repo in self.repositories:
+            repo_branches = {}
             for branch in repo.iter_branches():
-                level = hierarchy.match_with_levels(
-                        feature_id, branch.name, hierarchy_regexes)
-                if level is None:
-                    continue
+                repo_branches[branch.name] = {
+                    'sha': branch.commit.sha,
+                }
+
+            genealogy = hierarchy.match_with_genealogy(
+                feature_id, repo_branches.keys(), hierarchy_regexes)
+
+            for branch, parent in genealogy:
+                has_parent = None
+                in_parent = None
+                branch_data = repo_branches[branch]
+
+                if parent:
+                    for sha in [branch, parent]:
+                        # Loop through all the commits for branch and parent if
+                        # we haven't already done so and store them in the
+                        # temporary ``repo_branches`` dict
+                        if repo_branches[sha].get('commits') is None:
+                            repo_branches[sha]['commits'] = [
+                                c.sha for c in repo.iter_commits(sha=sha)
+                            ]
+                    # Check if we're merged in
+                    parent_data = repo_branches[parent]
+                    has_parent = parent_data['sha'] in branch_data['commits']
+                    in_parent = branch_data['sha'] in parent_data['commits']
+
                 branch_list.append({
-                    "repo_name": repo.name,
-                    "branch_name": branch.name,
-                    "latest_commit": branch.commit.sha,
-                    "level": level,
+                    "repository": repo.name,
+                    "name": branch,
+                    "commit_id": branch_data['sha'],
+                    "parent_name": parent,
+                    "has_parent": has_parent,
+                    "in_parent": in_parent,
                 })
 
         return branch_list

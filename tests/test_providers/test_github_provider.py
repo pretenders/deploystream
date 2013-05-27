@@ -11,6 +11,7 @@ def mock_github3(github3):
     mock_repo = Mock()
     mock_repo.has_issues = True
     mock_repo.name = 'repo_1'
+    mock_repo.iter_commits.return_value = [Mock(sha="CoMmItHaSh-MaStEr")]
 
     issue1 = {
         'title': 'Hello',
@@ -81,16 +82,22 @@ def test_implements_expected_interfaces(_):
 def test_get_repo_branches_involved(github3):
     mock_github3(github3)
     github_provider = GithubProvider('token')
-    branches = github_provider.get_repo_branches_involved(5,
-        hierarchy_regexes=DEFAULT_HIERARCHY_REGEXES)
+    branches = github_provider.get_repo_branches_involved("5",
+                                                    DEFAULT_HIERARCHY_REGEXES)
     assert_equal(2, len(branches))
     assert_true({
-        "repo_name": "repo_1",
-        "branch_name": "master",
-        "latest_commit": 'CoMmItHaSh-MaStEr',
-        "level": 0} in branches)
+        "repository": "repo_1",
+        "name": "master",
+        "parent_name": None,
+        "commit_id": 'CoMmItHaSh-MaStEr',
+        "has_parent": None,
+        "in_parent": None,
+    } in branches)
     assert_true({
-        "repo_name": "repo_1",
-        "branch_name": "story/5/alex",
-        "latest_commit": "CoMmItHaSh-5",
-        "level": 2} in branches)
+        "repository": "repo_1",
+        "name": "story/5/alex",
+        "parent_name": "master",
+        "commit_id": "CoMmItHaSh-5",
+        "has_parent": True,
+        "in_parent": False,
+    } in branches)

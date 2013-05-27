@@ -1,7 +1,7 @@
 import os
 from os.path import join, exists, dirname
 
-from nose.tools import assert_equal, with_setup
+from nose.tools import assert_equal, assert_true, with_setup
 
 from deploystream.providers.git_provider import GitProvider
 
@@ -33,27 +33,22 @@ def test_git_provider_finds_branches_across_repos():
     Clone the dummyrepo into the data folder if not already there.
 
     The data in this test is found by looking at the dummyrepo and getting
-    the branch names and latest commit of any branches that match "FeAtUrE".
+    the branch names and latest commit of any branches that match "feature-99".
     """
-    provider = GitProvider(code_dir=DUMMY_CODE_DIR,
-            feature_breakup_regex="(?P<project>[a-zA-Z]+)-?(?P<id>[0-9]+)",
-            branch_finder_template=".*(?i){project}.*")
-    branches = provider.get_repo_branches_involved('FeAtUrE-99')
+    provider = GitProvider(code_dir=DUMMY_CODE_DIR)
+    branches = provider.get_repo_branches_involved(
+        'feature-99',
+        hierarchy_regexes=["master", "[a-z]*/{FEATURE_ID}"],
+    )
 
-    assert_equal([
-        ('dummyrepo', 'my/feature_branch',
-         'cf9130d3c07b061a88569153f10a7c7779338cfa'),
-        ], branches)
-
-
-def test_git_provider_feature_breakup_regex():
-    """
-    Test that GitProvider breaks up feature ids into appropriate parts.
-    """
-    provider = GitProvider(
-                 feature_breakup_regex="(?P<project>[a-zA-Z]+)-?(?P<id>[0-9]+)")
-    for feature, expected in [
-        ('DD-334', {'id': '334', 'project':'DD'}),
-        ('DD334', {'id': '334', 'project':'DD'}),
-        ]:
-        assert_equal(provider._get_feature_breakdown('DD-334'), expected)
+    assert_equal(2, len(branches))
+    assert_true({
+        'name': 'master',
+        'commit_id': "0f6eefefc14f362a2c6f804df69aa83bac48c20b",
+        'parent_name': None,
+        'repository': 'dummyrepo'} in branches)
+    assert_true({
+        'name': 'my/feature-99',
+        'commit_id': "7098fa31bf9663343c723d9d155c0dc6e6e28174",
+        'parent_name': 'master',
+        'repository': 'dummyrepo'} in branches)

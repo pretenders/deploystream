@@ -1,24 +1,96 @@
-from nose.tools import assert_equals
+from nose.tools import assert_items_equal
 
-from deploystream.lib.hierarchy import match_with_levels
-from tests import DEFAULT_HIERARCHY_REGEXES
+from deploystream.lib.hierarchy import match_with_genealogy
 
 
-def test_match_with_levels():
-    "Test that we get back what we'd expect when matching branches"
-    branches_results = [
-        ('master', 0),
-        ('develop', 1),
-        ('story/23', 2),
-        ('dev/23/alex', 3),
-        ('dev/23/carles', 3),
+def test_genealogy():
+    regexes = ['master', 'develop', 'story/{FEATURE_ID}',
+               'story/{FEATURE_ID}/[a-z]*',
+               '{PARENT}/[a-z]*']
 
-        ('somestory/234/carles', None),
-        ('story/234/carles', None),
-        ('story/45/alex', None),
-        ('dev/99/carles', None),
+    branches = ['master', 'develop', 'story/12', 'story/12/alex',
+                'story/12/bill',
+                'story/12/bill/something',
+                'story/223/bill']
+
+    expected = [('master', None),
+                ('develop', 'master'),
+                ('story/12', 'develop'),
+                ('story/12/alex', 'story/12'),
+                ('story/12/bill', 'story/12'),
+                ('story/12/bill/something', 'story/12/bill')]
+
+    results = match_with_genealogy(12, branches, regexes)
+    assert_items_equal(results, expected)
+
+
+def test_genealogy_unordered_list():
+    regexes = ['master', 'develop', 'story/{FEATURE_ID}',
+               'story/{FEATURE_ID}/[a-z]*',
+               '{PARENT}/[a-z]*']
+
+    branches = ['story/12/bill', 'master',  'story/12/bill/something',
+                'story/12', 'story/12/alex', 'develop']
+
+    expected = [('master', None),
+                ('develop', 'master'),
+                ('story/12', 'develop'),
+                ('story/12/alex', 'story/12'),
+                ('story/12/bill', 'story/12'),
+                ('story/12/bill/something', 'story/12/bill')]
+
+    results = match_with_genealogy(12, branches, regexes)
+    results.sort()
+    assert_items_equal(results, expected)
+
+
+def test_genealogy_missing_steps():
+    regexes = ['master', 'develop', 'story/{FEATURE_ID}',
+               'story/{FEATURE_ID}/[a-z]*',
+               '{PARENT}/[a-z]*']
+
+    branches = ['master',
+                'story/12/bill']
+
+    expected = [('master', None),
+                ('story/12/bill', 'master')]
+
+    results = match_with_genealogy(12, branches, regexes)
+    assert_items_equal(results, expected)
+
+
+def test_gets_underscores():
+    regexes = [
+        'master',
+        'develop',
+        'story/{FEATURE_ID}',
+        'story/{FEATURE_ID}/[a-z_]*',
+        '{PARENT}[/_][a-z]*',
+        'dev/{FEATURE_ID}/[a-z]*',
+        '{PARENT}[/_][a-z]*',
     ]
 
-    for branch, expected in branches_results:
-        result = match_with_levels('23', branch, DEFAULT_HIERARCHY_REGEXES)
-        assert_equals(result, expected)
+    branches = [
+        'alex/19',
+        'dev/70/alex',
+        'dev/70/alex_hierarchy',
+        'dev_alex',
+        'develop',
+        'master',
+        'story/23/carles',
+        'story/43/carles',
+        'story/53/carles',
+        'story/58/carles',
+        'story/70/alex',
+        'story/72/carles',
+    ]
+    expected = [
+        ('master', None),
+        ('develop', 'master'),
+        ('story/70/alex', 'develop'),
+        ('dev/70/alex', 'story/70/alex'),
+        ('dev/70/alex_hierarchy', 'dev/70/alex'),
+    ]
+
+    results = match_with_genealogy(70, branches, regexes)
+    assert_items_equal(results, expected)
