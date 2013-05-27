@@ -82,6 +82,7 @@ class TestViewFeatureEndToEndWithDummyProviders(object):
             'testbuild': BuildInfoProvider})
     def test_feature_view_shows_details(self):
         response = self.client.get('/features/plan/FT101')
+        print response.__dict__
         feature_dict = json.loads(response.data)
         assert_true("Amazing feature that will blow your mind" in
             feature_dict['title'])

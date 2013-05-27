@@ -70,19 +70,7 @@ class GithubProvider(object):
                                        repository.name)
             if repository.has_issues:
                 for issue in repository.iter_issues(**filters):
-                    issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
-                    if issue.pull_request:
-                        issue_type = 'PR'
-                    else:
-                        issue_type = 'story'
-                    issue_info['type'] = issue_type
-                    issue_info['project'] = project
-                    owner = issue_info['assignee']
-                    if owner is None:
-                        issue_info['owner'] = ''
-                    else:
-                        # take only login name from User object
-                        issue_info['owner'] = owner.login
+                    issue_info = self._convert_to_dict(issue, project)
                     features.append(issue_info)
 
         # sort by putting PRs first, stories second
@@ -90,13 +78,34 @@ class GithubProvider(object):
 
         return features
 
+    def _convert_to_dict(self, issue, project):
+        issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
+        if issue.pull_request:
+            issue_type = 'PR'
+        else:
+            issue_type = 'story'
+        issue_info['type'] = issue_type
+        issue_info['project'] = project
+        owner = issue_info['assignee']
+        if owner is None:
+            issue_info['owner'] = ''
+        else:
+            # take only login name from User object
+            issue_info['owner'] = owner.login
+        return issue_info
+
     def get_feature_info(self, feature_id):
-        # Feature ID will need to have org in it.
-        # For now we'll do a really crude search through the get_features
-        # results
-        for feat in self.get_features():
-            if str(feat['id']) == str(feature_id):
-                return feat
+        # Issue with this approach is that we return the first issue with an
+        # ID across all repos.
+        # Such are the shortcomings of using Git as a planning provider. To
+        # get round this we'd need to have the repo in the feature_id, but this
+        # seems a bad idea from the POV of matching branch names.
+        for repository in self.repositories:
+            project = '{0}/{1}'.format(repository.owner.login,
+                                       repository.name)
+            issue = repository.issue(feature_id)
+            if issue:
+                return self._convert_to_dict(issue, project)
 
     @classmethod
     def get_oauth_data(self):
