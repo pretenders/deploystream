@@ -6,7 +6,8 @@ from deploystream import app
 from deploystream.apps.feature.lib import get_feature_info, get_all_features
 from deploystream.lib.transforms import nativify
 from deploystream.decorators import needs_providers
-from deploystream.exceptions import UnknownProviderException
+from deploystream.exceptions import (
+    UnknownProviderException, UnknownFeatureException)
 
 
 def as_json(func):
@@ -37,5 +38,7 @@ def view_feature(source_id, feature_id, providers):
     try:
         feature = get_feature_info(source_id, feature_id, providers)
     except UnknownProviderException:
+        abort(404)
+    except UnknownFeatureException:
         abort(404)
     return feature

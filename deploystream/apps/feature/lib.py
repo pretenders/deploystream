@@ -2,7 +2,8 @@
 #-*- coding: utf-8 -*-
 
 from deploystream import app
-from deploystream.exceptions import UnknownProviderException
+from deploystream.exceptions import (
+    UnknownProviderException, UnknownFeatureException)
 from deploystream.providers.interfaces import (
     IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider)
 from .models import Branch, BuildInfo, Feature
@@ -46,8 +47,13 @@ def get_feature_info(feature_provider, feature_id, providers):
     # First get feature info from the management provider
     planning_provider = providers[feature_provider]
 
-    feature = Feature(planning_provider,
-                      **planning_provider.get_feature_info(feature_id))
+    feature_info = planning_provider.get_feature_info(feature_id)
+
+    if not feature_info:
+        raise UnknownFeatureException(feature_id)
+
+    feature = Feature(planning_provider, **feature_info)
+
     # Then get any branch info from any source control providers
     for provider in providers[ISourceCodeControlProvider]:
         for branch_data in provider.get_repo_branches_involved(
