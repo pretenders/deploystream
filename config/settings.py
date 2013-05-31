@@ -1,12 +1,28 @@
 from os import path, environ
 import traceback
 
+_basedir = path.abspath(path.dirname(__file__))
 
-APP_PACKAGE = path.basename(path.dirname(__file__))
+APP_PACKAGE = path.basename(_basedir)
+
+# Default settings, overridden by the python file pointed to by CONFIG variable
+SQLALCHEMY_DATABASE_URI = 'sqlite:///' + path.join(_basedir, 'app.db')
+DATABASE_CONNECT_OPTIONS = {}
+
+# THREADS_PER_PAGE = 8
+
+# CSRF_ENABLED = True
+# CSRF_SESSION_KEY = "somethingimpossibletoguess"
+
+RECAPTCHA_USE_SSL = False
+RECAPTCHA_PUBLIC_KEY = 'blahblahblahblahblahblahblahblahblah'
+RECAPTCHA_PRIVATE_KEY = 'blahblahblahblahblahblahprivate'
+RECAPTCHA_OPTIONS = {'theme': 'white'}
+
+GITHUB_CONFIG = GIT_CONFIG = SPRINTLY_CONFIG = JIRA_CONFIG = None
 
 # The following is the programmatic equivalent of
 # from deploystream.local_settings_<CONFIG> import *
-GITHUB_CONFIG = GIT_CONFIG = SPRINTLY_CONFIG = JIRA_CONFIG = None
 
 try:
     CONFIG = environ.get('CONFIG', 'sample')

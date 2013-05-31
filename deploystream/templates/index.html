@@ -1,4 +1,13 @@
-{% extends "base.html" %}
+{% extends "base-angular.html" %}
+
+{% block extrahead %}
+<style>
+    [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
+    .ng-cloak, .x-ng-cloak {
+        display: none;
+    }
+</style>
+{% endblock %}
 
 {% block scripts %}
 <script src="/static/lib/angular/angular.js"></script>
