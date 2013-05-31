@@ -10,7 +10,7 @@ class LoginForm(Form):
 
 
 class RegisterForm(Form):
-    name = TextField('NickName', [Required()])
+    name = TextField('Name', [Required()])
     email = TextField('Email address', [Required(), Email()])
     password = PasswordField('Password', [Required()])
     confirm = PasswordField('Repeat Password', [
