@@ -6,3 +6,7 @@ class MissingTokenException(Exception):
 
 class UnknownProviderException(Exception):
     pass
+
+
+class UnknownFeatureException(Exception):
+    pass

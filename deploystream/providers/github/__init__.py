@@ -1,5 +1,8 @@
-import github3
+import datetime
+import iso8601
 import re
+
+import github3
 from zope import interface
 
 from deploystream.providers.interfaces import IPlanningProvider
@@ -70,19 +73,7 @@ class GithubProvider(object):
                                        repository.name)
             if repository.has_issues:
                 for issue in repository.iter_issues(**filters):
-                    issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
-                    if issue.pull_request:
-                        issue_type = 'PR'
-                    else:
-                        issue_type = 'story'
-                    issue_info['type'] = issue_type
-                    issue_info['project'] = project
-                    owner = issue_info['assignee']
-                    if owner is None:
-                        issue_info['owner'] = ''
-                    else:
-                        # take only login name from User object
-                        issue_info['owner'] = owner.login
+                    issue_info = self._convert_to_dict(issue, project)
                     features.append(issue_info)
 
         # sort by putting PRs first, stories second
@@ -90,13 +81,34 @@ class GithubProvider(object):
 
         return features
 
+    def _convert_to_dict(self, issue, project):
+        issue_info = transforms.remap(issue.__dict__, FEATURE_MAP)
+        if issue.pull_request:
+            issue_type = 'PR'
+        else:
+            issue_type = 'story'
+        issue_info['type'] = issue_type
+        issue_info['project'] = project
+        owner = issue_info['assignee']
+        if owner is None:
+            issue_info['owner'] = ''
+        else:
+            # take only login name from User object
+            issue_info['owner'] = owner.login
+        return issue_info
+
     def get_feature_info(self, feature_id):
-        # Feature ID will need to have org in it.
-        # For now we'll do a really crude search through the get_features
-        # results
-        for feat in self.get_features():
-            if str(feat['id']) == str(feature_id):
-                return feat
+        # Issue with this approach is that we return the first issue with an
+        # ID across all repos.
+        # Such are the shortcomings of using Git as a planning provider. To
+        # get round this we'd need to have the repo in the feature_id, but this
+        # seems a bad idea from the POV of matching branch names.
+        for repository in self.repositories:
+            project = '{0}/{1}'.format(repository.owner.login,
+                                       repository.name)
+            issue = repository.issue(feature_id)
+            if issue:
+                return self._convert_to_dict(issue, project)
 
     @classmethod
     def get_oauth_data(self):
@@ -135,6 +147,7 @@ class GithubProvider(object):
 
         """
         branch_list = []
+        two_months_ago = datetime.datetime.now() - datetime.timedelta(60)
 
         for repo in self.repositories:
             repo_branches = {}
@@ -157,9 +170,16 @@ class GithubProvider(object):
                         # we haven't already done so and store them in the
                         # temporary ``repo_branches`` dict
                         if repo_branches[sha].get('commits') is None:
-                            repo_branches[sha]['commits'] = [
-                                c.sha for c in repo.iter_commits(sha=sha)
-                            ]
+                            c_list = []
+                            for commit in repo.iter_commits(sha=sha):
+                                commit_date = commit.commit.committer['date']
+                                commit_date_time = iso8601.parse_date(
+                                    commit_date)
+                                if (commit_date_time.replace(tzinfo=None) <
+                                        two_months_ago):
+                                    break
+                            c_list.append(commit.sha)
+                            repo_branches[sha]['commits'] = c_list
                     # Check if we're merged in
                     parent_data = repo_branches[parent]
                     has_parent = parent_data['sha'] in branch_data['commits']

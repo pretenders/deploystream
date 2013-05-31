@@ -34,6 +34,7 @@ class JiraProvider(object):
         if not issue_types:
             issue_types = ['Story', 'Bug']
         self.issue_types = issue_types
+        self.base_url = url
         options = {'server': url}
         self._conn = JIRA(options, basic_auth=(user, password))
 
@@ -78,5 +79,6 @@ class JiraProvider(object):
 
             ``None`` otherwise
         """
-        raise NotImplementedError("get_feature_info() not implemented in {0}"
-                                  .format(self.__class__.__name__))
+        jira_feature = self._conn.issue(feature_id)
+        if jira_feature:
+            return _transform(jira_feature)
