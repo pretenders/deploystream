@@ -1,8 +1,10 @@
 from flask import session, redirect, flash, request, url_for
 from flask_oauth import OAuth
 
-from deploystream import app
+from deploystream import app, db
 from deploystream.apps.oauth import get_token, set_token
+from deploystream.apps.users.models import User, OAuth as UserOAuth
+from deploystream.apps.users.lib import load_user_to_session
 from deploystream.providers.interfaces import class_implements, IOAuthProvider
 
 
@@ -63,14 +65,29 @@ def oauth_authorized(resp):
     set_token(session, oauth_name, resp['access_token'])
 
     if request.args.get('islogin'):
-        user = OAUTH_OBJECTS[oauth_name].get('/user')
-        username = user.data['login']
-        session['username'] = username
+        remote_user = OAUTH_OBJECTS[oauth_name].get('/user')
+        remote_user_id = remote_user.data['id']
+        # Save user if doesn't already exist.
+        oauth_obj = UserOAuth.query.filter_by(service_user_id=remote_user_id,
+                                              service=oauth_name).first()
+        if not oauth_obj:
+            # Create a user and an OAuth linked to it.
+            user = User(name=remote_user.data['login'])
+            oauth = UserOAuth(service_user_id=remote_user_id,
+                              service=oauth_name)
+            oauth.user = user
+            db.session.add(user)
+            db.session.add(oauth)
+            db.session.commit()
+        else:
+            user = oauth_obj.user
+
+        load_user_to_session(session, user)
 
     return redirect(next_url)
 
 
-@app.route('/login')
+@app.route('/github-login')
 def login():
     "Handler for calls to login via github."
     return start_token_processing('github', islogin=True)

@@ -15,11 +15,16 @@ def ensure_dummy_clone_available():
     if not os.path.exists(DUMMY_CODE_DIR):
         os.mkdir(DUMMY_CODE_DIR)
     folder_name = join(DUMMY_CODE_DIR, 'dummyrepo')
+
     if not exists(folder_name):
+
         os.system('git clone git://github.com/pretenders/dummyrepo.git {0}'
                   .format(folder_name))
     else:
-        os.system('git --git-dir={0} fetch'.format(folder_name))
+        print "RUNNING GIT FETCH"
+        cmd = 'git --git-dir={0}/.git fetch'.format(folder_name)
+        print cmd
+        os.system(cmd)
 
 
 @with_setup(ensure_dummy_clone_available)

@@ -3,9 +3,10 @@ from flask import (Blueprint, request, render_template, flash, g, session,
 from werkzeug import check_password_hash, generate_password_hash
 
 from deploystream import db
-from deploystream.apps.users.forms import RegisterForm, LoginForm
-from deploystream.apps.users.models import User
-from deploystream.apps.users.decorators import requires_login
+from .forms import RegisterForm, LoginForm
+from .models import User
+from .lib import load_user_to_session
+from .decorators import requires_login
 
 mod = Blueprint('users', __name__, url_prefix='/users')
 
@@ -37,9 +38,8 @@ def login():
         user = User.query.filter_by(email=form.email.data).first()
         # we use werzeug to validate user's password
         if user and check_password_hash(user.password, form.password.data):
-            # the session can't be modified as it's signed,
-            # it's a safe place to store the user id
-            session['user_id'] = user.id
+            load_user_to_session(session, user)
+
             flash('Welcome %s' % user.name)
             return redirect(url_for('users.home'))
         flash('Wrong email or password', 'error-message')
@@ -53,10 +53,9 @@ def register():
     """
     form = RegisterForm(request.form)
     if form.validate_on_submit():
-        print "VALID"
-        # create an user instance not yet stored in the database
-        user = User(form.name.data, form.email.data, \
-        generate_password_hash(form.password.data))
+        # create a user instance not yet stored in the database
+        user = User(form.name.data, form.email.data,
+            generate_password_hash(form.password.data))
         # Insert the record in our database and commit it
         db.session.add(user)
         db.session.commit()
@@ -68,6 +67,5 @@ def register():
         flash('Thanks for registering')
         # redirect user to the 'home' method of the user module.
         return redirect(url_for('users.home'))
-    else:
-        print form.__dict__
+
     return render_template("users/register.html", form=form)
