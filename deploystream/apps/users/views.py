@@ -43,7 +43,11 @@ def login():
             flash('Welcome %s' % user.name)
             return redirect(url_for('users.home'))
         flash('Wrong email or password', 'error-message')
-    return render_template("users/login.html", form=form)
+    if request.method == 'POST':
+        suffix = ".html"
+    else:
+        suffix = "_ajax.html"
+    return render_template("users/login" + suffix, form=form)
 
 
 @mod.route('/register/', methods=['GET', 'POST'])
