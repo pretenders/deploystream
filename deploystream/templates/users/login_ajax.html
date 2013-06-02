@@ -1,0 +1,9 @@
+{% from "forms/macros.html" import render_field %}
+<form method="POST" action="{{ url_for('users.login') }}" class="form">
+    {{ form.csrf_token }}
+    {{ render_field(form.email, class="input text", autofocus="autofocus") }}
+    {{ render_field(form.password, class="input text") }}
+    <div class=controls>
+        <input type="submit" value="Login" class="btn btn-primary">
+    </div>
+</form>
