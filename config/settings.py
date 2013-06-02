@@ -14,10 +14,10 @@ DATABASE_CONNECT_OPTIONS = {}
 # CSRF_ENABLED = True
 # CSRF_SESSION_KEY = "somethingimpossibletoguess"
 
-RECAPTCHA_USE_SSL = False
-RECAPTCHA_PUBLIC_KEY = 'blahblahblahblahblahblahblahblahblah'
-RECAPTCHA_PRIVATE_KEY = 'blahblahblahblahblahblahprivate'
-RECAPTCHA_OPTIONS = {'theme': 'white'}
+# RECAPTCHA_USE_SSL = False
+# RECAPTCHA_PUBLIC_KEY = 'blahblahblahblahblahblahblahblahblah'
+# RECAPTCHA_PRIVATE_KEY = 'blahblahblahblahblahblahprivate'
+# RECAPTCHA_OPTIONS = {'theme': 'white'}
 
 GITHUB_CONFIG = GIT_CONFIG = SPRINTLY_CONFIG = JIRA_CONFIG = None
 
