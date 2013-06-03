@@ -46,3 +46,4 @@ class OAuth(db.Model):
 
     # Each user in deploystream should only have each service oauth'd once.
     db.UniqueConstraint('user_id', 'service', name='user_service')
+

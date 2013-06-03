@@ -69,38 +69,69 @@ def oauth_authorized(resp):
     # If Logging in, then just loading to session
     # If linking, then just adding a userOauth.
 
-    current_user = get_user_id_from_session(session)
+    current_user_id = get_user_id_from_session(session)
     remote_user = OAUTH_OBJECTS[oauth_name].get('/user')
     remote_user_id = remote_user.data['id']
 
-    if not current_user:
+    user = get_or_create_user_oauth(current_user_id, remote_user_id,
+                        oauth_name, remote_user.data['login'])
+
+    load_user_to_session(session, user)
+
+    return redirect(next_url)
+
+
+def get_or_create_user_oauth(user_id, service_user_id, service_name,
+                             service_username):
+    """
+    Get or create OAuth information and Users with the given information.
+
+    Handles a number of scenarios:
+        - No user id is known. (ie user is logged out)
+            - OAuth object exists: return the associated user.
+            - OAuth object doesn't exist: create it, along with a user and link
+              them
+        - User id is known (ie user is logged in)
+            - Create and link the OAuth data to the account.
+
+    :param user_id:
+        The id of the currently logged in user. Or ``None`` if logged out.
+    :param service_user_id:
+        The id of the user according to the external service.
+    :param service_name:
+        The name used internally to reference the external service.
+    :param service_username:
+        The username that the service knows this user by. This will be used to
+        create the account in deploystream if logging in for the first time.
+    """
+    if not user_id:
         # We're either logging in or registering
-        oauth_obj = UserOAuth.query.filter_by(service_user_id=remote_user_id,
-                                              service=oauth_name).first()
+        oauth_obj = UserOAuth.query.filter_by(service_user_id=service_user_id,
+                                              service=service_name).first()
         if not oauth_obj:
             # Create a user and an OAuth linked to it.
-            user = User(username=remote_user.data['login'])
-            oauth = UserOAuth(service_user_id=remote_user_id,
-                              service=oauth_name,
-                              service_username=remote_user.data['login'])
-            oauth.user = user
-            db.session.add(user)
+            current_user = User(username=service_username)
+            oauth = UserOAuth(service_user_id=service_user_id,
+                              service=service_name,
+                              service_username=service_username)
+            oauth.user = current_user
+            db.session.add(current_user)
             db.session.add(oauth)
             db.session.commit()
+            user_id = current_user.id
         else:
-            user = oauth_obj.user
+            user_id = oauth_obj.user.id
 
-        load_user_to_session(session, user)
     else:
         # We're linking the account
-        oauth = UserOAuth(service_user_id=remote_user_id,
-                          service=oauth_name,
-                          service_username=remote_user.data['login'],
-                          user_id=current_user)
+        oauth = UserOAuth(service_user_id=service_user_id,
+                          service=service_name,
+                          service_username=service_username,
+                          user_id=user_id)
         db.session.add(oauth)
         db.session.commit()
 
-    return redirect(next_url)
+    return user_id
 
 
 @app.route('/oauth/<oauth_name>')
