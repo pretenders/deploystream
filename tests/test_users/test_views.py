@@ -33,7 +33,6 @@ class TestRegister(UserTestMixin):
 
     def test_incomplete_when_username_already_exists(self):
         response = self.send_register_post(username='fred')
-        print response.data
         assert_true("/users/me" in response.location)
 
         response = self.send_register_post(username='fred')

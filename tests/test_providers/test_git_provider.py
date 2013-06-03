@@ -40,7 +40,6 @@ def test_git_provider_finds_branches_across_repos():
             branch_finder_template=".*(?i){project}.*")
     branches = provider.get_repo_branches_involved('FeAtUrE-99')
 
-    print "BRANCHES", branches
     assert_items_equal([
         ('dummyrepo', 'my/feature_branch',
          'cf9130d3c07b061a88569153f10a7c7779338cfa'),

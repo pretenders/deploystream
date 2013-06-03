@@ -28,9 +28,6 @@ class User(db.Model):
     def getRole(self):
         return USER.ROLE[self.role]
 
-    def oauth(self, service):
-        print "SERVICE", service
-
     def __repr__(self):
         return '<User %r>' % (self.username)
 
