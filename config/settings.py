@@ -11,8 +11,8 @@ DATABASE_CONNECT_OPTIONS = {}
 
 # THREADS_PER_PAGE = 8
 
-# CSRF_ENABLED = True
-# CSRF_SESSION_KEY = "somethingimpossibletoguess"
+CSRF_ENABLED = True
+CSRF_SESSION_KEY = "somethingimpossibletoguess"
 
 # RECAPTCHA_USE_SSL = False
 # RECAPTCHA_PUBLIC_KEY = 'blahblahblahblahblahblahblahblahblah'

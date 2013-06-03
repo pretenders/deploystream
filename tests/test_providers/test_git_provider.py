@@ -1,7 +1,7 @@
 import os
 from os.path import join, exists, dirname
 
-from nose.tools import assert_equal, with_setup
+from nose.tools import assert_equal, with_setup, assert_items_equal
 
 from deploystream.providers.git_provider import GitProvider
 
@@ -40,9 +40,12 @@ def test_git_provider_finds_branches_across_repos():
             branch_finder_template=".*(?i){project}.*")
     branches = provider.get_repo_branches_involved('FeAtUrE-99')
 
-    assert_equal([
+    print "BRANCHES", branches
+    assert_items_equal([
         ('dummyrepo', 'my/feature_branch',
          'cf9130d3c07b061a88569153f10a7c7779338cfa'),
+        ('dummyrepo', 'my/feature-99',
+         '7098fa31bf9663343c723d9d155c0dc6e6e28174'),
         ], branches)
 
 

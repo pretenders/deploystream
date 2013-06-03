@@ -3,6 +3,8 @@ from flask.ext.wtf import (
 )
 from flask.ext.wtf import Required, Email, EqualTo
 
+from .models import User
+
 
 class LoginForm(Form):
     username = TextField('Username', [Required()])
@@ -19,3 +21,15 @@ class RegisterForm(Form):
       ])
     accept_tos = BooleanField('I accept the TOS', [Required()])
     #recaptcha = RecaptchaField()
+
+    def validate(self):
+        rv = Form.validate(self)
+        if not rv:
+            return False
+
+        uname_clash = User.query.filter_by(username=self.username.data).first()
+        if uname_clash:
+            self.username.errors.append("This username is already in use.")
+            return False
+
+        return True
