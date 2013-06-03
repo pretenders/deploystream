@@ -6,17 +6,15 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>DeployStream {% block extratitle %}{% endblock %}</title>
-        <style>
-            [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak],
-            .ng-cloak, .x-ng-cloak {
-                display: none;
-            }
-        </style>
-
         <!-- <site bootstrap> -->
         <link href="/static/css/site.css" rel="stylesheet" media="screen">
         <link href="/static/css/responsive.css" rel="stylesheet">
         <!-- </site bootstrap> -->
+
+        <!-- Bootstrap { -->
+        <script src="http://code.jquery.com/jquery.min.js"></script>
+        <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+        <!-- } -->
 
         {% block extrahead %}
         {% endblock %}
@@ -43,10 +41,22 @@
             </div>
         </footer>
 
-        <!-- Bootstrap { -->
-        <script src="http://code.jquery.com/jquery.min.js"></script>
-        <script src="/static/bootstrap/js/bootstrap.min.js"></script>
-        <!-- } -->
+        <script>
+        $(document).ready(function () {
+            $('.signin-menu').popover({
+                html: true,
+                title: "Sign in",
+                placement: 'bottom',
+                content: function() {
+                    return $.ajax({
+                        type: "GET",
+                        url: "{{ url_for('users.login') }}",
+                        async: false
+                    }).responseText;
+                }
+            });
+        });
+        </script>
         {% block scripts %}{% endblock %}
     </body>
 
