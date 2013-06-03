@@ -2,8 +2,7 @@ from nose.tools import assert_true, assert_false
 
 from deploystream.providers.interfaces import (
     is_implementation,
-    IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider,
-    IOAuthProvider
+    IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider
 )
 
 
@@ -71,21 +70,3 @@ class TestPlanningProviderInterface(object):
             pass
 
         assert_false(is_implementation(MyProvider(), IPlanningProvider))
-
-
-class TestOAuthProviderInterface(object):
-
-    def test_implements_oauth(self):
-        class MyProvider(object):
-            name = "provider"
-            oauth_token_name = "oauth"
-
-            def get_oauth_data(self):
-                pass
-        assert_true(is_implementation(MyProvider(), IOAuthProvider))
-
-    def test_does_not_implement_oauth(self):
-        class MyProvider(object):
-            pass
-
-        assert_false(is_implementation(MyProvider(), IOAuthProvider))

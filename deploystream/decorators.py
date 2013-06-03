@@ -5,7 +5,6 @@ from flask import session
 from deploystream import app
 from deploystream.exceptions import MissingTokenException
 from deploystream.providers import get_providers
-from deploystream.apps import oauth
 
 
 def needs_providers(func):
@@ -23,5 +22,6 @@ def needs_providers(func):
         except MissingTokenException, te:
             # If we haven't got a required token, let's stop here and
             # go and get it.
-            return oauth.views.start_token_processing(te.missing_token)
+            return te.provider.start_token_processing()
+
     return _wrapped

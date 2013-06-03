@@ -1,9 +1,10 @@
+from flask import request, url_for
 import github3
 from zope import interface
 
 from deploystream.providers.interfaces import IPlanningProvider
 from deploystream.lib import transforms
-
+from .views import GITHUB_APP
 
 __all__ = ['GithubProvider']
 
@@ -73,3 +74,12 @@ class GithubProvider(object):
 
     def get_feature_info(self, feature_id):
         pass
+
+    @classmethod
+    def start_token_processing(self):
+        "Start processing oauth for the given name"
+        url = url_for(
+                'github-oauth-authorized',
+                 next=request.args.get('next') or request.referrer or None,
+                 _external=True)
+        return GITHUB_APP.authorize(callback=url)

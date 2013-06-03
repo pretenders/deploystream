@@ -6,16 +6,13 @@ from deploystream.apps.oauth import get_token, set_token
 from deploystream.apps.users.models import User, OAuth as UserOAuth
 from deploystream.apps.users.lib import (load_user_to_session,
     get_user_id_from_session)
-from deploystream.providers.interfaces import class_implements, IOAuthProvider
 
 # TODO:
-# Alter the following 2 functions to be explicitly creating views for github.
-# Remove ``get_oauth_data`` from github
-# Remove the concept of IOAuthProvider
 # Fix broken tests
 # Add tests for Registering an account
 # Add test for linking an account to github.
 # Refactor oauth_authorized so that there are fewer paths.
+# Move github into a sub url (/github/)
 
 consumer_key, consumer_secret = app.config['oauth']['github']
 
@@ -43,7 +40,7 @@ def get_github_token():
 def oauth_authorized(resp):
     "Call back for the oauth authorization."
     next_url = request.args.get('next') or url_for('homepage')
-    oauth_name = request.args.get('oauth_name')
+    oauth_name = 'github'
     if resp is None:
         flash(u'You denied the request to sign in.')
         return redirect(next_url)
@@ -91,13 +88,5 @@ def oauth_authorized(resp):
 @app.route('/github-register')
 def login():
     "Handler for calls to login via github."
-    return start_token_processing('github')
-
-
-def start_token_processing(oauth_name):
-    "Start processing oauth for the given name"
-    url = url_for('{0}-oauth-authorized'.format(oauth_name),
-                  next=request.args.get('next') or request.referrer or None,
-                  oauth_name=oauth_name,
-                  _external=True)
-    return GITHUB_APP.authorize(callback=url)
+    from deploystream.apps.github import GithubProvider
+    return GithubProvider.start_token_processing()

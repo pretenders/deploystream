@@ -8,9 +8,8 @@ from .oauth import IOAuthProvider
 
 __all__ = [
     IBuildInfoProvider, IPlanningProvider, ISourceCodeControlProvider,
-    IOAuthProvider,
-    'is_implementation', 'is_planning_provider', 'is_build_info_provider',
-    'is_source_code_provider'
+    IOAuthProvider, 'is_implementation', 'is_planning_provider',
+    'is_build_info_provider', 'is_source_code_provider'
 ]
 
 

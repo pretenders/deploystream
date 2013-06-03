@@ -7,3 +7,6 @@ def get_token(session, name):
 
 def set_token(session, name, value):
     session["{0}.{1}".format(name, oauth_suffix)] = value
+
+
+OAUTH_PROVIDERS = {}

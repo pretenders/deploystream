@@ -10,13 +10,14 @@ class TestRegister(object):
 
     def send_register_post(self, email, password='123',
                            confirm_password='123'):
-        return self.client.post('/users/register',
-            {'name': 'testuser', 'email': email, 'password': password,
-             'confirm': confirm_password, 'accept_tos': True})
+        return self.client.post('/users/register/',
+            data={'name': 'testuser', 'email': email, 'password': password,
+                  'confirm': confirm_password, 'accept_tos': True})
 
     def test_adds_user_to_the_database(self):
         response = self.send_register_post('test@test.com')
 
+        print response.location
         assert_equal(response.status_code, 302)
         assert_true("/users/me" in response.location)
         assert_false("NEED TO CHECK IN THE DB FOR THE OBJECT HERE")
@@ -36,5 +37,5 @@ class TestRegister(object):
 
 class TestLogin(object):
 
-    def test_login_to_existing_user_account():
+    def test_login_to_existing_user_account(self):
         raise NotImplementedError()

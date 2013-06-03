@@ -45,7 +45,8 @@ def get_providers(configs, session):
                                     provider_class.oauth_token_name)
                 if not token:
                     raise MissingTokenException(
-                            missing_token=provider_class.oauth_token_name)
+                            missing_token=provider_class.oauth_token_name,
+                            provider=provider_class)
 
                 kwargs['token'] = token
         except KeyError:
