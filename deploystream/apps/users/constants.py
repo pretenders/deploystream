@@ -17,3 +17,6 @@ STATUS = {
     NEW: 'new',
     ACTIVE: 'active',
 }
+
+#OAUTH keys supported:
+OAUTHS = ['github']

@@ -5,13 +5,13 @@ from flask.ext.wtf import Required, Email, EqualTo
 
 
 class LoginForm(Form):
-    email = TextField('Email address', [Required(), Email()])
+    username = TextField('Username', [Required()])
     password = PasswordField('Password', [Required()])
 
 
 class RegisterForm(Form):
-    name = TextField('Name', [Required()])
-    email = TextField('Email address', [Required(), Email()])
+    username = TextField('Username', [Required()])
+    email = TextField('Email address', [Email()])
     password = PasswordField('Password', [Required()])
     confirm = PasswordField('Repeat Password', [
       Required(),
