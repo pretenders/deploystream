@@ -4,7 +4,8 @@ from flask_oauth import OAuth
 from deploystream import app, db
 from deploystream.apps.oauth import get_token, set_token
 from deploystream.apps.users.models import User, OAuth as UserOAuth
-from deploystream.apps.users.lib import load_user_to_session
+from deploystream.apps.users.lib import (load_user_to_session,
+        get_user_id_from_session)
 from deploystream.providers.interfaces import class_implements, IOAuthProvider
 
 
@@ -64,17 +65,24 @@ def oauth_authorized(resp):
 
     set_token(session, oauth_name, resp['access_token'])
 
-    if request.args.get('islogin'):
-        remote_user = OAUTH_OBJECTS[oauth_name].get('/user')
-        remote_user_id = remote_user.data['id']
-        # Save user if doesn't already exist.
+    # If registering, add a User and UserOAuth and load to session.
+    # If Logging in, then just loading to session
+    # If linking, then just adding a userOauth.
+
+    current_user = get_user_id_from_session(session)
+    remote_user = OAUTH_OBJECTS[oauth_name].get('/user')
+    remote_user_id = remote_user.data['id']
+
+    if not current_user:
+        # We're either logging in or registering
         oauth_obj = UserOAuth.query.filter_by(service_user_id=remote_user_id,
                                               service=oauth_name).first()
         if not oauth_obj:
             # Create a user and an OAuth linked to it.
-            user = User(name=remote_user.data['login'])
+            user = User(username=remote_user.data['login'])
             oauth = UserOAuth(service_user_id=remote_user_id,
-                              service=oauth_name)
+                              service=oauth_name,
+                              service_username=remote_user.data['login'])
             oauth.user = user
             db.session.add(user)
             db.session.add(oauth)
@@ -83,14 +91,22 @@ def oauth_authorized(resp):
             user = oauth_obj.user
 
         load_user_to_session(session, user)
+    else:
+        # We're linking the account
+        oauth = UserOAuth(service_user_id=remote_user_id,
+                          service=oauth_name,
+                          service_username=remote_user.data['login'],
+                          user_id=current_user)
+        db.session.add(oauth)
+        db.session.commit()
 
     return redirect(next_url)
 
 
-@app.route('/github-login')
-def login():
+@app.route('/oauth/<oauth_name>')
+def link_up(oauth_name):
     "Handler for calls to login via github."
-    return start_token_processing('github', islogin=True)
+    return start_token_processing(oauth_name, islogin=True)
 
 
 def start_token_processing(oauth_name, islogin=None):
@@ -100,4 +116,5 @@ def start_token_processing(oauth_name, islogin=None):
                   oauth_name=oauth_name,
                   islogin=islogin,
                   _external=True)
+
     return OAUTH_OBJECTS[oauth_name].authorize(callback=url)
