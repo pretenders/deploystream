@@ -57,13 +57,11 @@ db = SQLAlchemy(app)
 from providers import init_providers
 classes = init_providers(app.config['PROVIDERS'])
 
-# Configure additional routes needed for oauth
-from deploystream.apps.oauth.views import configure_oauth_routes
-configure_oauth_routes(classes)
 
 # Import any views we want to register here at the bottom of the file:
 import deploystream.views  # NOQA
 import deploystream.apps.feature.views  # NOQA
+import deploystream.apps.github.views  # NOQA
 
 from deploystream.apps.users.views import mod as usersModule
 app.register_blueprint(usersModule)

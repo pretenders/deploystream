@@ -48,7 +48,7 @@ except (AttributeError, ImportError) as e:
 
 PROVIDERS = [
     'deploystream.providers.git_provider.GitProvider',
-    'deploystream.providers.github.GithubProvider',
+    'deploystream.apps.github.GithubProvider',
     'deploystream.providers.sprintly.SprintlyProvider',
     'deploystream.providers.jira.JiraProvider',
 ]
