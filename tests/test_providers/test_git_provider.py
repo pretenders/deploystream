@@ -1,7 +1,7 @@
 import os
 from os.path import join, exists, dirname
 
-from nose.tools import assert_equal, with_setup
+from nose.tools import assert_equal, with_setup, assert_items_equal
 
 from deploystream.providers.git_provider import GitProvider
 
@@ -19,7 +19,10 @@ def ensure_dummy_clone_available():
         os.system('git clone git://github.com/pretenders/dummyrepo.git {0}'
                   .format(folder_name))
     else:
-        os.system('git --git-dir={0} fetch'.format(folder_name))
+        cmd = 'git --git-dir={0}/.git fetch'.format(folder_name)
+        ans = os.system(cmd)
+        if ans != 0:
+            raise Exception("Git fetch failed")
 
 
 @with_setup(ensure_dummy_clone_available)
@@ -37,9 +40,11 @@ def test_git_provider_finds_branches_across_repos():
             branch_finder_template=".*(?i){project}.*")
     branches = provider.get_repo_branches_involved('FeAtUrE-99')
 
-    assert_equal([
+    assert_items_equal([
         ('dummyrepo', 'my/feature_branch',
          'cf9130d3c07b061a88569153f10a7c7779338cfa'),
+        ('dummyrepo', 'my/feature-99',
+         '7098fa31bf9663343c723d9d155c0dc6e6e28174'),
         ], branches)
 
 
@@ -48,7 +53,7 @@ def test_git_provider_feature_breakup_regex():
     Test that GitProvider breaks up feature ids into appropriate parts.
     """
     provider = GitProvider(
-                 feature_breakup_regex="(?P<project>[a-zA-Z]+)-?(?P<id>[0-9]+)")
+        feature_breakup_regex="(?P<project>[a-zA-Z]+)-?(?P<id>[0-9]+)")
     for feature, expected in [
         ('DD-334', {'id': '334', 'project':'DD'}),
         ('DD334', {'id': '334', 'project':'DD'}),
