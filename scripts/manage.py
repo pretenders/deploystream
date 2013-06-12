@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 # A module for doing all the things.
 # Bares a vague resemblance to django's manage.py
 #
