@@ -19,4 +19,14 @@ angular.module('deploystream.services', ['ngResource'])
                     isArray: true
                 }
             });
+    })
+    .factory('User', function($resource) {
+        return $resource(
+            '/users/me',
+            {},
+            {
+                query: {
+                    method: 'GET'
+                }
+            });
     });

@@ -1,0 +1,26 @@
+ <section class="marketing-hero row-fluid">
+    <article>
+    <!-- Avatar -->
+    <h1>{{ user.username }}</h1>
+    <ul>
+        <li> Joined on {{ user.created }}</li>
+    </ul>
+
+    <h3>Linked Accounts</h3>
+    <ul>
+
+    <li ng-repeat="oauth_info in user.oauth_info">
+
+        <i class="icon-{{oauth_info.service}} icon-large"></i>
+            <span ng-switch on="oauth_info.username != 'null'">
+                <span ng-switch-when="true">
+                    {{ oauth_info.username }}
+                </span>
+                <span ng-switch-default>
+                    <a href="/oauth/github?next=/#/profile"> Add </a>
+                </span>
+            </span>
+    </li>
+    </ul>
+    </article>
+</section>

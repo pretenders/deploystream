@@ -16,5 +16,9 @@ angular.module('deploystream', [
             templateUrl: '/static/partials/features.html',
             controller: FeatureListCtrl
         });
+        $routeProvider.when('/profile', {
+            templateUrl: '/static/partials/profile.html',
+            controller: ProfileCtrl
+        });
     }]
 );

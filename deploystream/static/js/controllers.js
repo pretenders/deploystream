@@ -12,3 +12,11 @@ function FeatureListCtrl($scope, Feature) {
     });
 }
 //FeatureListCtrl.$inject = [];
+
+function ProfileCtrl($scope, User) {
+
+    User.query('', function(user) {
+        $scope.user = user;
+    });
+
+}

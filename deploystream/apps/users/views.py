@@ -3,19 +3,16 @@ from flask import (Blueprint, request, render_template, flash, g, session,
 from werkzeug import check_password_hash, generate_password_hash
 
 from deploystream import db
+from deploystream.lib.transforms import as_json
+
 from .forms import RegisterForm, LoginForm
 from .models import User
 from .lib import load_user_to_session
 from .decorators import requires_login
 from . import template_helpers
 
+
 mod = Blueprint('users', __name__, url_prefix='/users')
-
-
-@mod.route('/me/')
-@requires_login
-def home():
-    return render_template("users/profile.html", user=g.user)
 
 
 @mod.before_request
@@ -26,6 +23,14 @@ def before_request():
     g.user = None
     if 'user_id' in session:
         g.user = User.query.get(session['user_id'])
+
+
+@mod.route('/me/')
+@requires_login
+@as_json
+def home():
+    return g.user.as_dict()
+    #return render_template("users/profile.html", user=g.user)
 
 
 @mod.route('/login/', methods=['GET', 'POST'])
@@ -48,6 +53,7 @@ def login():
         suffix = ".html"
     else:
         suffix = "_ajax.html"
+
     return render_template("users/login" + suffix, form=form)
 
 
