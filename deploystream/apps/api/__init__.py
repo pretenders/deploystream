@@ -29,8 +29,10 @@ manager.create_api(User, methods=['GET'],
 # - Can't grab a list of users.
 # - Can't grab a user that isn't you.
 # - Grabbing /profile (or similar) returns you.
+# - Ensure that password data isn't included in the response.
 #
 # Change the angular Users stuff to:
 # - Call /profile to get you
 # - Call /oauth/ to get a list of possible oauths
 # - Fillin the details using the oauth_keys returned in /profile.
+# - humanize the date joined.
