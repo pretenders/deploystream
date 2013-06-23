@@ -1,24 +1,8 @@
 from mock import Mock, patch
 from nose.tools import assert_true, assert_equal
 
-import deploystream
 from deploystream.apps.users.models import User
-
-
-class UserTestMixin(object):
-
-    def setup(self):
-        self.client = deploystream.app.test_client()
-
-    def send_register_post(self, username, email="a@a.com", password='123',
-                           confirm_password='123'):
-        return self.client.post('/users/register/',
-            data={'username': username, 'email': email, 'password': password,
-                  'confirm': confirm_password, 'accept_tos': True})
-
-    def send_login_post(self, username, password):
-        return self.client.post('/users/login/',
-            data={'username': username, 'password': password})
+from tests.test_users import UserTestMixin
 
 
 class TestRegister(UserTestMixin):

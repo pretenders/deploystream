@@ -22,7 +22,7 @@ angular.module('deploystream.services', ['ngResource'])
     })
     .factory('User', function($resource) {
         return $resource(
-            '/users/me',
+            '/users/me/',
             {},
             {
                 query: {

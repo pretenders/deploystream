@@ -3,16 +3,16 @@
     <!-- Avatar -->
     <h1>{{ user.username }}</h1>
     <ul>
-        <li> Joined on {{ user.created }}</li>
+        <li> Joined on {{ user.created | date:'short' }}</li>
     </ul>
 
     <h3>Linked Accounts</h3>
     <ul>
 
-    <li ng-repeat="oauth_info in user.oauth_info">
+    <li ng-repeat="oauth_info in oauth_info">
 
         <i class="icon-{{oauth_info.service}} icon-large"></i>
-            <span ng-switch on="oauth_info.username != 'null'">
+            <span ng-switch on="oauth_info.username != null">
                 <span ng-switch-when="true">
                     {{ oauth_info.username }}
                 </span>
@@ -22,5 +22,7 @@
             </span>
     </li>
     </ul>
+
+
     </article>
 </section>

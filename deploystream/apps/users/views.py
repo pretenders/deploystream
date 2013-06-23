@@ -1,15 +1,11 @@
 from flask import (Blueprint, request, render_template, flash, g, session,
     redirect, url_for)
-from werkzeug import check_password_hash, generate_password_hash
-
-from deploystream import db
-from deploystream.lib.transforms import as_json
+from werkzeug import check_password_hash
 
 from .forms import RegisterForm, LoginForm
 from .models import User
 from .lib import load_user_to_session
 from .decorators import requires_login
-from . import template_helpers
 
 
 mod = Blueprint('users', __name__, url_prefix='/users')
@@ -27,10 +23,8 @@ def before_request():
 
 @mod.route('/me/')
 @requires_login
-@as_json
 def home():
-    return g.user.as_dict()
-    #return render_template("users/profile.html", user=g.user)
+    return redirect('/api/users/{0}'.format(g.user.id))
 
 
 @mod.route('/login/', methods=['GET', 'POST'])
@@ -65,11 +59,11 @@ def register():
     form = RegisterForm(request.form)
     if form.validate_on_submit():
         # create a user instance not yet stored in the database
-        user = User(form.username.data, form.email.data,
-            generate_password_hash(form.password.data))
-        # Insert the record in our database and commit it
-        db.session.add(user)
-        db.session.commit()
+        user = User.create_user(
+            form.username.data,
+            form.email.data,
+            form.password.data
+        )
 
         # Log the user in, as he now has an id
         load_user_to_session(session, user)
