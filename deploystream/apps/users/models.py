@@ -43,35 +43,6 @@ class User(db.Model):
     def __repr__(self):
         return '<User %r>' % (self.username)
 
-    def as_dict(self):
-        self_dict = self.__dict__
-        self_dict['oauth_info'] = self.all_oauths()
-        print self_dict
-        return self_dict
-
-    def all_oauths(self):
-        """Return all available oauths for the User.
-
-        Returns all oauth information including those that the user hasn't
-        connected to yet.
-        """
-        all_oauth = []
-        for oauth_service in OAUTHS:
-            user_oauth = OAuth.query.filter_by(user_id=self.id,
-                                               service=oauth_service).first()
-            if user_oauth:
-                all_oauth.append({
-                    'service': oauth_service,
-                    'username': user_oauth.service_username
-                })
-            else:
-                all_oauth.append({
-                    'service': oauth_service,
-                    'username': None
-                })
-
-        return all_oauth
-
 
 class OAuth(db.Model):
 
