@@ -3,6 +3,7 @@ Flask                # web framework
 Flask-OAuth          # Oauth library for flask
 flask-sqlalchemy     # SQLAlchemy support for flask
 Flask-WTF            # Handle User's data submission
+Flask-Restless       # Serve SQLAlchemy objects in a restful manner
 github3.py           # client for the GitHub v3 API
 GitPython            # access git repositories
 zope.interface       # define and enforce interfaces
