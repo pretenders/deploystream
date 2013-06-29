@@ -6,7 +6,10 @@ from deploystream.apps.oauth import get_token, set_token
 from deploystream.apps.users.models import User, OAuth as UserOAuth
 from deploystream.apps.users.lib import (load_user_to_session,
         get_user_id_from_session)
+from deploystream.lib.transforms import as_json
 from deploystream.providers.interfaces import class_implements, IOAuthProvider
+
+from . import constants as OAUTH_CONSTANTS
 
 
 def configure_oauth_routes(provider_classes):
@@ -149,3 +152,13 @@ def start_token_processing(oauth_name, islogin=None):
                   _external=True)
 
     return OAUTH_OBJECTS[oauth_name].authorize(callback=url)
+
+
+@app.route('/oauth/')
+@as_json
+def list():
+    """Returns the list of supported Oauths
+
+    This may want to end up in the database and be turned into a /api/ url.
+    """
+    return OAUTH_CONSTANTS.OAUTHS

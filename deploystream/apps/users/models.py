@@ -1,7 +1,9 @@
 from datetime import datetime
 
+from werkzeug import generate_password_hash
+
 from deploystream import db
-from deploystream.apps.users import constants as USERS
+from . import constants as USER_CONSTANTS
 
 
 class User(db.Model):
@@ -11,11 +13,21 @@ class User(db.Model):
     username = db.Column(db.String(50), unique=True)
     email = db.Column(db.String(120))
     password = db.Column(db.String(20))
-    role = db.Column(db.SmallInteger, default=USERS.USER)
-    status = db.Column(db.SmallInteger, default=USERS.NEW)
+    role = db.Column(db.SmallInteger, default=USER_CONSTANTS.USER)
+    status = db.Column(db.SmallInteger, default=USER_CONSTANTS.NEW)
     created = db.Column(db.DateTime, default=datetime.now)
 
     oauth_keys = db.relationship('OAuth', backref='user')
+
+    EXCLUDE_AT_API = ['password', 'role', 'status']
+
+    @classmethod
+    def create_user(cls, username, email, password):
+        user = cls(username, email, generate_password_hash(password))
+        # Insert the record in our database and commit it
+        db.session.add(user)
+        db.session.commit()
+        return user
 
     def __init__(self, username=None, email=None, password=None):
         self.username = username
@@ -23,10 +35,10 @@ class User(db.Model):
         self.password = password
 
     def getStatus(self):
-        return USERS.STATUS[self.status]
+        return USER_CONSTANTS.STATUS[self.status]
 
     def getRole(self):
-        return USERS.ROLE[self.role]
+        return USER_CONSTANTS.ROLE[self.role]
 
     def __repr__(self):
         return '<User %r>' % (self.username)
