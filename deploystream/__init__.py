@@ -1,11 +1,11 @@
 __version__ = '0.1'
 
 from os import environ
-from os.path import join, dirname
+from os.path import join, dirname, abspath
 from flask import Flask
 from flask.ext.sqlalchemy import SQLAlchemy
 
-APP_DIR = dirname(__file__)
+APP_DIR = abspath(dirname(__file__))
 CONFIG_DIR = join(dirname(APP_DIR), 'config')
 STATIC_DIR = join(APP_DIR, 'static')
 

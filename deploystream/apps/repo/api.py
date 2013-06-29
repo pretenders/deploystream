@@ -25,7 +25,13 @@ def get_single_preprocessor(instance_id=None, **kw):
 
 def get_many_preprocessor(search_params=None, **kw):
     try:
-        search_params['user_id'] = session['user_id']
+        if 'filters' not in search_params:
+            search_params['filters'] = []
+
+        # Filter on user id. Strange syntax, but this is what Restless is
+        # after.
+        filt = dict(name='users__id', op='any', val=session['user_id'])
+        search_params['filters'].append(filt)
     except KeyError:
         raise ProcessingException(message='Not Authorized',
                                   status_code=401)

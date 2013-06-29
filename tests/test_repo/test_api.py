@@ -77,4 +77,3 @@ class TestGetRepo(test_users.UserTestMixin):
         repo_data = json.loads(response.data)
 
         assert_equal(len(repo_data['objects']), 0)
-        # Need to restrict the API to only bring back this user's repos.
