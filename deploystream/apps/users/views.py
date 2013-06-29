@@ -1,5 +1,6 @@
-from flask import (Blueprint, request, render_template, flash, g, session,
-    redirect, url_for)
+from flask import (
+    Blueprint, request, render_template, flash, g, session, redirect, url_for
+)
 from werkzeug import check_password_hash
 
 from .forms import RegisterForm, LoginForm
@@ -41,7 +42,7 @@ def login():
             load_user_to_session(session, user)
 
             flash('Welcome %s' % user.username)
-            return redirect(url_for('users.home'))
+            return redirect('/#/profile')
         flash('Wrong email or password', 'error-message')
     if request.method == 'POST':
         suffix = ".html"
