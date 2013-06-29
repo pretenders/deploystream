@@ -69,3 +69,4 @@ from deploystream.apps.users.views import mod as usersModule
 app.register_blueprint(usersModule)
 
 from deploystream.apps.users import api
+from deploystream.apps.repo import api
