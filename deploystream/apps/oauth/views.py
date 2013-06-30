@@ -76,8 +76,9 @@ def oauth_authorized(resp):
     remote_user = OAUTH_OBJECTS[oauth_name].get('/user')
     remote_user_id = remote_user.data['id']
 
-    user = get_or_create_user_oauth(current_user_id, remote_user_id,
-                        oauth_name, remote_user.data['login'])
+    user = get_or_create_user_oauth(
+        current_user_id, remote_user_id, oauth_name, remote_user.data['login']
+    )
 
     load_user_to_session(session, user)
 
@@ -122,8 +123,10 @@ def get_or_create_user_oauth(user_id, service_user_id, service_name,
             db.session.add(oauth)
             db.session.commit()
             user_id = current_user.id
+            user = current_user
         else:
             user_id = oauth_obj.user.id
+            user = oauth_obj.user
 
     else:
         # We're linking the account
@@ -133,8 +136,9 @@ def get_or_create_user_oauth(user_id, service_user_id, service_name,
                           user_id=user_id)
         db.session.add(oauth)
         db.session.commit()
+        user = oauth.user
 
-    return user_id
+    return user
 
 
 @app.route('/oauth/<oauth_name>')
