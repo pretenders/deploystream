@@ -23,9 +23,7 @@ function FeatureDetailCtrl($scope, $routeParams, Feature) {
 
     Feature.get({featureId: featureId}, function (feature) {
         var repos = [];
-        var branches = feature.branch_list;
         $scope.feature = feature;
-        $scope.branches = branches;
         $scope.root = 'master';
     });
 }

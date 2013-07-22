@@ -1,4 +1,4 @@
-<div ng-show="feature">
+<div class="feature" ng-show="feature">
 
     <h2>
         <a href="{{feature.url}}"><i class="icon-{{feature.provider}}"></i>
@@ -16,8 +16,10 @@
     </p>
 
     <h3>Branches</h3>
-    <script type="text/ng-template"  id="branch.html">
+    <script type="text/ng-template" id="branch.html">
         <p>
+            <i class="icon icon-caret-right"></i>
+            <i class="icon icon-large icon-sign-blank health-{{branch.health.status}}"></i>
             {{branch.branch_name}}
             <span class='label'>{{branch.latest_commit}}</span>
         </p>
@@ -26,14 +28,12 @@
         </ul>
     </script>
 
-    <ul>
-        <li ng-repeat="branch in branches" ng-show='branch.branch_name == root'>
-        {{branch.repo_name}}-{{branch.branch_name}}
-            <ul>
-                <li ng-repeat="branch in branch.children" ng-include="'branch.html'"></li>
-            </ul>
-        </li>
-    </ul>
+    <section class="repo row-fluid" ng-repeat="repo in feature.repositories">
+        <h4 class="span1">{{repo.name}}</h4>
+        <ul class="span10">
+            <li ng-repeat="branch in repo.branches" ng-include="'branch.html'"></li>
+        </ul>
+    </section>
 
 </div>
 <p class="loading" ng-hide="feature">

@@ -1,0 +1,101 @@
+{
+  "description": "",
+  "title": "Ability to view the branch hierarchy for a feature, and what is merged into what.",
+  "url": "https://github.com/pretenders/deploystream/issues/70",
+  "project": "pretenders/deploystream",
+  "owner": "",
+  "provider": "github",
+  "type": "story",
+  "id": 70,
+  "repositories": [
+  {
+    "name": "deploystream",
+    "branches": [
+      {
+        "latest_commit": "9770a5e",
+        "branch_name": "master",
+        "health": {
+          "status": "green",
+          "details": [
+            {
+              "type": "build",
+              "provider": "travis-ci",
+              "status": "green",
+              "url": "https://travis-ci.org/pretenders/deploystream/builds/8604410"
+            }
+          ]
+        },
+        "children": [
+          {
+            "latest_commit": "dfa9217",
+            "branch_name": "develop",
+            "health": {
+                "status": "green",
+                "details": [
+                    {
+                    "type": "build",
+                    "provider": "travis-ci",
+                    "status": "green",
+                    "url": "https://travis-ci.org/pretenders/deploystream/builds/8604410"
+                    }
+                ]
+            },
+            "children": [
+                {
+                "latest_commit": "98457ab",
+                "branch_name": "story/70/alex",
+                "health": {
+                  "status": "red",
+                  "details": [
+                    {
+                      "type": "build",
+                      "provider": "travis-ci",
+                      "status": "red",
+                      "url": "https://travis-ci.org/pretenders/deploystream/builds/8604410"
+                    }
+                  ]
+                },
+                "children": [
+                  {
+                    "latest_commit": "5719681",
+                    "branch_name": "dev/70/alex",
+                    "repo_name": "deploystream",
+                    "health": {
+                        "status": "unknown",
+                        "details": [
+                            {
+                            "type": "build",
+                            "provider": "travis-ci",
+                            "status": "unknown",
+                            "url": "https://travis-ci.org/pretenders/deploystream/builds/8604410"
+                            }
+                        ]
+                    },
+                    "children": []
+                  },
+                  {
+                    "latest_commit": "aace02c",
+                    "branch_name": "dev/70/carles",
+                    "health": {
+                      "status": "yellow",
+                      "details": [
+                        {
+                          "type": "build",
+                          "provider": "travis-ci",
+                          "status": "yellow",
+                          "url": "https://travis-ci.org/pretenders/deploystream/builds/8604410"
+                        }
+                      ]
+                    },
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  ]
+}

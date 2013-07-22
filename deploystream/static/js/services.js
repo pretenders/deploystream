@@ -10,13 +10,12 @@ angular.module('deploystream.services', ['ngResource'])
     .value('version', '0.1')
     .factory('Feature', function ($resource) {
         return $resource(
-            '/features/:featureId',
-            //'/static/:featureId.json',
+            //'/features/:featureId',
+            '/static/:featureId.json',
             {},
             {
                 query: {
                     method: 'GET',
-                    params: {featureId: ''},
                     isArray: true
                 }
             });
