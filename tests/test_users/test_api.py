@@ -6,7 +6,7 @@ import tests
 from tests import test_users
 
 
-class TestUserDetails(test_users.UserTestMixin):
+class TestUserDetails(test_users.UserTest):
 
     def test_can_get_details_about_myself(self):
         self.send_login_post('main_test_user', '123')

@@ -8,7 +8,7 @@ def setup():
     tests.create_main_user()
 
 
-class UserTestMixin(object):
+class UserTest(object):
 
     def setup(self):
         self.client = deploystream.app.test_client()

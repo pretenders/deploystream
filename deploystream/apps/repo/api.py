@@ -1,14 +1,20 @@
-import flask.ext.restless
 from flask import session
-from flask.ext.restless import ProcessingException
+from flask.ext.restless import APIManager, ProcessingException
 from sqlalchemy.orm.exc import NoResultFound
 from deploystream import app, db
 from deploystream.apps.repo.models import Repo, user_repo_permissions
 
-manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)
+manager = APIManager(app, flask_sqlalchemy_db=db)
 
 
 def get_single_preprocessor(instance_id=None, **kw):
+    """
+    Preprocessor for getting a single repo. Handles permissions.
+
+    401: If the user isn't logged in.
+    404: If the repo ``instance_id`` does not exist.
+    404: If the user logged in doesn't have rights to the repo.)
+    """
     try:
         user_id = session['user_id']
     except KeyError:
@@ -24,6 +30,14 @@ def get_single_preprocessor(instance_id=None, **kw):
 
 
 def get_many_preprocessor(search_params=None, **kw):
+    """
+    Preprocessor for getting multiple repos. Handles permissions.
+
+    Responsible for adding the search filters to ensure that the response only
+    brings back repos relevant for this user. Not ALL repos.
+
+    401: If the user isn't logged in.
+    """
     try:
         if 'filters' not in search_params:
             search_params['filters'] = []

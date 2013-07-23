@@ -1,11 +1,10 @@
-import flask.ext.restless
 from flask import session
-from flask.ext.restless import ProcessingException
+from flask.ext.restless import APIManager, ProcessingException
 
 from deploystream import app, db
 from deploystream.apps.users.models import User
 
-manager = flask.ext.restless.APIManager(app, flask_sqlalchemy_db=db)
+manager = APIManager(app, flask_sqlalchemy_db=db)
 
 
 def deny(**kw):

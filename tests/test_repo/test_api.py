@@ -11,7 +11,7 @@ import tests
 from tests import test_users
 
 
-class TestGetRepo(test_users.UserTestMixin):
+class TestGetRepo(test_users.UserTest):
 
     def setup(self):
         self.client = deploystream.app.test_client()

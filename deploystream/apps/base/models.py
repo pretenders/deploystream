@@ -28,7 +28,11 @@ class Base(object):
         if instance:
             return instance, False
         else:
-            params = dict((k, v) for k, v in kwargs.iteritems() if not isinstance(v, ClauseElement))  # NOQA
+            params = dict(
+                (k, v)
+                for k, v in kwargs.iteritems()
+                if not isinstance(v, ClauseElement)
+            )
             params.update(defaults)
             instance = cls(**params)
             db.session.add(instance)
