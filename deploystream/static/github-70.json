@@ -43,7 +43,7 @@
             "children": [
                 {
                 "latest_commit": "98457ab",
-                "branch_name": "story/70/alex",
+                "branch_name": "story/70/view-hierarchy",
                 "health": {
                   "status": "red",
                   "details": [
@@ -92,6 +92,43 @@
                 ]
               }
             ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "somecomponent",
+    "branches": [
+      {
+        "latest_commit": "7923a5e",
+        "branch_name": "develop",
+        "health": {
+          "status": "green",
+          "details": [
+            {
+              "type": "build",
+              "provider": "travis-ci",
+              "status": "green",
+              "url": "https://travis-ci.org/pretenders/deploystream/builds/8604410"
+            }
+          ]
+        },
+        "children": [
+          {
+            "latest_commit": "e3457ab",
+            "branch_name": "story/70/view-hierarchy",
+            "health": {
+              "status": "green",
+              "details": [
+                {
+                  "type": "build",
+                  "provider": "travis-ci",
+                  "status": "red",
+                  "url": "https://travis-ci.org/pretenders/deploystream/builds/8604410"
+                }
+              ]
+            }
           }
         ]
       }
