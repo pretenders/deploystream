@@ -16,7 +16,7 @@ class TestGetRepo(test_users.UserTest):
     def setup(self):
         self.client = deploystream.app.test_client()
         repo, created = Repo.get_or_create(
-            {'git_url': 'http://testrepo.git'},
+            {'url': 'http://testrepo.git'},
             name='test_repo')
         self.repo_id = repo.id
         repo.users = [User.query.get(tests.MAIN_USER_ID)]
@@ -31,7 +31,7 @@ class TestGetRepo(test_users.UserTest):
         repo_data = json.loads(response.data)
 
         assert_equal(repo_data['name'], 'test_repo')
-        assert_equal(repo_data['git_url'], 'http://testrepo.git')
+        assert_equal(repo_data['url'], 'http://testrepo.git')
 
     def test_api_get_single_rejects_anonymous_user(self):
         "Test that the api rejects an anonymous user"
@@ -58,7 +58,7 @@ class TestGetRepo(test_users.UserTest):
 
         assert_equal(len(repo_data['objects']), 1)
         assert_equal(repo_data['objects'][0]['name'], 'test_repo')
-        assert_equal(repo_data['objects'][0]['git_url'], 'http://testrepo.git')
+        assert_equal(repo_data['objects'][0]['url'], 'http://testrepo.git')
 
     def test_api_get_many_rejects_anonymous_user(self):
         "Test that the api rejects an anonymous user"

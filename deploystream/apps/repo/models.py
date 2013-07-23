@@ -15,7 +15,7 @@ class Repo(db.Model, Base):
     __tablename__ = 'repo_repo'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100))
-    git_url = db.Column(db.String(200), unique=True)
+    url = db.Column(db.String(200), unique=True)
     active = db.Column(db.Boolean())
 
     users = db.relationship('User', secondary=user_repo_permissions,
