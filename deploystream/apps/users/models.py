@@ -3,10 +3,12 @@ from datetime import datetime
 from werkzeug import generate_password_hash
 
 from deploystream import db
+from deploystream.apps.base.models import Base
+
 from . import constants as USER_CONSTANTS
 
 
-class User(db.Model):
+class User(Base, db.Model):
 
     __tablename__ = 'users_user'
     id = db.Column(db.Integer, primary_key=True)
@@ -44,7 +46,7 @@ class User(db.Model):
         return '<User %r>' % (self.username)
 
 
-class OAuth(db.Model):
+class OAuth(Base, db.Model):
 
     __tablename__ = 'users_oauth'
     id = db.Column(db.Integer, primary_key=True)

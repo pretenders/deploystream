@@ -2,16 +2,17 @@ import json
 
 from nose.tools import assert_equal, assert_false, assert_true
 
+import tests
 from tests import test_users
 
 
-class TestUserDetails(test_users.UserTestMixin):
+class TestUserDetails(test_users.UserTest):
 
     def test_can_get_details_about_myself(self):
         self.send_login_post('main_test_user', '123')
 
         response = self.client.get('/api/users/{0}'.format(
-                        test_users.MAIN_USER_ID))
+                        tests.MAIN_USER_ID))
 
         assert_equal(response.status_code, 200)
         json_data = json.loads(response.data)
@@ -34,5 +35,5 @@ class TestUserDetails(test_users.UserTestMixin):
         response = self.client.get('/users/me/')
 
         assert_equal(response.status_code, 302)
-        assert_true("/api/users/{0}".format(test_users.MAIN_USER_ID)
+        assert_true("/api/users/{0}".format(tests.MAIN_USER_ID)
                         in response.location)
