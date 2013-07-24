@@ -20,8 +20,10 @@ def needs_providers(func):
         try:
             providers = get_providers(config, session)
             return func(providers=providers, *args, **kwargs)
-        except MissingTokenException, te:
+        except MissingTokenException as te:
             # If we haven't got a required token, let's stop here and
             # go and get it.
+            # Unfortunately our API client calls are not currently dealing with
+            # OAUTH redirects at this point, so we may need to rework this...
             return oauth.views.start_token_processing(te.missing_token)
     return _wrapped
