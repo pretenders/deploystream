@@ -1,24 +1,7 @@
-from functools import wraps
-
-from flask import json, Response
-
 from deploystream import app
 from deploystream.apps.feature.lib import get_feature_info, get_all_features
-from deploystream.lib.transforms import nativify
+from deploystream.lib.transforms import as_json
 from deploystream.decorators import needs_providers
-
-
-def as_json(func):
-    """
-    Decorator that JSONifies result data.
-    """
-    @wraps(func)
-    def _wrapped(*args, **kwargs):
-        result = func(*args, **kwargs)
-        return Response(json.dumps(nativify(result), indent=2),
-                        mimetype='application/json')
-
-    return _wrapped
 
 
 @app.route('/features', methods=['GET'])

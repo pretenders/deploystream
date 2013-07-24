@@ -3,6 +3,7 @@ __version__ = '0.1'
 from os import environ
 from os.path import join, dirname
 from flask import Flask
+from flask.ext.sqlalchemy import SQLAlchemy
 
 APP_DIR = dirname(__file__)
 CONFIG_DIR = join(dirname(APP_DIR), 'config')
@@ -51,6 +52,7 @@ ensure_certifi_certs_installed()
 # something that is actually a secret
 app.secret_key = 'mysecret'
 
+db = SQLAlchemy(app)
 # Initialise the providers.
 from providers import init_providers
 classes = init_providers(app.config['PROVIDERS'])
@@ -62,3 +64,8 @@ configure_oauth_routes(classes)
 # Import any views we want to register here at the bottom of the file:
 import deploystream.views  # NOQA
 import deploystream.apps.feature.views  # NOQA
+
+from deploystream.apps.users.views import mod as usersModule
+app.register_blueprint(usersModule)
+
+from deploystream.apps.users import api
