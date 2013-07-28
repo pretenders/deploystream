@@ -1,22 +1,22 @@
 <div class="feature" ng-show="feature">
 
-    <h2>
-        <a href="{{feature.url}}"><i class="icon-{{feature.provider}}"></i>
-            #{{feature.id}}
-        </a>
-        {{feature.title}}
-    </h2>
+    <header>
+        <h2>
+            <a href="{{feature.url}}" target="_blank"><i class="icon-{{feature.provider}}"></i>
+                #{{feature.id}}
+            </a>
+            {{feature.title}}
+        </h2>
 
-    <p>
-        {{feature.project}}
-        <span class="label label-info">{{feature.type}}</span>
-    </p>
-    <p>
-        Owner: {{feature.owner}}
-    </p>
+        <p>
+            {{feature.project}}
+            <span class="label label-info">{{feature.type}}</span>
+            <i class="icon icon-user"></i> {{feature.owner}}
+        </p>
+    </header>
 
-    <h3>Branches</h3>
     <script type="text/ng-template" id="branch.html">
+        <!-- recursive template for a branch -->
         <p>
             <i class="icon icon-caret-right"></i>
             <i class="icon icon-large icon-sign-blank health-{{branch.health.status}}"></i>
@@ -29,9 +29,9 @@
         </ul>
     </script>
 
-    <section class="repo row-fluid" ng-repeat="repo in feature.repositories">
-        <h4 class="span1">{{repo.name}}</h4>
-        <ul class="span10">
+    <section class="repo" ng-repeat="repo in feature.repositories">
+        <h4>{{repo.name}}</h4>
+        <ul class="branches">
             <li ng-repeat="branch in repo.branches" ng-include="'branch.html'"></li>
         </ul>
     </section>

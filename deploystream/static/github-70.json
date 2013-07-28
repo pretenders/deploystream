@@ -3,7 +3,7 @@
   "title": "Ability to view the branch hierarchy for a feature, and what is merged into what.",
   "url": "https://github.com/pretenders/deploystream/issues/70",
   "project": "pretenders/deploystream",
-  "owner": "",
+  "owner": "alexcouper",
   "provider": "github",
   "type": "story",
   "id": 70,
