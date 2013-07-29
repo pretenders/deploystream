@@ -22,7 +22,6 @@ function FeatureDetailCtrl($scope, $routeParams, Feature) {
     });
 
     Feature.get({featureId: featureId}, function (feature) {
-        var repos = [];
         $scope.feature = feature;
         $scope.root = 'master';
     });

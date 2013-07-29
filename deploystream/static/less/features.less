@@ -29,10 +29,32 @@
         border-left: 6px solid @secondaryTitle;
         padding-left: 8px;
         margin-left: 8px;
+        .popover-content {
+            padding: 0;
+        }
+        .dropdown {
+            display: inline;
+        }
+        .dropdown-menu {
+            left: -18px;
+            width: 220px;
+            font-size: 90%;
+            padding: 8px 0;
+            li {
+                padding: 0 16px;
+                &:hover {
+                    background-color: @linkColor;
+                    color: @white;
+                }
+            }
+        }
     }
     ul {
         margin-top: 10px;
         list-style: none;
+    }
+    .tool:hover {
+        color: @linkColor;
     }
 }
 
@@ -51,3 +73,4 @@
 .health-unknown {
     color: @statusUnknown;
 }
+

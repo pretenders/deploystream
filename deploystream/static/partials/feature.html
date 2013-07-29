@@ -17,17 +17,28 @@
 
     <script type="text/ng-template" id="branch.html">
         <!-- recursive template for a branch -->
-        <p>
+        <div>
             <i class="icon icon-caret-right"></i>
-            <i class="icon icon-large icon-sign-blank health-{{branch.health.status}}"></i>
-            <i class="icon icon-wrench"></i>
+            <i class="icon icon-large icon-sign-blank health-{{branch.health.status}}" feature-health></i>
+            <div class="dropdown">
+                <i data-toggle="dropdown" class="tool icon icon-wrench"></i>
+                <ul class="dropdown-menu" role="menu">
+                    <li><i class="icon icon-arrow-up"></i> Send PR to parent branch</li>
+                    <li><i class="icon icon-arrow-down"></i> Update from parent branch</li>
+                    <li><i class="icon icon-cogs"></i> Start build</li>
+                    <li><i class="icon icon-play"></i> Deploy</li>
+                </ul>
+            </div>
             {{branch.branch_name}}
             <span class='label'>{{branch.latest_commit}}</span>
-        </p>
+        </div>
         <ul>
             <li ng-repeat="branch in branch.children" ng-include="'branch.html'"> </li>
         </ul>
     </script>
+
+    <div id="branch-tools" style="display: none">
+    </div>
 
     <section class="repo" ng-repeat="repo in feature.repositories">
         <h4>{{repo.name}}</h4>

@@ -32,12 +32,17 @@
             "health": {
                 "status": "green",
                 "details": [
-                    {
+                  {
                     "type": "build",
                     "provider": "travis-ci",
                     "status": "green",
                     "url": "https://travis-ci.org/pretenders/deploystream/builds/8604410"
-                    }
+                  },
+                  {
+                    "type": "relevant",
+                    "provider": "git",
+                    "status": "green"
+                  }
                 ]
             },
             "children": [
@@ -52,6 +57,17 @@
                       "provider": "travis-ci",
                       "status": "red",
                       "url": "https://travis-ci.org/pretenders/deploystream/builds/8604410"
+                    },
+                    {
+                      "type": "relevant",
+                      "provider": "git",
+                      "status": "green"
+                    },
+                    {
+                      "type": "updated",
+                      "provider": "git",
+                      "status": "yellow",
+                      "message": "this branch is not up to date with develop"
                     }
                   ]
                 },
