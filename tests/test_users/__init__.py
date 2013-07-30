@@ -1,21 +1,14 @@
-import os
-
 import deploystream
-from deploystream.apps.users.models import User
 
-MAIN_USER_ID = None
+import tests
 
 
 def setup():
-    global MAIN_USER_ID
-    if os.path.exists(deploystream.app.config['TEST_DB_LOCATION']):
-        os.remove(deploystream.app.config['TEST_DB_LOCATION'])
-    deploystream.db.create_all()
-    user = User.create_user("main_test_user", "main@test.com", "123")
-    MAIN_USER_ID = user.id
+    tests.recreate_db()
+    tests.create_main_user()
 
 
-class UserTestMixin(object):
+class UserTest(object):
 
     def setup(self):
         self.client = deploystream.app.test_client()
