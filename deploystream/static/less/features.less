@@ -43,9 +43,29 @@
             li {
                 padding: 0 16px;
                 &:hover {
-                    background-color: @linkColor;
-                    color: @white;
+                    background-color: @grayLighter;
                 }
+            }
+            &:before {
+                content: '';
+                position: absolute;
+                top: -7px;
+                left: 15px;
+                display: inline-block;
+                border-left: 7px solid transparent;
+                border-right: 7px solid transparent;
+                border-bottom: 7px solid #ccc;
+                border-bottom-color: rgba(0, 0, 0, 0.2);
+            }
+            &:after {
+                content: '';
+                position: absolute;
+                top: -6px;
+                left: 16px;
+                display: inline-block;
+                border-right: 6px solid transparent;
+                border-bottom: 6px solid white;
+                border-left: 6px solid transparent;
             }
         }
     }

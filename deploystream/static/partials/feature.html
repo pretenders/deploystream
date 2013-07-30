@@ -19,7 +19,15 @@
         <!-- recursive template for a branch -->
         <div>
             <i class="icon icon-caret-right"></i>
-            <i class="icon icon-large icon-sign-blank health-{{branch.health.status}}" feature-health></i>
+            <div class="dropdown">
+                <i data-toggle="dropdown" class="icon icon-large icon-sign-blank health-{{branch.health.status}}"></i>
+                <ul class="dropdown-menu" role="menu">
+                    <li ng-repeat="detail in branch.health.details">
+                        <i class="icon icon-large icon-sign-blank health-{{detail.status}}"> </i>
+                        {{detail.type}} [{{detail.provider}}]
+                    </li>
+                </ul>
+            </div>
             <div class="dropdown">
                 <i data-toggle="dropdown" class="tool icon icon-wrench"></i>
                 <ul class="dropdown-menu" role="menu">
