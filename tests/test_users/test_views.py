@@ -1,11 +1,10 @@
-from mock import Mock, patch
 from nose.tools import assert_true, assert_equal
 
 from deploystream.apps.users.models import User
-from tests.test_users import UserTestMixin
+from tests.test_users import UserTest
 
 
-class TestRegister(UserTestMixin):
+class TestRegister(UserTest):
 
     def test_adds_user_to_the_database(self):
         response = self.send_register_post(
@@ -29,7 +28,7 @@ class TestRegister(UserTestMixin):
         assert_true("Passwords must match" in response.data)
 
 
-class TestLogin(UserTestMixin):
+class TestLogin(UserTest):
 
     def test_login_to_existing_user_account(self):
         response = self.send_register_post('phil', 'test_login@test.com')
