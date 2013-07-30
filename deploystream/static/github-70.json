@@ -140,7 +140,7 @@
                 {
                   "type": "build",
                   "provider": "travis-ci",
-                  "status": "red",
+                  "status": "green",
                   "url": "https://travis-ci.org/pretenders/deploystream/builds/8604410"
                 }
               ]
