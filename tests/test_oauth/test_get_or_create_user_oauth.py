@@ -65,11 +65,11 @@ def test_logged_in_and_attach_additional_oauth_information():
     db.session.add(u)
     db.session.commit()
 
-    user_id = get_or_create_user_oauth(user_id=u.id,
+    user = get_or_create_user_oauth(user_id=u.id,
         service_user_id='109',
         service_name='my-oauth-service',
         service_username='add-github')
 
-    assert_equal(user_id, u.id)
+    assert_equal(user.id, u.id)
     original_user = User.query.filter_by(username='additional').first()
     assert_equal('add-github', original_user.oauth_keys[0].service_username)

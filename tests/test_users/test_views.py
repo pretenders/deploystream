@@ -35,4 +35,4 @@ class TestLogin(UserTest):
         self.client.get('/logout')
         response = self.send_login_post('phil', '123')
         assert_equal(response.status_code, 302)
-        assert_true("/users/me" in response.location)
+        assert_true("/#/profile" in response.location)
