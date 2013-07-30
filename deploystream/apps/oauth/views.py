@@ -1,9 +1,15 @@
 from flask import session, redirect, flash, request, url_for
 from flask_oauth import OAuth
 
-from deploystream import app
+from deploystream import app, db
 from deploystream.apps.oauth import get_token, set_token
+from deploystream.apps.users.models import User, OAuth as UserOAuth
+from deploystream.apps.users.lib import (load_user_to_session,
+        get_user_id_from_session)
+from deploystream.lib.transforms import as_json
 from deploystream.providers.interfaces import class_implements, IOAuthProvider
+
+from . import constants as OAUTH_CONSTANTS
 
 
 def configure_oauth_routes(provider_classes):
@@ -62,18 +68,83 @@ def oauth_authorized(resp):
 
     set_token(session, oauth_name, resp['access_token'])
 
-    if request.args.get('islogin'):
-        user = OAUTH_OBJECTS[oauth_name].get('/user')
-        username = user.data['login']
-        session['username'] = username
+    # If registering, add a User and UserOAuth and load to session.
+    # If Logging in, then just loading to session
+    # If linking, then just adding a userOauth.
+
+    current_user_id = get_user_id_from_session(session)
+    remote_user = OAUTH_OBJECTS[oauth_name].get('/user')
+    remote_user_id = remote_user.data['id']
+
+    user = get_or_create_user_oauth(
+        current_user_id, remote_user_id, oauth_name, remote_user.data['login']
+    )
+
+    load_user_to_session(session, user)
 
     return redirect(next_url)
 
 
-@app.route('/login')
-def login():
+def get_or_create_user_oauth(user_id, service_user_id, service_name,
+                             service_username):
+    """
+    Get or create OAuth information and Users with the given information.
+
+    Handles a number of scenarios:
+        - No user id is known. (ie user is logged out)
+            - OAuth object exists: return the associated user.
+            - OAuth object doesn't exist: create it, along with a user and link
+              them
+        - User id is known (ie user is logged in)
+            - Create and link the OAuth data to the account.
+
+    :param user_id:
+        The id of the currently logged in user. Or ``None`` if logged out.
+    :param service_user_id:
+        The id of the user according to the external service.
+    :param service_name:
+        The name used internally to reference the external service.
+    :param service_username:
+        The username that the service knows this user by. This will be used to
+        create the account in deploystream if logging in for the first time.
+    """
+    if not user_id:
+        # We're either logging in or registering
+        oauth_obj = UserOAuth.query.filter_by(service_user_id=service_user_id,
+                                              service=service_name).first()
+        if not oauth_obj:
+            # Create a user and an OAuth linked to it.
+            current_user = User(username=service_username)
+            oauth = UserOAuth(service_user_id=service_user_id,
+                              service=service_name,
+                              service_username=service_username)
+            oauth.user = current_user
+            db.session.add(current_user)
+            db.session.add(oauth)
+            db.session.commit()
+            user_id = current_user.id
+            user = current_user
+        else:
+            user_id = oauth_obj.user.id
+            user = oauth_obj.user
+
+    else:
+        # We're linking the account
+        oauth = UserOAuth(service_user_id=service_user_id,
+                          service=service_name,
+                          service_username=service_username,
+                          user_id=user_id)
+        db.session.add(oauth)
+        db.session.commit()
+        user = oauth.user
+
+    return user
+
+
+@app.route('/oauth/<oauth_name>')
+def link_up(oauth_name):
     "Handler for calls to login via github."
-    return start_token_processing('github', islogin=True)
+    return start_token_processing(oauth_name, islogin=True)
 
 
 def start_token_processing(oauth_name, islogin=None):
@@ -83,4 +154,15 @@ def start_token_processing(oauth_name, islogin=None):
                   oauth_name=oauth_name,
                   islogin=islogin,
                   _external=True)
+
     return OAUTH_OBJECTS[oauth_name].authorize(callback=url)
+
+
+@app.route('/oauth/')
+@as_json
+def list():
+    """Returns the list of supported Oauths
+
+    This may want to end up in the database and be turned into a /api/ url.
+    """
+    return OAUTH_CONSTANTS.OAUTHS

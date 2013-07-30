@@ -1,3 +1,21 @@
+from functools import wraps
+
+from flask import json, Response
+
+
+def as_json(func):
+    """
+    Decorator that JSONifies result data.
+    """
+    @wraps(func)
+    def _wrapped(*args, **kwargs):
+        result = func(*args, **kwargs)
+        return Response(json.dumps(nativify(result), indent=2),
+                        mimetype='application/json')
+
+    return _wrapped
+
+
 def nativify(data):
     """
     Convert stuff to native datatypes that can be json-encoded.

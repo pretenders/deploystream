@@ -1,3 +1,5 @@
+from os import path
+
 GITHUB_CONFIG = {
     'repositories': [
         ('pretenders', 'deploystream'),
@@ -19,3 +21,7 @@ SPRINTLY_CONFIG = {
 
 GIT_CONFIG = {
 }
+
+CSRF_ENABLED = False
+TEST_DB_LOCATION = path.join(path.abspath(path.dirname(__file__)), 'test.db')
+SQLALCHEMY_DATABASE_URI = ('sqlite:///' + TEST_DB_LOCATION)

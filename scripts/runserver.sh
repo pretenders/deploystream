@@ -1,3 +1,3 @@
 #!/bin/bash
 
-`dirname $0`/runserver.py $*
+`dirname $0`/manage.py runserver $*
