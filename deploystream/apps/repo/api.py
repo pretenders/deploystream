@@ -29,9 +29,6 @@ def get_single_preprocessor(instance_id=None, **kw):
         raise Unauthorized()
     try:
         Repo.query.filter_by(user_id=user_id).one()
-        # db.session.query(user_repo_permissions).filter(
-        #     user_repo_permissions.c.user_id == user_id,
-        #     user_repo_permissions.c.repo_id == instance_id).one()
     except NoResultFound:
         raise ProcessingException(message='Not Found',
                                   status_code=404)
