@@ -57,6 +57,13 @@ def get_many_preprocessor(search_params=None, **kw):
 
 
 def post_preprocessor(data, **kwargs):
+    """
+    Preprocessor for POST requests to create repos.
+
+    Creates a repo against the current authorized users account.
+
+    401: If the user isn't logged in.
+    """
     try:
         auth_user_id = session['user_id']
     except KeyError:
