@@ -20,6 +20,7 @@ class User(Base, db.Model):
     created = db.Column(db.DateTime, default=datetime.now)
 
     oauth_keys = db.relationship('OAuth', backref='user')
+    repos = db.relationship('Repo', backref='user')
 
     EXCLUDE_AT_API = ['password', 'role', 'status']
 

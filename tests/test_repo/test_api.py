@@ -16,10 +16,10 @@ class TestGetRepo(test_users.UserTest):
     def setup(self):
         self.client = deploystream.app.test_client()
         repo, created = Repo.get_or_create(
-            {'url': 'http://testrepo.git'},
+            {'url': 'http://testrepo.git',
+             'user_id': tests.MAIN_USER_ID},
             name='test_repo')
         self.repo_id = repo.id
-        repo.users = [User.query.get(tests.MAIN_USER_ID)]
         db.session.commit()
 
     def test_api_get_single_repo(self):
@@ -77,3 +77,45 @@ class TestGetRepo(test_users.UserTest):
         repo_data = json.loads(response.data)
 
         assert_equal(len(repo_data['objects']), 0)
+
+
+class TestPostRepo(test_users.UserTest):
+
+    def setup(self):
+        self.client = deploystream.app.test_client()
+
+    def send_add_repo_post(self, **kwargs):
+        payload = {
+            'name': 'AwesomeRepo',
+            'url': 'http://github.com/me/awesomes',
+        }
+        payload.update(kwargs)
+        return self.client.post('/api/repos', data=json.dumps(payload),
+                                content_type='application/json')
+
+    def test_create_repo_against_user(self):
+        self.send_login_post('main_test_user', '123')
+
+        response = self.send_add_repo_post()
+        assert_equal(response.status_code, 201)
+        repo = Repo.query.filter_by(name='AwesomeRepo').first()
+        me = User.query.filter_by(username='main_test_user').first()
+        assert_equal(repo.user, me)
+
+    def test_post_as_anonymous_fails(self):
+        response = self.send_add_repo_post()
+        assert_equal(response.status_code, 401)
+
+    def test_post_as_other_user_ignores_user_id(self):
+        self.send_register_post('other_user')
+        self.send_login_post('other_user', '123')
+
+        self.send_add_repo_post(
+            user_id=tests.MAIN_USER_ID,
+            url='http://my_sneeky_repo'
+        )
+
+        repo = Repo.query.filter_by(url='http://my_sneeky_repo').first()
+        assert_equal(repo.user.username, 'other_user')
+
+
